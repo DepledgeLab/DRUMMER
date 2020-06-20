@@ -1,7 +1,7 @@
 # DRUMMER
 Detection of RNA modifications mediated by error rates (DRUMMER) is a software packaged designed to identify RNA modifications at both transcript and nucleotide-level resolution through the comparative analysis of Nanopore direct RNA sequencing (DRS) datasets. 
 
-DRUMMER was designed and implemented by Jonathan Abebe and Daniel Depledge
+DRUMMER was designed and implemented by Jonathan Abebe and [Daniel Depledge](https://med.nyu.edu/faculty/daniel-p-depledge)
 
 
 ## Introduction
