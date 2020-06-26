@@ -47,18 +47,25 @@ samtools index dataset1.aligned.sorted.bam
 DRUMMER can be run in either exome or isoform mode. Exome mode (--runmode exome) uses DRS read alignments against the genome of a given organism to identify putatively modified bases while isoform (--runmode isoform) mode uses DRS read alignments against the transcriptome of a given organism to provide a high resolution mapping. While isoform mode is superior, it is also slower. 
 
 Usage:
-
+```
 ./drummer.sh -r <ref> -t <test.bam> -c <control.bam> -o <output_dir> --runmode exome|isoform [additional flags]
-
+```
 Required flags
+
 -r  Reference genome (exome) or transcriptome (isoform) used during mapping step
+
 -c  Control (RNA modification(s) present) BAM file containing filtered exome/transcriptome level alignments against reference
+
 -v  Test (RNA modification(s) absent) BAM file containing filtered exome/transcriptome level alignments against reference
+
 -o  Output directory
 
 Optional flags
+
 -log2fc XXX (default = 0.5)
+
 -odds XXX (default = 1)
+
 -padj XXX (default = 0.05)
 
 
