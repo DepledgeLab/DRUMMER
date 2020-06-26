@@ -53,19 +53,15 @@ Usage:
 Required flags
 ```
 -r  Reference genome (exome) or transcriptome (isoform) used during mapping step
-
+-l  List of transcripts to be examined (1-column or XX-column format) (isoform analysis only)
 -c  Control (RNA modification(s) present) BAM file containing filtered exome/transcriptome level alignments against reference
-
 -v  Test (RNA modification(s) absent) BAM file containing filtered exome/transcriptome level alignments against reference
-
 -o  Output directory
 ```
 Optional flags
 ```
 -log2fc XXX (default = 0.5)
-
 -odds XXX (default = 1)
-
 -padj XXX (default = 0.05)
 ```
 
