@@ -51,7 +51,7 @@ Usage:
 ./drummer.sh -r <ref> -t <test.bam> -c <control.bam> -o <output_dir> --runmode exome|isoform [additional flags]
 ```
 Required flags
-
+```
 -r  Reference genome (exome) or transcriptome (isoform) used during mapping step
 
 -c  Control (RNA modification(s) present) BAM file containing filtered exome/transcriptome level alignments against reference
@@ -59,15 +59,15 @@ Required flags
 -v  Test (RNA modification(s) absent) BAM file containing filtered exome/transcriptome level alignments against reference
 
 -o  Output directory
-
+```
 Optional flags
-
+```
 -log2fc XXX (default = 0.5)
 
 -odds XXX (default = 1)
 
 -padj XXX (default = 0.05)
-
+```
 
 
 
