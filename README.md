@@ -8,6 +8,19 @@ DRUMMER was designed and implemented by Jonathan Abebe and [Daniel Depledge](htt
 Experimental design defines the context of analysis and the modifications likely to be identified. For instance, comparison of DRS datasets from a parental cell line and METTL3-knockout cell line allows for the detection of m6A.
 
 
+## Installation 
+
+### Pre-requisites
+DRUMMER requires the following packages to be installed and available in the users path: 
+[SAMTools](http://www.htslib.org/) v1.3 or higher
+[bam-readcount](https://github.com/genome/bam-readcount) v0.8 or higher
+
+Python v XXX and modules: pandas, numpy
+
+R v XXX and modules: [RVAideMemoire](https://cran.r-project.org/web/packages/RVAideMemoire/index.html)
+
+### Installation
+
 
 
 ## Data preparation
