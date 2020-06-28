@@ -37,9 +37,11 @@ def return_odds(max_c,max_t,sum_c,sum_t):
     '''
     odds_list = []
     for m_c,m_t,s_c,s_t in zip(max_c,max_t,sum_c,sum_t):
-        odds = 1 /((m_c*(s_t-m_t))/((m_t*(s_c-m_c))))
-        #LOR = np.log(m_c) + np.log(s_t) - np.log(np.log(m_t)) - np.log(s_c)
-        odds_list.append(odds)
+        try:
+            odds = 1 /((m_c*(s_t-m_t))/((m_t*(s_c-m_c))))
+            odds_list.append(odds)
+        except ZeroDivisionError:
+            odds_list.append(1)
     return odds_list
 
 def max_sum_function(ctrl:list,test:list):
@@ -77,14 +79,7 @@ def return_ratio(max_list:list,sum_list:list):
             ratios.append(max_value/(sum_value-max_value))
     return ratios
             
-def return_odds(max_c,max_t,sum_c,sum_t):
-    '''Takes in max control/test, and sum control/test returns odds.
-    '''
-    odds_list = []
-    for m_c,m_t,s_c,s_t in zip(max_c,max_t,sum_c,sum_t):
-        LOR = np.log(m_c) + np.log(s_t) - np.log(np.log(m_t)) - np.log(s_c)
-        odds_list.append(LOR)
-    return odds_list
+
     
 df = pd.read_csv(input,sep='\t')
 df.columns = [i.replace('.1','_mod') if '.1' in i else i+'_unmod' for i in df.columns ]
