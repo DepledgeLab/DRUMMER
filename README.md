@@ -44,26 +44,33 @@ samtools index dataset1.aligned.sorted.bam
 ```
 
 ## Running DRUMMER
-DRUMMER can be run in either exome or isoform mode. Exome mode (--runmode exome) uses DRS read alignments against the genome of a given organism to identify putatively modified bases while isoform (--runmode isoform) mode uses DRS read alignments against the transcriptome of a given organism to provide a high resolution mapping. While isoform mode is superior, it is also slower. 
+DRUMMER can be run in either exome or isoform mode. Exome mode (-m exome) uses DRS read alignments against the genome of a given organism to identify putatively modified bases while isoform mode (-m isoform) uses DRS read alignments against the transcriptome of a given organism to provide a high resolution mapping. While isoform mode is superior, it is also slower. 
 
 Usage:
 ```
-./drummer.sh -r <ref> -t <test.bam> -c <control.bam> -o <output_dir> --runmode exome|isoform [additional flags]
+Usage: drummer.sh -r [FASTA] -l|-n [TARGETS] -c [CONTROL] -t [TEST] -o [OUTPUT] -m [RUNMODE] (OPTIONS)
 ```
 Required flags
 ```
--r  Reference genome (exome) or transcriptome (isoform) used during mapping step
--l  List of transcripts to be examined (1-column or XX-column format) (isoform analysis only)
--c  Control (RNA modification(s) present) BAM file containing filtered exome/transcriptome level alignments against reference
--v  Test (RNA modification(s) absent) BAM file containing filtered exome/transcriptome level alignments against reference
--o  Output directory
+-r              fasta format reference genome (exome) or transcriptome (isoforms)
+
+-u              list of transcripts (isoform) to be examined (single column or XX-column format)
+OR
+-n              name of genome (exome) - must match fasta file header
+
+-c              sorted.bam file - control (RNA modification(s) present)
+-t              sorted.bam file - treatment (RNA modification(s) absent)
+-o              output directory
+-m              runmode (exome|isoform)
+
 ```
 Optional flags
 ```
--log2fc XXX (default = 0.5)
--odds XXX (default = 1)
--padj XXX (default = 0.05)
+-x              specify log2fc required (default >= 0.5)
+-y              specify odds ratio requirement (default >= 1)
+-z              specify adjusted p_value (G-test) requirement (default<= 0.05)
 ```
+
 
 
 
