@@ -8,23 +8,35 @@ name=$2 ### working ID - must match FASTA header
 test_file=$3 ### INPUT CTRL (RNA MOD PRESENT) SORTED BAM FILE
 control_file=$4  ### INPUT CTRL (RNA MOD ABSENT) SORTED BAM FILE
 output_dir=$5
+log2fc=$6
+odds=$7
+padj=$8
 
-### FUNCTION TO ASSIGN DEFAULT IF VALUE IS EMPTY
-#log2fc=$3
-#odds=
-#padj=
-
-
-### CHECK IF OUTPUT DIRECTORY EXISTS, OTHERWISE MAKE IT
-if [ -d "$output_dir" ] 
-then
+### CHECK IF OUTPUT DIRECTORIES EXIST, OTHERWISE MAKE IT
+if [ -d "$output_dir" ]; then
     echo "Directory /path/to/dir exists." 
 else
     mkdir "$output_dir"
+fi
+
+if [ -d "$output_dir"/map ]; then
+    echo "Directory /path/to/dir exists."
+else
     mkdir "$output_dir"/map
+fi
+
+if [ -d "$output_dir"/bam_readcount ]; then
+    echo "Directory /path/to/dir exists."
+else
     mkdir "$output_dir"/bam_readcount
+fi
+
+if [ -d "$output_dir"/gTest ]; then
+    echo "Directory /path/to/dir exists."
+else
     mkdir "$output_dir"/gTest
 fi
+
 
 ### ONE LINER TO DETERMINE SEQUENCE LENGTH
 length=$(awk '/^>/ {if (seqlen){print seqlen}; seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' "$genome_file")
@@ -42,34 +54,46 @@ bam-readcount -f "$genome_file" "$output_dir"/map/"$name".TEST.sorted.bam "$name
 bam-readcount -f "$genome_file" "$output_dir"/map/"$name".CTRL.sorted.bam "$name" > "$output_dir"/bam_readcount/"$name".CTRL.bamreadcount.txt
 
 
-input_bamreadcounts=bam_readcount/$transcript_name
+#### JONATHAN TO CHECK BELOW
+
+input_bamreadcounts=bam_readcount/$name
 #echo $transcript_name
 #echo $control_file
 #echo $test_file
 
 #Creates a directory called filter and subdir of transcript name
-python3 readcount_filter.py -i $input_bamreadcounts
+python3 ../modules/readcount_filter.py -i $input_bamreadcounts
 
 #paste -d "\t" "$input_bamreadcounts".TEST.filtered.txt "$input_bamreadcounts".TEST.filtered.txt > "$input_bamreadcounts".merged.filtered.txt
 
 #odds_ratio / make new directory with odds ratio added to individual reads
 #merged_transcripts=merged/$transcript_name.*
-merged_transcripts=merged/$transcript_name.*
+merged_transcripts=merged/$name.*
 #echo $transcript_name
 #echo $merged_transcripts
-python3 odds_ratio.py -i $merged_transcripts
+python3 ../modules/odds_ratio.py -i $merged_transcripts
 
 #motif_information / make new directory with motif information added to individual reads
 #python3 motif_information.py -i odds_ratio/AdPol.merged.filtered.odds_ratio.txt
 
-motif_transcripts=odds_ratio/$transcript_name.*
+motif_transcripts=odds_ratio/$name.*
 #motif_transcripts=odds_ratio/$transcript_name.*
 #echo $motif_transcripts
-python3 motif_information.py -i $motif_transcripts
+python3 ../modules/motif_information.py -i $motif_transcripts
 
 #Gtest/ make new directory of gtest values added to individual reads
 gtest_transcripts=motif_information/$transcript_name.*
 #gtest_transcripts=motif_information/$transcript_name.*
 #python3 create_output_file.py -i _ -o gTest
 #echo $gtest_transcripts
-Rscript Gtest.R $gtest_transcripts "$output_dir"/gTest/$transcript_name.merged.odds_ratio.motif_information.gtest.csv
+Rscript ../modules/Gtest.R $gtest_transcripts "$output_dir"/gTest/$transcript_name.merged.odds_ratio.motif_information.gtest.csv
+
+
+
+
+
+
+
+
+
+
