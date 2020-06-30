@@ -12,12 +12,12 @@ error rates in nanopore direct RNA sequencing data
 
 https://github.com/DepledgeLab/DRUMMER
 
-Usage: drummer.sh -r [FASTA] -l|-n [TARGETS] -c [CONTROL] -t [TEST] -o [OUTPUT] -m [RUNMODE]
+Usage: drummer.sh -r [FASTA] -l|-n [TARGETS] -c [CONTROL] -t [TEST] -o [OUTPUT] -m [RUNMODE] (OPTIONS)
 
 Required flags:
 -r 		fasta format reference genome (exome) or transcriptome (isoforms)
 
--l 		list of transcripts to be examined (single column or XX-column format)
+-u 		list of transcripts (isoform) to be examined (single column or XX-column format)
 OR
 -n		name of genome (exome) - must match fasta file header
 
@@ -26,10 +26,10 @@ OR
 -o 		output directory
 -m 		runmode (exome|isoform)
 
-Tuning flags:
-log2fc		specify log2fc required (default >= 0.5)
-odds            specify odds ratio requirement (default >= 1)
-padj            specify adjusted p_value (G-test) requirement (default<= 0.05)
+Optional flags:
+-x		specify log2fc required (default >= 0.5)
+-y		specify odds ratio requirement (default >= 1)
+-z		specify adjusted p_value (G-test) requirement (default<= 0.05)
 
 DRUMMER was written by Jonathan S. Abebe & Daniel P. Depledge.
 If you encounter any problems with DRUMMER, please log them as an issue at the GitHub page https://github.com/DepledgeLab/DRUMMER
@@ -38,9 +38,10 @@ If you encounter any problems with DRUMMER, please log them as an issue at the G
 
 
 ### Function for showing usage
-if [ -z "$1" ] || [[ $1 == -h ]] || [[ $1 == --help ]]; then
-        usage
-        exit
+if [[ ( $# == "--help") ||  $# == "-h" ||  $# == 0 ]] 
+    then 
+    usage
+    exit 0
 fi
 
 
