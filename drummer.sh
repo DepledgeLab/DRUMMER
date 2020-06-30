@@ -2,33 +2,12 @@ usage(){
 echo "
 DRUMMER (2020 - present)
 
-Description:  Fast and accurate splice-aware read aligner.
-Please read bbmap/docs/guides/BBMapGuide.txt for more information.
+Description:  Detection of RNA modifications through comparative profiling of basecall 
+error rates in nanopore direct RNA sequencing data
 
-To index:     bbmap.sh ref=<reference fasta>
-To map:       bbmap.sh in=<reads> out=<output sam>
-To map without writing an index:
-    bbmap.sh ref=<reference fasta> in=<reads> out=<output sam> nodisk
+https://github.com/DepledgeLab/DRUMMER
 
-in=stdin will accept reads from standard in, and out=stdout will write to
-standard out, but file extensions are still needed to specify the format of the
-input and output files e.g. in=stdin.fa.gz will read gzipped fasta from
-standard in; out=stdout.sam.gz will write gzipped sam.
-
-Indexing Parameters (required when building the index):
-nodisk=f                Set to true to build index in memory and write nothing
-                        to disk except output.
-ref=<file>              Specify the reference sequence.  Only do this ONCE,
-                        when building the index (unless using 'nodisk').
-build=1                 If multiple references are indexed in the same directory,
-                        each needs a unique numeric ID (unless using 'nodi
-Please contact Brian Bushnell at bbushnell@lbl.gov if you encounter
-any problems, or post at: http://seqanswers.com/forums/showthread.php?t=41057
-
-
-
-
-Usage: [-r REFERENCE] [-c CONTROL] [-t TEST]
+Usage: drummer.sh -r [FASTA] -l|-n [TARGETS] -c [CONTROL] -t [TEST] -o [OUTPUT] -m [RUNMODE]
 
 Required flags:
 -r 		fasta format reference genome (exome) or transcriptome (isoforms)
@@ -140,15 +119,5 @@ echo "ERROR:: User must specify either -runmode exome or runmode isoform"
 echo ""
 usage
 fi
-
-### EXOME TEST 
-#./wrapper.sh -r /gpfs/data/depledgelab/reference-genomes/Adenovirus-Ad5.fasta -n Ad5 -c /gpfs/scratch/depled01/m6A/Ad5_topstrand.M3P1.sorted.bam -t /gpfs/scratch/depled01/m6A/Ad5_topstrand.M3KO1.sorted.bam -o /gpfs/scratch/depled01/DRUMTEST2 -m exome
-
-### ISOFORM TEST
-
-
-
-
-
 
 
