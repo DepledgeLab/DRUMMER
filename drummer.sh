@@ -1,3 +1,8 @@
+#!/bin/bash
+set -e
+set -u
+set -o pipefail
+
 usage(){
 echo "
 DRUMMER (2020 - present)
@@ -19,7 +24,7 @@ OR
 -c 		sorted.bam file - control (RNA modification(s) present)
 -t 		sorted.bam file - treatment (RNA modification(s) absent)
 -o 		output directory
--m 		runmode (exome|isoform)\n
+-m 		runmode (exome|isoform)
 
 Tuning flags:
 log2fc		specify log2fc required (default >= 0.5)
@@ -40,84 +45,118 @@ fi
 
 
 ### GETOPTS
-while getopts ":rctomnlxyz:" opt; do
-   case "$opt" in
-      r ) reference_file="$OPTARG" ;;
-      n ) name="$OPTARG" ;;
-      c ) control_file="$OPTARG" ;;
-      t ) test_file="$OPTARG" ;;
-      l ) transcripts="$OPTARG" ;;
-      o ) output_dir="$OPTARG" ;;
-      x ) log2fc="$OPTARG" ;;
-      y ) odds="$OPTARG" ;;
-      z ) padj="$OPTARG" ;;
-      m ) runmode="$OPTARG" ;;
-      ? ) usage ;; # Print usage in case parameter is non-existent
+#PTSTRING contains the option letters to be recognized; if a letter is followed by a colon, the option is expected to have an argument
+
+while getopts ":r:n:c:t:o:m:u:x:y:z:" opt; do
+   case $opt in
+      r) reference_file="$OPTARG";;
+      n) name="$OPTARG";;
+      c) control_file="$OPTARG";;
+      t) test_file="$OPTARG" ;;
+      u) transcripts="$OPTARG" ;;
+      o) output_dir="$OPTARG" ;;
+      x) log2fc="$OPTARG" ;;
+      y) odds="$OPTARG" ;;
+      z) padj="$OPTARG" ;;
+      m) runmode="$OPTARG";;
+      ?) usage ;; # Print usage in case parameter is non-existent
    esac
 done
 
-### CHECK THAT MANDATORY FLAGS ARE PROVIDED
-if [ "x" != "x$reference_file" ]; then
-  echo "-r [flag] is required"
-  exit
+
+echo "$reference_file"
+
+## CHECK THAT MANDATORY FLAGS ARE PROVIDED
+
+if [[ -v reference_file ]]; then
+echo "-r [flag] is set"
+else
+echo "-r [flag] is required"
+exit
 fi
 
-if [ "x" != "x$test_file" ]; then
-  echo "-t [flag] is required"
-  exit
+if [[ -v test_file ]]; then
+echo "-t [flag] is set"
+else
+echo "-t [flag] is required"
+exit
 fi
 
-if [ "x" != "x$control_file" ]; then
-  echo "-l [flag] is required"
-  exit
+if [[ -v control_file ]]; then
+echo "-c [flag] is set"
+else
+echo "-c [flag] is required"
+exit
 fi
 
-if [ "x" != "x$output_dir" ]; then
-  echo "-o [flag] is required"
-  exit
+if [[ -v output_dir ]]; then
+echo "-o [flag] is set"
+else
+echo "-o [flag] is required"
+exit
 fi
 
 
 ### APPLY VALUES TO OPTIONAL PARAMETERS OR REVERT TO DEFAULTS
-
-if [ "x" != "x$odds" ]; then
+if [[ -v odds ]]; then
+  echo "using user-specified value for Odds Ratio Test"
+  else
   odds=1
-  exit
+  echo "using default value of 1.0 for Odds Ratio Test"
 fi
 
-if [ "x" != "x$padj" ]; then
+if [[ -v padj ]]; then
+  echo "using user-specified value for padj cutoff"
+  else
   padj="0.05"
-  exit
+  echo "using default value of 0.05 for padj cutoff"
 fi
 
-if [ "x" != "x$log2fc" ]; then
+if [[ -v log2fc ]]; then
+  echo "using user-specified value for Log2fc cutoff"
+  else
   log2fc="0.5"
-  exit
+  echo "using default value of 0.5 for Log2fc cutoff"
 fi
-
 
 
 ### DETERMINE RUN PATH (EXOME VS ISOFORM)
-if [[ $runmode == "exome" ]]; then
-  if [ "x" != "x$name" ]; then
-    echo "-m exome requires -n [flag]"
-    exit
-  else
-    echo "Hallelujah"
-    #xargs -P 8 -n 1 ./core/drummer-core-exome.sh $reference_file $name $test_file $control_file $output_dir $log2fc $odds $padj
+if [[ "$runmode" == "exome" ]]; then
+  if [[ -v name ]]; then
+     echo "-m set to exome"
+  else	
+     echo "-m exome requires -n [flag]"
+     exit
   fi
-elif [[ $runmode == "isoform" ]]; then
-  if [ "x" != "x$transcripts" ]; then
-    echo "-m exome requires -x [flag]"
-    exit
+echo "Hallelujah"
+#xargs -P 8 -n 1 ./core/drummer-core-exome.sh $reference_file $name $test_file $control_file $output_dir $log2fc $odds $padj
+
+elif [[ "$runmode" == "isoform" ]]; then
+  if [[ -v transcripts ]]; then
+     echo "-m set to isoform"
   else
-    echo "Hallelujah"
-    #xargs -P 8 -n 1 ./core/drummer-core-isoform.sh $reference_file $transcripts $test_file $control_file $output_dir $log2fc $odds $padj
+     echo "-m isoform requires -u [flag]"
+     exit
   fi
+echo "Hallelujah"
+#xargs -P 8 -n 1 ./core/drummer-core-isoform.sh $reference_file $transcripts $test_file $control_file $output_dir $log2fc $odds $padj
 else
-echo "ERROR:: User must specify either -runmode exome or runmode isoform"
+echo "ERROR:: User must specify runmode as -m exome|isoform"
 echo ""
 usage
 fi
+
+
+
+
+
+
+
+
+
+
+### TEST RUN
+# ./drummer.sh -r /gpfs/data/depledgelab/reference-genomes/Adenovirus-Ad5.fasta -n Ad5 -c /gpfs/scratch/depled01/m6A/Ad5_topstrand.M3P1.sorted.bam -t /gpfs/scratch/depled01/m6A/Ad5_topstrand.M3KO1.sorted.bam -o /gpfs/scratch/depled01/DRUMTEST2 -m exome
+
 
 
