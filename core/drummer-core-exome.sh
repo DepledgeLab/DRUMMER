@@ -90,7 +90,7 @@ gtest_transcripts=motif_information/$transcript_name.*
 python3 ../modules/Gtest.py -i $gtest_transcripts
 
 candidate_transcripts=gTest/$transcript_name.*
-python3 ../modules/find_candidates.py -i $candidate_transcripts -r odds -l log2fc -p padj
+python3 ../modules/find_candidates.py -i $candidate_transcripts -r $odds -l $log2fc -p $padj
 
 
 
