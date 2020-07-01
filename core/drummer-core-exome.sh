@@ -31,11 +31,11 @@ else
     mkdir "$output_dir"/bam_readcount
 fi
 
-if [ -d "$output_dir"/gTest ]; then
-    echo "Directory /path/to/dir exists."
-else
-    mkdir "$output_dir"/gTest
-fi
+# if [ -d "$output_dir"/gTest ]; then
+#     echo "Directory /path/to/dir exists."
+# else
+#     mkdir "$output_dir"/gTest
+# fi
 
 
 ### ONE LINER TO DETERMINE SEQUENCE LENGTH
@@ -86,8 +86,11 @@ gtest_transcripts=motif_information/$transcript_name.*
 #gtest_transcripts=motif_information/$transcript_name.*
 #python3 create_output_file.py -i _ -o gTest
 #echo $gtest_transcripts
-Rscript ../modules/Gtest.R $gtest_transcripts "$output_dir"/gTest/$transcript_name.merged.odds_ratio.motif_information.gtest.csv
+# Rscript ../modules/Gtest.R $gtest_transcripts "$output_dir"/gTest/$transcript_name.merged.odds_ratio.motif_information.gtest.csv
+python3 ../modules/Gtest.py -i $gtest_transcripts
 
+candidate_transcripts=gTest/$transcript_name.*
+python3 ../modules/find_candidates.py -i $candidate_transcripts -r odds -l log2fc -p padj
 
 
 
