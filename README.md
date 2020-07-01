@@ -20,9 +20,11 @@ Python3 and modules: pandas, numpy
 ### Setting up DRUMMER
 git clone https://github.com/DepledgeLab/DRUMMER
 
-
+COMING SOON...
 
 ## Data preparation
+
+### Alignment and filtering
 
 DRUMMER requires sorted.bam files containing transcriptome- or genome-level read alignments for each of the two experimental conditions being compared. Note that this is **_the_** most critical consideration when running DRUMMER (or comparable tools). Working to the adage that what you give is what you get, it is vital that **_you_** are confident that the following conditions are satisified.
 
@@ -40,6 +42,12 @@ samtools sort -o dataset1.aligned.sorted.bam dataset1.aligned.bam
 
 samtools index dataset1.aligned.sorted.bam
 ```
+
+### Setting up a transcript list file
+
+COMING SOON...
+
+
 
 ## Running DRUMMER
 DRUMMER can be run in either exome or isoform mode. Exome mode (-m exome) uses DRS read alignments against the genome of a given organism to identify putatively modified bases while isoform mode (-m isoform) uses DRS read alignments against the transcriptome of a given organism to provide a high resolution mapping. While isoform mode is superior, it is also slower. 
@@ -76,11 +84,12 @@ Optional flags
 
 ## Interpreting output
 
+COMING SOON...
 
 
 ## Troubleshooting
 
-
+COMING SOON...
 
 
 
