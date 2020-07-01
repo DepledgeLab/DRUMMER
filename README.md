@@ -43,7 +43,7 @@ samtools sort -o dataset1.aligned.sorted.bam dataset1.aligned.bam
 samtools index dataset1.aligned.sorted.bam
 ```
 
-### Setting up a transcript list file
+### Setting up a transcript list file \[ -m isoform mode only \]
 
 COMING SOON...
 
