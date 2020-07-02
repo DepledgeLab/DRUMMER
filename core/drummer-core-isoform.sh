@@ -32,11 +32,11 @@ else
     mkdir "$output_dir"/bam_readcount
 fi
 
-if [ -d "$output_dir"/gTest ]; then
-    echo "Directory /path/to/dir exists."
-else
-    mkdir "$output_dir"/gTest
-fi
+#if [ -d "$output_dir"/gTest ]; then
+#    echo "Directory /path/to/dir exists."
+#else
+#    mkdir "$output_dir"/gTest
+#fi
 
 if [ -d "$output_dir"/transcripts ]; then
     echo "Directory /path/to/dir exists."
@@ -52,6 +52,8 @@ cat $transcriptome_file | awk '{ if (substr($0, 1, 1)==">") {filename=(substr($0
 
 
 ### LOOP FUNCTION REQUIRED BELOW????
+#FOR testing yes. FOR final version I do not think so, should handled by drummer.sh when xargs is called, this should hand parallelization as well.
+#(i.e.) cat $reference_file | xargs -P 8 -n 1 ./all_test.sh $test_file $control_file
 
 #for id in $(echo $list | cut -f1 -d$'\t'); do
 
@@ -62,6 +64,8 @@ do
 echo $id
 
 ### ONE LINER TO DETERMINE SEQUENCE LENGTH
+#bam_readcount=/gpfs/data/tsirigoslab/home/ja3539/Nanopore/OPEN/bam-readcount/bam-readcount/build/bin/bam-readcount
+
 length=$(awk '/^>/ {if (seqlen){print seqlen}; seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' "$output_dir"/transcripts/"$id".fa)
 
 #### UNIQUE MAP FILTER METHOD NOTE: REQUIRES -alt.sorted.bam
@@ -76,19 +80,31 @@ samtools index "$output_dir"/map/"$id".MOD.sorted.bam
 bam-readcount -f "$output_dir"/transcripts/"$id".fa "$output_dir"/map/"$id".UNMOD.sorted.bam "$id" > "$output_dir"/bam_readcount/"$id".UNMOD.bamreadcount.txt
 bam-readcount -f "$output_dir"/transcripts/"$id".fa "$output_dir"/map/"$id".MOD.sorted.bam "$id" > "$output_dir"/bam_readcount/"$id".MOD.bamreadcount.txt
 
-done < $list
-
-
-
-
-
-
-
-
-
+#done < $list
 
 #### JONATHAN TO CHECK BELOW
 
+input_bamreadcounts="$output_dir"/bam_readcount/$id
+python3 ../modules/readcount_filter.py -i $input_bamreadcounts -o $output_dir
+
+merged_transcripts="$output_dir"/merged/$id.*
+
+python3 ../modules/odds_ratio.py -i $merged_transcripts -o $output_dir
+
+motif_transcripts="$output_dir"/odds_ratio/$id.*
+
+python3 ../modules/motif_information.py -i $motif_transcripts -o $output_dir
+
+gtest_transcripts="$output_dir"/motif_information/$id.*
+
+python3 ../modules/Gtest.py -i $gtest_transcripts -o $output_dir
+
+candidate_transcripts="$output_dir"/gTest/$id.*
+
+python3 ../modules/find_candidates.py -i $candidate_transcripts -r $odds -l $log2fc -p $padj
+
+
+done < $list
 #input_bamreadcounts=bam_readcount/$name
 #echo $transcript_name
 #echo $control_file

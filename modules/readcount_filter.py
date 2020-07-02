@@ -47,11 +47,12 @@ def do_math(df:'DataFrame',index:int):
     
 #argument = 'bamreadcount/E3.RIDb'.split('/')
 input = input.split('/')
+print('input',input)
 # print(input)
 file = input.pop(-1)
 mypath = '/'.join(input)
 onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
-# print('File',file)
+print('File',file)
 #Test file is always second
 k = [mypath+'/'+i for i in onlyfiles if i.startswith(file)]
 k = sorted(k, key=lambda x:('TEST' in x, x))
