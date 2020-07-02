@@ -9,18 +9,18 @@ ap = argparse.ArgumentParser(description = 'Takes in the output from the pipelin
 using log2fc, odds_ratio and padj')
 requiredGrp = ap.add_argument_group('required arguments')
 requiredGrp.add_argument("-i",'--input', required=True, help="input file location")
-ap.add_argument("-r","--odds_ratio", required=False,nargs='?',const=1.3,type=int,default=1.3, help="odds ratio cutoff")
-ap.add_argument("-l","--log2_fc", required=False,nargs='?', const=-0.5,type=int,default=-0.5,help="Log2 fold change cutoff")
-ap.add_argument("-p","--padj", required=False,nargs='?',const=0.05,type=int,default=0.05, help="padj cutoff")
+requiredGrp.add_argument("-r",'--odds_ratio', required=True, help="input file location")
+requiredGrp.add_argument("-l",'--log2_fc', required=True, help="input file location")
+requiredGrp.add_argument("-p",'--padj', required=True, help="input file location")
 
 
 
 
 args = vars(ap.parse_args())
 input = args['input']
-odds_ratio = args['odds_ratio']
-log2fc = args['log2_fc']
-padj = args['padj']
+odds_ratio = float(args['odds_ratio'])
+log2fc = float(args['log2_fc'])
+padj = float(args['padj'])
 
 # print(log2fc, odds_ratio, padj)
 def is_candidate(df,log2fc,odds_ratio,padj):
