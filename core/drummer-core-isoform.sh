@@ -1,69 +1,128 @@
 #!/bin/bash 
 
+### ISOFORM LEVEL ANALYSIS
 
-#### TRANSCRIPT SPECIFIC ANALYSIS
+transcriptome_file=$1 ### Input transcriptome multi-FASTA file
+list=$2 ### list of transcript IDs - must match FASTA header
+test_file=$3 ### INPUT CTRL (RNA MOD PRESENT) SORTED BAM FILE
+control_file=$4  ### INPUT CTRL (RNA MOD ABSENT) SORTED BAM FILE
+output_dir=$5
+log2fc=$6
+odds=$7
+padj=$8
 
-test_file=$1
-control_file=$2
-transcript_name=$3
+echo $transcriptome_file $list $test_file $control_file $output_dir 
+
+### CHECK IF OUTPUT DIRECTORIES EXIST, OTHERWISE MAKE IT
+if [ -d "$output_dir" ]; then
+    echo "Directory /path/to/dir exists."
+else
+    mkdir "$output_dir"
+fi
+
+if [ -d "$output_dir"/map ]; then
+    echo "Directory /path/to/dir exists."
+else
+    mkdir "$output_dir"/map
+fi
+
+if [ -d "$output_dir"/bam_readcount ]; then
+    echo "Directory /path/to/dir exists."
+else
+    mkdir "$output_dir"/bam_readcount
+fi
+
+if [ -d "$output_dir"/gTest ]; then
+    echo "Directory /path/to/dir exists."
+else
+    mkdir "$output_dir"/gTest
+fi
+
+if [ -d "$output_dir"/transcripts ]; then
+    echo "Directory /path/to/dir exists."
+else
+    mkdir "$output_dir"/transcripts
+fi
 
 
-### NEED FUNCTION TO SPLITS PROVIDED FASTA FILE 
+### ADD FUNCTION TO SPLIT MULTI-FASTA INTO INDIVIDUAL TRANSCRIPTS
+
+cat $transcriptome_file | awk '{ if (substr($0, 1, 1)==">") {filename=(substr($0,2) ".fa")} print $0 > "'$output_dir'/transcripts/"filename }'
 
 
+
+### LOOP FUNCTION REQUIRED BELOW????
+
+#for id in $(echo $list | cut -f1 -d$'\t'); do
+
+
+while IFS=$'\t' read id remainder; 
+do
+
+echo $id
 
 ### ONE LINER TO DETERMINE SEQUENCE LENGTH
-length=$(awk '/^>/ {if (seqlen){print seqlen}; seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' transcripts/"$transcript_name".fa)
+length=$(awk '/^>/ {if (seqlen){print seqlen}; seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' "$output_dir"/transcripts/"$id".fa)
 
-mkdir -p map
 #### UNIQUE MAP FILTER METHOD NOTE: REQUIRES -alt.sorted.bam
-samtools view -b "$test_file" "$transcript_name":1-"$length" -o map/"$transcript_name".M3P1.bam
-samtools sort -o map/"$transcript_name".M3P1.sorted.bam map/"$transcript_name".M3P1.bam
-samtools index map/"$transcript_name".M3P1.sorted.bam
+samtools view -b "$test_file" "$id":1-"$length" -o "$output_dir"/map/"$id".UNMOD.bam
+samtools sort -o "$output_dir"/map/"$id".UNMOD.sorted.bam "$output_dir"/map/"$id".UNMOD.bam
+samtools index "$output_dir"/map/"$id".UNMOD.sorted.bam
 
-samtools view -b "$control_file" "$transcript_name":1-"$length" -o map/"$transcript_name".M3KO1.bam
-samtools sort -o map/"$transcript_name".M3KO1.sorted.bam map/"$transcript_name".M3KO1.bam
-samtools index map/"$transcript_name".M3KO1.sorted.bam
+samtools view -b "$control_file" "$id":1-"$length" -o "$output_dir"/map/"$id".MOD.bam
+samtools sort -o "$output_dir"/map/"$id".MOD.sorted.bam "$output_dir"/map/"$id".MOD.bam
+samtools index "$output_dir"/map/"$id".MOD.sorted.bam
 
-mkdir -p bam_readcount
-$bam_readcount -f transcripts/"$transcript_name".fa map/"$transcript_name".M3P1.sorted.bam "$transcript_name" > bam_readcount/"$transcript_name".M3P1.bamreadcount.txt
-$bam_readcount -f transcripts/"$transcript_name".fa map/"$transcript_name".M3KO1.sorted.bam "$transcript_name" > bam_readcount/"$transcript_name".M3KO1.bamreadcount.txt
+bam-readcount -f "$output_dir"/transcripts/"$id".fa "$output_dir"/map/"$id".UNMOD.sorted.bam "$id" > "$output_dir"/bam_readcount/"$id".UNMOD.bamreadcount.txt
+bam-readcount -f "$output_dir"/transcripts/"$id".fa "$output_dir"/map/"$id".MOD.sorted.bam "$id" > "$output_dir"/bam_readcount/"$id".MOD.bamreadcount.txt
 
-
-
+done < $list
 
 
-input_bamreadcounts=bam_readcount/$transcript_name
+
+
+
+
+
+
+
+
+#### JONATHAN TO CHECK BELOW
+
+#input_bamreadcounts=bam_readcount/$name
 #echo $transcript_name
 #echo $control_file
 #echo $test_file
 
 #Creates a directory called filter and subdir of transcript name
-python3 readcount_filter.py -i $input_bamreadcounts
+#python3 ../modules/readcount_filter.py -i $input_bamreadcounts
 
-#paste -d "\t" "$input_bamreadcounts".M3P1.filtered.txt "$input_bamreadcounts".M3KO1.filtered.txt > "$input_bamreadcounts".merged.filtered.txt
+#paste -d "\t" "$input_bamreadcounts".TEST.filtered.txt "$input_bamreadcounts".TEST.filtered.txt > "$input_bamreadcounts".merged.filtered.txt
 
 #odds_ratio / make new directory with odds ratio added to individual reads
 #merged_transcripts=merged/$transcript_name.*
-merged_transcripts=merged/$transcript_name.*
+#merged_transcripts=merged/$name.*
 #echo $transcript_name
 #echo $merged_transcripts
-python3 odds_ratio.py -i $merged_transcripts
+#python3 ../modules/odds_ratio.py -i $merged_transcripts
 
 #motif_information / make new directory with motif information added to individual reads
 #python3 motif_information.py -i odds_ratio/AdPol.merged.filtered.odds_ratio.txt
 
-motif_transcripts=odds_ratio/$transcript_name.*
+#motif_transcripts=odds_ratio/$name.*
 #motif_transcripts=odds_ratio/$transcript_name.*
 #echo $motif_transcripts
-python3 motif_information.py -i $motif_transcripts
-
-
+#python3 ../modules/motif_information.py -i $motif_transcripts
 
 #Gtest/ make new directory of gtest values added to individual reads
-gtest_transcripts=motif_information/$transcript_name.*
+#gtest_transcripts=motif_information/$transcript_name.*
 #gtest_transcripts=motif_information/$transcript_name.*
 #python3 create_output_file.py -i _ -o gTest
 #echo $gtest_transcripts
-mkdir -p gTest
-Rscript Gtest.R $gtest_transcripts gTest/$transcript_name.merged.odds_ratio.motif_information.gtest.csv
+# Rscript ../modules/Gtest.R $gtest_transcripts "$output_dir"/gTest/$transcript_name.merged.odds_ratio.motif_information.gtest.csv
+#python3 ../modules/Gtest.py -i $gtest_transcripts
+
+#candidate_transcripts=gTest/$transcript_name.*
+#python3 ../modules/find_candidates.py -i $candidate_transcripts -r $odds -l $log2fc -p $padj
+
+
