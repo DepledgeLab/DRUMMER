@@ -15,12 +15,14 @@ and returns a text file containing the count of each nucleotide at the position 
 fraction of the reference nucleotide among all reads.')
 requiredGrp = ap.add_argument_group('required arguments')
 requiredGrp.add_argument("-i","--input", required=True, help="input file location")
-
+requiredGrp.add_argument("-o","--output", required=True, help="output directory location")
 
 args = vars(ap.parse_args())
 input = args['input']
+output = args['output']
 
 
+# print('output',output)
 def proper_filter(read_metrics:list):
     """Takes in a list returns a dictionary with counts of each nucleotide
     """
@@ -45,13 +47,16 @@ def do_math(df:'DataFrame',index:int):
     
 #argument = 'bamreadcount/E3.RIDb'.split('/')
 input = input.split('/')
-mypath = input[0]
-file = input[1]
+# print(input)
+file = input.pop(-1)
+mypath = '/'.join(input)
 onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
-print('File',file)
-#KO file is always second
+# print('File',file)
+#Test file is always second
 k = [mypath+'/'+i for i in onlyfiles if i.startswith(file)]
-k = sorted(k, key=lambda x:('KO' in x, x))
+k = sorted(k, key=lambda x:('TEST' in x, x))
+
+# print('k',k)
 lst = []
 for i in k:
     list_of_rows = []
@@ -67,9 +72,14 @@ for i in k:
     filtered_df = filtered_df[filtered_df['depth'] != '0'].reset_index(drop=True)
     filtered_df['ref_fraction'] = [do_math(filtered_df,i) for i in range(len(filtered_df))]
     lst.append(filtered_df)
-    output = create_output(i,'filtered',file)
-    without_sub = create_output(i,'filtered')
-    filtered_df.to_csv(output,sep = '\t', index = False)
+#     print(i)
+#     print('file',file)
+    output_path = create_output(output,i,'filtered',file)
+#     print('output',output)
+    without_sub = create_output(output,i,'filtered')
+#     print('without_sub',without_sub)
+#     print(# output)
+    filtered_df.to_csv(output_path,sep = '\t', index = False)
 
 cols = ['chr', 'pos', 'ref', 'depth', 'A', 'C', 'G', 'T', 'N', 'ref_fraction',
        'chr.1', 'pos.1', 'ref.1', 'depth.1', 'A.1', 'C.1', 'G.1', 'T.1', 'N.1',
@@ -77,10 +87,12 @@ cols = ['chr', 'pos', 'ref', 'depth', 'A', 'C', 'G', 'T', 'N', 'ref_fraction',
        
 merged_df = pd.concat([lst[0],lst[1]],axis =1)
 merged_df.columns = cols
-merged_dir = 'merged/' 
-
+merged_dir = output + '/' + 'merged/'
+print('merged_dir',merged_dir)
 os.makedirs(merged_dir, exist_ok = True)
-output_dir = 'merged/' + file + '.merged.txt'
+
+output_dir = merged_dir + file + '.merged.txt'
+print('output_dir',output_dir)
 #merged_dir = without_sub.split('.')
 #merged_dir.insert(-1,'merged')
 #merged_dir = '.'.join(merged_dir)

@@ -37,5 +37,6 @@ include_candidate_df = is_candidate(include_candidate_df,log2fc,odds_ratio,padj)
 print('Candidate sites:\n',include_candidate_df['candidate_site'].value_counts())
 # include_candidate_df.to_csv(output,index=False)
 
-output = create_output(input,'candidates')
-include_candidate_df.to_csv(output,sep = '\t', index = False)
+# output = create_output(input,input,'candidates')
+print(input)
+include_candidate_df.to_csv(input,sep = '\t', index = False)

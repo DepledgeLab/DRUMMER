@@ -1,19 +1,16 @@
 import os
 import argparse
-def create_output(input_file:str,output_dir_name:str,subdir=False):
+def create_output(output_dir_path:str,input_file:str,output_dir_name:str,subdir=False):
 	"""Takes in an input file and returns an output file
 	"""
 	# Making the new output directory
-	if '/' in input_file:
-		input_file = input_file.split('/').pop(-1)
-	
-	current_directory = os.getcwd()
-	output_dir = current_directory + '/' + output_dir_name
-	print(input_file)
+	input_file = input_file.split('/')[-1]
+# 	print('output_dir_path',output_dir_path)
+	output_dir = ''
 	if subdir != False:
-		#print('here')
-		output_dir = output_dir + '/' + subdir
-	print(output_dir)
+	    output_dir = output_dir_path + '/' + output_dir_name + '/' + subdir
+	else:
+		output_dir = output_dir_path + '/' + output_dir_name
 	os.makedirs(output_dir, exist_ok = True)
 	# Name of the file
 	split_input_file = input_file.split('.')

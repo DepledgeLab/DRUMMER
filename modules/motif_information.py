@@ -10,11 +10,11 @@ and returns a text file containing the count of each nucleotide at the position 
 fraction of the reference nucleotide among all reads.')
 requiredGrp = ap.add_argument_group('required arguments')
 requiredGrp.add_argument("-i","--input", required=True, help="input file location")
-
+requiredGrp.add_argument("-o","--output", required=True, help="output file directory")
 
 args = vars(ap.parse_args())
 input = args['input']
-
+output = args['output']
 
 def closest_ac(df):
     seq = ''.join(df['ref_unmod'])
@@ -50,6 +50,7 @@ def get_kmers(df,num_kmers1,num_kmers2):
 
 
 df = pd.read_csv(input,sep = '\t')
+# print(df.columns)
 df = df.dropna()
 near_ac,five_bp_motif = closest_ac(df)
 five,eleven = get_kmers(df,5,11)
@@ -59,5 +60,5 @@ df['nearest_ac_motif'] = five_bp_motif
 df['five_bp_motif'] = five
 df['eleven_bp_motif'] = eleven
 
-output = create_output(input,'motif_information')
+output = create_output(output,input,'motif_information')
 df.to_csv(output,sep = '\t', index = False)

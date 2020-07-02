@@ -11,11 +11,12 @@ and returns a text file containing the count of each nucleotide at the position 
 fraction of the reference nucleotide among all reads.')
 requiredGrp = ap.add_argument_group('required arguments')
 requiredGrp.add_argument("-i","--input", required=True, help="input file location")
+requiredGrp.add_argument("-o","--output", required=True, help="output file directory")
 #requiredGrp.add_argument("-i2","--input2", required=True, help="input2 file location")
 
 args = vars(ap.parse_args())
 input = args['input']
-#output = args['output']
+output = args['output']
 
 
 
@@ -96,8 +97,8 @@ df['fold_change'] = fold_change
 df['log2_fc'] = log2_fc
 df['odds_ratio'] = odds_vals
 
-output = create_output(input,'odds_ratio')
-
+output = create_output(output,input,'odds_ratio')
+print(output)
 df.to_csv(output,sep = '\t', index = False)
 
 

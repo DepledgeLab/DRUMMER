@@ -12,14 +12,18 @@ and returns a text file containing the count of each nucleotide at the position 
 fraction of the reference nucleotide among all reads.')
 requiredGrp = ap.add_argument_group('required arguments')
 requiredGrp.add_argument("-i","--input", required=True, help="input file location")
+requiredGrp.add_argument("-o","--output", required=True, help="output file directory")
+
 #requiredGrp.add_argument("-i2","--input2", required=True, help="input2 file location")
 
 args = vars(ap.parse_args())
 input = args['input']
+output = args['output']
 
 
-df = pd.read_csv(input)
+df = pd.read_csv(input,sep = '\t')
 
+# print(df.columns)
 #Get columns of interest
 control = [[row['A_unmod'],row['C_unmod'],row['G_unmod'],row['T_unmod'],row['N_unmod']] for index,row in df.iterrows()]
 test = [[row['A_mod'],row['C_mod'],row['G_mod'],row['T_mod'],row['N_mod']] for index,row in df.iterrows()]
@@ -43,7 +47,7 @@ df['G_test'] = gtests
 df['p_val'] = p_vals
 
 #Padj is obtained by multiplying pval by length of dataframe
-df['padj'] = df['p'] * len(df)
+df['padj'] = df['p_val'] * len(df)
 
-output = create_output(input,'gTest')
+output = create_output(output,input,'gTest')
 df.to_csv(output,sep = '\t', index = False)
