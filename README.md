@@ -15,7 +15,7 @@ DRUMMER requires the following packages to be installed and available in the use
 [SAMTools](http://www.htslib.org/) v1.3 or higher
 [bam-readcount](https://github.com/genome/bam-readcount) v0.8 or higher
 
-Python3 and modules: pandas, numpy
+Python3 and modules: pandas, numpy, scipy
 
 ### Setting up DRUMMER
 git clone https://github.com/DepledgeLab/DRUMMER
