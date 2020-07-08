@@ -102,10 +102,44 @@ Optional flags
 
 
 
-## Interpreting output
+## Output
 
-COMING SOON...
-
+When run to completion, DRUMMER outputs a single text file containing the results. A detailed description of the column headers follow.
+```
+chr_unmod: name of chromosome or transcript
+pos_unmod: position of nucleotide on chromosome/transcript
+ref_unmod: nucleotide at this position
+depth_unmod: read depth at this position
+A_unmod: number of reads supporting an Adenine at this position
+C_unmod: number of reads supporting an Cytosine at this position
+G_unmod: number of reads supporting an Guanine at this position
+T_unmod: number of reads supporting an Thymine at this position
+N_unmod: number of reads supporting an indel (N) at this position
+ref_fraction_unmod: fraction of reads matching the reference nucleotide
+chr_mod: name of chromosome or transcript
+pos_mod: position of nucleotide on chromosome/transcript
+ref_mod: nucleotide at this position
+depth_mod: read depth at this position
+A_mod: number of reads supporting an Adenine at this position
+C_mod: number of reads supporting an Cytosine at this position
+G_mod: number of reads supporting an Guanine at this position
+T_mod: number of reads supporting an Thymine at this position
+N_mod: number of reads supporting an indel (N) at this position
+ref_fraction_mod: fraction of reads matching the reference nucleotide
+ratio_unmod: 
+ratio_mod: 
+fold_change: fold change difference between ratio_unmod and ratio_mod
+log2_fc: log2 fold change
+odds_ratio: odds ratio
+nearest_ac: (m6A only) distance (nt) to nearest AC motif (-ve indicates upstream, +ve indicates downstream)
+nearest_ac_motif: (m6A only) sequence (5-mer) of nearest AC motif (centered on A)
+five_bp_motif: sequence (5-mer) centered on current position
+eleven_bp_motif: sequence (11-mer) centered on current position
+G_test: Result of 2x5 G-test
+p_val: p-value of G-test
+padj: bonferroni-corrected p-value
+candidate_site: Nucleotide predicted to be modified based on supplied cutoffs for padj, odds_ratio, and log2_fc
+```
 
 ## Troubleshooting
 
@@ -113,7 +147,7 @@ COMING SOON...
 
 
 
-
+### Wisdom
 Detim imim finyish du wa ting, im ye fo sèmpere
 
 
