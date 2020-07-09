@@ -51,10 +51,8 @@ samtools view -b "$control_file" "$name":1-"$length" -o "$output_dir"/map/"$name
 samtools sort -o "$output_dir"/map/"$name".CTRL.sorted.bam "$output_dir"/map/"$name".CTRL.bam
 samtools index "$output_dir"/map/"$name".CTRL.sorted.bam
 
-bam_readcount=/gpfs/data/tsirigoslab/home/ja3539/Nanopore/OPEN/bam-readcount/bam-readcount/build/bin/bam-readcount
-
-$bam_readcount -f "$genome_file" "$output_dir"/map/"$name".TEST.sorted.bam "$name" > "$output_dir"/bam_readcount/"$name".TEST.bamreadcount.txt
-$bam_readcount -f "$genome_file" "$output_dir"/map/"$name".CTRL.sorted.bam "$name" > "$output_dir"/bam_readcount/"$name".CTRL.bamreadcount.txt
+./../modules/bam-readcount -f "$genome_file" "$output_dir"/map/"$name".TEST.sorted.bam "$name" > "$output_dir"/bam_readcount/"$name".TEST.bamreadcount.txt
+./../modules/bam-readcount -f "$genome_file" "$output_dir"/map/"$name".CTRL.sorted.bam "$name" > "$output_dir"/bam_readcount/"$name".CTRL.bamreadcount.txt
 
 
 #### JONATHAN TO CHECK BELOW
