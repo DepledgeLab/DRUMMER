@@ -86,8 +86,9 @@ cols = ['chr', 'pos', 'ref', 'depth', 'A', 'C', 'G', 'T', 'N', 'ref_fraction',
        'chr.1', 'pos.1', 'ref.1', 'depth.1', 'A.1', 'C.1', 'G.1', 'T.1', 'N.1',
        'ref_fraction.1']
        
-merged_df = pd.concat([lst[0],lst[1]],axis =1)
-merged_df.columns = cols
+# merged_df = pd.concat([lst[0],lst[1]],axis =1)
+# merged_df.columns = cols
+merged_df = lst[0].merge(lst[1],on = 'pos',suffixes = ('','.1'))
 merged_dir = output + '/' + 'merged/'
 print('merged_dir',merged_dir)
 os.makedirs(merged_dir, exist_ok = True)
