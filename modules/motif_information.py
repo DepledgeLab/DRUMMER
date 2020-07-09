@@ -28,7 +28,7 @@ def closest_ac(df):
         zero_index_correction = i + 1
         five_base_motif.append(seq[closest_value-2:closest_value+3])
         #print('closest_value',closest_value,'index',zero_index_correction)
-        nearest_ac.append(zero_index_correction - closest_value + 1)
+        nearest_ac.append(zero_index_correction - closest_value - 1)
     return nearest_ac,five_base_motif
     
 def get_kmers(df,num_kmers1,num_kmers2):

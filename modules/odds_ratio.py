@@ -39,7 +39,7 @@ def return_odds(max_c,max_t,sum_c,sum_t):
     odds_list = []
     for m_c,m_t,s_c,s_t in zip(max_c,max_t,sum_c,sum_t):
         try:
-            odds = 1 /((m_c*(s_t-m_t))/((m_t*(s_c-m_c))))
+            odds = (m_c*(s_t-m_t))/((m_t*(s_c-m_c)))
             odds_list.append(odds)
         except ZeroDivisionError:
             odds_list.append(1)
@@ -83,7 +83,7 @@ def return_ratio(max_list:list,sum_list:list):
 
     
 df = pd.read_csv(input,sep='\t')
-df.columns = [i.replace('.1','_mod') if '.1' in i else i+'_unmod' for i in df.columns ]
+df.columns = [i.replace('.1','_unmod') if '.1' in i else i+'_mod' for i in df.columns ]
 
 control = [[row['A_unmod'],row['C_unmod'],row['G_unmod'],row['T_unmod'],row['N_unmod']] for index,row in df.iterrows()]
 test = [[row['A_mod'],row['C_mod'],row['G_mod'],row['T_mod'],row['N_mod']] for index,row in df.iterrows()]
