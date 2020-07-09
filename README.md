@@ -13,14 +13,12 @@ Experimental design defines the context of analysis and the modifications likely
 ### Pre-requisites
 DRUMMER requires the following packages to be installed and available in the users path: 
 [SAMTools](http://www.htslib.org/) v1.3 or higher
-[bam-readcount](https://github.com/genome/bam-readcount) v0.8 or higher
+[BEDTools](https://bedtools.readthedocs.io/en/latest/) v2.26 or higher
 
 Python3 and modules: pandas, numpy, scipy
 
 ### Setting up DRUMMER
 git clone https://github.com/DepledgeLab/DRUMMER
-
-COMING SOON...
 
 ## Data preparation
 
