@@ -85,8 +85,8 @@ samtools view -b "$control_file" "$id":1-"$length" -o "$output_dir"/map/"$id".MO
 samtools sort -o "$output_dir"/map/"$id".MOD.sorted.bam "$output_dir"/map/"$id".MOD.bam
 samtools index "$output_dir"/map/"$id".MOD.sorted.bam
 
-bam-readcount -f "$output_dir"/transcripts/"$id".fa "$output_dir"/map/"$id".UNMOD.sorted.bam "$id" > "$output_dir"/bam_readcount/"$id".UNMOD.bamreadcount.txt
-bam-readcount -f "$output_dir"/transcripts/"$id".fa "$output_dir"/map/"$id".MOD.sorted.bam "$id" > "$output_dir"/bam_readcount/"$id".MOD.bamreadcount.txt
+./../modules/bam-readcount -f "$output_dir"/transcripts/"$id".fa "$output_dir"/map/"$id".UNMOD.sorted.bam "$id" > "$output_dir"/bam_readcount/"$id".UNMOD.bamreadcount.txt
+./../modules/bam-readcount -f "$output_dir"/transcripts/"$id".fa "$output_dir"/map/"$id".MOD.sorted.bam "$id" > "$output_dir"/bam_readcount/"$id".MOD.bamreadcount.txt
 
 #done < $list
 
@@ -109,7 +109,7 @@ python3 "$DIR"/../modules/Gtest.py -i $gtest_transcripts -o $output_dir
 
 candidate_transcripts="$output_dir"/gTest/$id.*
 
-python3 "$DIR"/../modules/find_candidates.py -i $candidate_transcripts -r $odds -l $log2fc -p $padj -o $output_dir/$name.complete.txt
+python3 "$DIR"/../modules/find_candidates.py -i $candidate_transcripts -r $odds -l $log2fc -p $padj -o $output_dir/$id.complete.txt
 
 done < $list
 
