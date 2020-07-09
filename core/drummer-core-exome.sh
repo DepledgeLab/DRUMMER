@@ -51,8 +51,10 @@ samtools view -b "$control_file" "$name":1-"$length" -o "$output_dir"/map/"$name
 samtools sort -o "$output_dir"/map/"$name".CTRL.sorted.bam "$output_dir"/map/"$name".CTRL.bam
 samtools index "$output_dir"/map/"$name".CTRL.sorted.bam
 
-bam-readcount -f "$genome_file" "$output_dir"/map/"$name".TEST.sorted.bam "$name" > "$output_dir"/bam_readcount/"$name".TEST.bamreadcount.txt
-bam-readcount -f "$genome_file" "$output_dir"/map/"$name".CTRL.sorted.bam "$name" > "$output_dir"/bam_readcount/"$name".CTRL.bamreadcount.txt
+bam_readcount=/gpfs/data/tsirigoslab/home/ja3539/Nanopore/OPEN/bam-readcount/bam-readcount/build/bin/bam-readcount
+
+$bam_readcount -f "$genome_file" "$output_dir"/map/"$name".TEST.sorted.bam "$name" > "$output_dir"/bam_readcount/"$name".TEST.bamreadcount.txt
+$bam_readcount -f "$genome_file" "$output_dir"/map/"$name".CTRL.sorted.bam "$name" > "$output_dir"/bam_readcount/"$name".CTRL.bamreadcount.txt
 
 
 #### JONATHAN TO CHECK BELOW
@@ -91,7 +93,7 @@ gtest_transcripts="$output_dir"/motif_information/$name.*
 python3 ../modules/Gtest.py -i $gtest_transcripts -o $output_dir
 
 candidate_transcripts="$output_dir"/gTest/$name.*
-python3 ../modules/find_candidates.py -i $candidate_transcripts -r $odds -l $log2fc -p $padj
+python3 ../modules/find_candidates.py -i $candidate_transcripts -r $odds -l $log2fc -p $padj -o $output_dir/$name.complete.txt
 
 
 

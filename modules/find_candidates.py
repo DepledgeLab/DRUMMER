@@ -12,7 +12,7 @@ requiredGrp.add_argument("-i",'--input', required=True, help="input file locatio
 requiredGrp.add_argument("-r",'--odds_ratio', required=True, help="input file location")
 requiredGrp.add_argument("-l",'--log2_fc', required=True, help="input file location")
 requiredGrp.add_argument("-p",'--padj', required=True, help="input file location")
-
+requiredGrp.add_argument("-o",'--output', required=True, help="output file location")
 
 
 
@@ -21,6 +21,7 @@ input = args['input']
 odds_ratio = float(args['odds_ratio'])
 log2fc = float(args['log2_fc'])
 padj = float(args['padj'])
+output = args['output']
 
 # print(log2fc, odds_ratio, padj)
 def is_candidate(df,log2fc,odds_ratio,padj):
@@ -39,4 +40,4 @@ print('Candidate sites:\n',include_candidate_df['candidate_site'].value_counts()
 
 # output = create_output(input,input,'candidates')
 print(input)
-include_candidate_df.to_csv(input,sep = '\t', index = False)
+include_candidate_df.to_csv(output,sep = '\t', index = False)
