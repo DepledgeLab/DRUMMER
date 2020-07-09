@@ -3,6 +3,15 @@ set -e
 set -u
 set -o pipefail
 
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+
+
 usage(){
 echo "
 DRUMMER (2020 - present)
@@ -35,7 +44,6 @@ DRUMMER was written by Jonathan S. Abebe & Daniel P. Depledge.
 If you encounter any problems with DRUMMER, please log them as an issue at the GitHub page https://github.com/DepledgeLab/DRUMMER
 "
 }
-
 
 ### Function for showing usage
 if [[ ( $# == "--help") ||  $# == "-h" ||  $# == 0 ]] 
@@ -129,7 +137,8 @@ if [[ "$runmode" == "exome" ]]; then
      echo "-m exome requires -n [flag]"
      exit
   fi
-echo "Hallelujah"
+#echo "Hallelujah"
+"$DIR"/core/drummer-core-exome.sh $reference_file $name $test_file $control_file $output_dir $log2fc $odds $padj
 #xargs -P 8 -n 1 ./core/drummer-core-exome.sh $reference_file $name $test_file $control_file $output_dir $log2fc $odds $padj
 
 elif [[ "$runmode" == "isoform" ]]; then
@@ -139,8 +148,9 @@ elif [[ "$runmode" == "isoform" ]]; then
      echo "-m isoform requires -u [flag]"
      exit
   fi
-echo "Hallelujah"
+#echo "Hallelujah"
 #xargs -P 8 -n 1 ./core/drummer-core-isoform.sh $reference_file $transcripts $test_file $control_file $output_dir $log2fc $odds $padj
+"$DIR"/core/drummer-core-isoform.sh $reference_file $transcripts $test_file $control_file $output_dir $log2fc $odds $padj
 else
 echo "ERROR:: User must specify runmode as -m exome|isoform"
 echo ""

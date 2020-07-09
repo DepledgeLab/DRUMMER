@@ -1,5 +1,13 @@
 #!/bin/bash 
 
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+
 ### ISOFORM LEVEL ANALYSIS
 
 transcriptome_file=$1 ### Input transcriptome multi-FASTA file
@@ -85,25 +93,27 @@ bam-readcount -f "$output_dir"/transcripts/"$id".fa "$output_dir"/map/"$id".MOD.
 #### JONATHAN TO CHECK BELOW
 
 input_bamreadcounts="$output_dir"/bam_readcount/$id
-python3 ../modules/readcount_filter.py -i $input_bamreadcounts -o $output_dir
+python3 "$DIR"/../modules/readcount_filter.py -i $input_bamreadcounts -o $output_dir
 
 merged_transcripts="$output_dir"/merged/$id.*
 
-python3 ../modules/odds_ratio.py -i $merged_transcripts -o $output_dir
+python3 "$DIR"/../modules/odds_ratio.py -i $merged_transcripts -o $output_dir
 
 motif_transcripts="$output_dir"/odds_ratio/$id.*
 
-python3 ../modules/motif_information.py -i $motif_transcripts -o $output_dir
+python3 "$DIR"/../modules/motif_information.py -i $motif_transcripts -o $output_dir
 
 gtest_transcripts="$output_dir"/motif_information/$id.*
 
-python3 ../modules/Gtest.py -i $gtest_transcripts -o $output_dir
+python3 "$DIR"/../modules/Gtest.py -i $gtest_transcripts -o $output_dir
 
 candidate_transcripts="$output_dir"/gTest/$id.*
 
-python3 ../modules/find_candidates.py -i $candidate_transcripts -r $odds -l $log2fc -p $padj -o $output_dir/$name.complete.txt
+python3 "$DIR"/../modules/find_candidates.py -i $candidate_transcripts -r $odds -l $log2fc -p $padj -o $output_dir/$name.complete.txt
 
 done < $list
+
+
 #input_bamreadcounts=bam_readcount/$name
 #echo $transcript_name
 #echo $control_file
