@@ -111,7 +111,7 @@ python3 "$DIR"/../modules/Gtest.py -i $gtest_transcripts -o $output_dir
 
 candidate_transcripts="$output_dir"/gTest/$id.*
 
-python3 "$DIR"/../modules/find_candidates.py -i $candidate_transcripts -r $odds -l $log2fc -p $padj -o $output_dir/$id.complete.txt
+python3 "$DIR"/../modules/find_candidates.py -i $candidate_transcripts -r $odds -p $padj -o $output_dir/$id.complete.txt
 
 done < $list
 
