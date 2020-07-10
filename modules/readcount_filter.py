@@ -34,8 +34,9 @@ def proper_filter(read_metrics:list):
             keep_track[splitted_metrics[0]] += int(splitted_metrics[1])
         elif indiv_metrics[0] not in nucleotides and indiv_metrics[0] != '=':
             splitted_metrics = indiv_metrics.split(':')
-            if len(splitted_metrics[0]) <= 3: #Keep in count the -2 - +2  indels
-            	keep_track['N'] += int(splitted_metrics[1]) 
+            keep_track['N'] += int(splitted_metrics[1]) 
+#             if len(splitted_metrics[0]) <= 3: #Keep in count the -2 - +2  indels
+#             	keep_track['N'] += int(splitted_metrics[1]) 
     return keep_track
     
 def new_depth(df):

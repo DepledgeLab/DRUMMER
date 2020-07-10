@@ -10,7 +10,7 @@ using log2fc, odds_ratio and padj')
 requiredGrp = ap.add_argument_group('required arguments')
 requiredGrp.add_argument("-i",'--input', required=True, help="input file location")
 requiredGrp.add_argument("-r",'--odds_ratio', required=True, help="input file location")
-requiredGrp.add_argument("-l",'--log2_fc', required=True, help="input file location")
+requiredGrp.add_argument("-l",'--log2_fc', required=False, help="input file location")
 requiredGrp.add_argument("-p",'--padj', required=True, help="input file location")
 requiredGrp.add_argument("-o",'--output', required=True, help="output file location")
 
@@ -27,7 +27,8 @@ output = args['output']
 def is_candidate(df,log2fc,odds_ratio,padj):
     '''Takes in a dataframe looks at log2fc, odds and padj to determine if the site is a candidate'''
 #     print('log2fc',df[df['log2_fc']<log2fc])
-    idx = (df['log2_fc']>log2fc) & (df['odds_ratio']>odds_ratio) &(df['padj']< padj)
+    idx = ((df['odds_ratio']>odds_ratio) &(df['padj']< padj)
+	#idx = (df['log2_fc']>log2fc) & (df['odds_ratio']>odds_ratio) &(df['padj']< padj)
     df['candidate_site'] = ['Candidate' if i == True else '' for i in idx ]
     return df
 
