@@ -8,6 +8,8 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
+echo "$DIR"
+
 ### ISOFORM LEVEL ANALYSIS
 
 transcriptome_file=$1 ### Input transcriptome multi-FASTA file
@@ -85,8 +87,8 @@ samtools view -b "$control_file" "$id":1-"$length" -o "$output_dir"/map/"$id".MO
 samtools sort -o "$output_dir"/map/"$id".MOD.sorted.bam "$output_dir"/map/"$id".MOD.bam
 samtools index "$output_dir"/map/"$id".MOD.sorted.bam
 
-./../modules/bam-readcount -f "$output_dir"/transcripts/"$id".fa "$output_dir"/map/"$id".UNMOD.sorted.bam "$id" > "$output_dir"/bam_readcount/"$id".UNMOD.bamreadcount.txt
-./../modules/bam-readcount -f "$output_dir"/transcripts/"$id".fa "$output_dir"/map/"$id".MOD.sorted.bam "$id" > "$output_dir"/bam_readcount/"$id".MOD.bamreadcount.txt
+"$DIR"/../modules/bam-readcount -f "$output_dir"/transcripts/"$id".fa "$output_dir"/map/"$id".UNMOD.sorted.bam "$id" > "$output_dir"/bam_readcount/"$id".UNMOD.bamreadcount.txt
+"$DIR"/../modules/bam-readcount -f "$output_dir"/transcripts/"$id".fa "$output_dir"/map/"$id".MOD.sorted.bam "$id" > "$output_dir"/bam_readcount/"$id".MOD.bamreadcount.txt
 
 #done < $list
 
