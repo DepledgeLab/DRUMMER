@@ -39,11 +39,11 @@ def proper_filter(read_metrics:list):
 #             	keep_track['N'] += int(splitted_metrics[1]) 
     return keep_track
     
-def new_depth(df):
-    new_depths = []
-    for index,column in df.iterrows():
-        new_depths.append(sum([column['A'],column['C'],column['G'],column['T'],column['N']]))
-    return new_depths
+# def new_depth(df):
+#     new_depths = []
+#     for index,column in df.iterrows():
+#         new_depths.append(sum([column['A'],column['C'],column['G'],column['T'],column['N']]))
+#     return new_depths
     
 def do_math(df:'DataFrame',index:int):
     """Takes in dataframe and row index, returns that rows reference fraction
@@ -78,7 +78,7 @@ for i in k:
             list_of_rows.append(pd.DataFrame([first_4_dict]))
     filtered_df = pd.concat(list_of_rows).reset_index(drop=True)
     filtered_df.columns = columns_names
-    filtered_df['depth'] = new_depth(filtered_df)
+#     filtered_df['depth'] = new_depth(filtered_df)
     filtered_df = filtered_df[filtered_df['depth'] != 0].reset_index(drop=True)
     filtered_df['ref_fraction'] = [do_math(filtered_df,i) for i in range(len(filtered_df))]
     lst.append(filtered_df)
