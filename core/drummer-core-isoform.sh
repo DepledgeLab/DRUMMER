@@ -113,6 +113,8 @@ candidate_transcripts="$output_dir"/gTest/$id.*
 
 python3 "$DIR"/../modules/find_candidates.py -i $candidate_transcripts -r $odds -p $padj -o $output_dir/$id.complete.txt
 
+##Location of transcript file?
+#python3 "$DIR"/../modules/genomic_locations.py -i $output_dir/$id.complete.txt -t $list -o $output_dir/$id.complete.txt
 done < $list
 
 
