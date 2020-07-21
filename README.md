@@ -72,7 +72,7 @@ DRUMMER can be run in either exome or isoform mode. Exome mode (-m exome) uses D
 
 Usage:
 ```
-Usage: drummer.sh -r [FASTA] -l|-n [TARGETS] -c [CONTROL] -t [TEST] -o [OUTPUT] -m [RUNMODE] (OPTIONS)
+Usage: drummer.sh -r [FASTA] -u|-n [TARGETS] -c [CONTROL] -t [TEST] -o [OUTPUT] -m [RUNMODE] (OPTIONS)
 ```
 Required flags
 ```
