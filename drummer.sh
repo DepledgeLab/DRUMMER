@@ -21,7 +21,7 @@ error rates in nanopore direct RNA sequencing data
 
 https://github.com/DepledgeLab/DRUMMER
 
-Usage: drummer.sh -r [FASTA] -l|-n [TARGETS] -c [CONTROL] -t [TEST] -o [OUTPUT] -m [RUNMODE] (OPTIONS)
+Usage: drummer.sh -r [FASTA] -u|-n [TARGETS] -c [CONTROL] -t [TEST] -o [OUTPUT] -m [RUNMODE] (OPTIONS)
 
 Required flags:
 -r 		fasta format reference genome (exome) or transcriptome (isoforms)
