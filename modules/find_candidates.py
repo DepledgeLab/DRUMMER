@@ -29,7 +29,7 @@ def is_candidate(df,odds_ratio,padj):
 #     print('log2fc',df[df['log2_fc']<log2fc])
     idx = ((df['odds_ratio']>odds_ratio) &(df['padj']< padj) & (df['ref_fraction_mod'] < df['ref_fraction_unmod']))
 	#idx = (df['log2_fc']>log2fc) & (df['odds_ratio']>odds_ratio) &(df['padj']< padj)
-    df['candidate_site'] = ['Candidate' if i == True else '' for i in idx ]
+    df['candidate_site'] = ['candidate' if i == True else '' for i in idx ]
     return df
 
 include_candidate_df = pd.read_csv(input,sep = '\t')
