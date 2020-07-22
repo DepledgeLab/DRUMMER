@@ -138,8 +138,8 @@ candidate_site: Nucleotide predicted to be modified based on supplied cutoffs fo
 A simple test dataset is included in the DRUMMER repository and can be used to verify DRUMMER is working correctly in your environment. Both exome-mode and isoform-mode analyses should complete in a matter of minutes.
 
 exome mode
-```./drummer.sh -r TESTDATA/Adenovirus-Ad5.fasta -n Ad5 -c TESTDATA/exome.sample.MOD.bam -t TESTDATA/exome.sample.UNMOD.bam -o OUTPUTDIR_exome -m exome
-TESTDATA/Adenovirus-Ad5.fasta
+```
+./drummer.sh -r TESTDATA/Adenovirus-Ad5.fasta -n Ad5 -c TESTDATA/exome.sample.MOD.bam -t TESTDATA/exome.sample.UNMOD.bam -o OUTPUTDIR_exome -m exome
 ```
 
 isoform mode
