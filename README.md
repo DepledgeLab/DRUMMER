@@ -29,7 +29,7 @@ DRUMMER requires sorted.bam files containing transcriptome- or genome-level read
 - each read has a single (primary) alignment. All secondary/supplemental alignments have been filtered out
 - each read is aligned against the correct transcript sequence (transcriptome analysis only)
 
-The choice of alignment & filtering parameters for generated the input sorted.bam files will always be context dependent. For instance, our work on [mapping the locations of m6A modifications on the adenovirus Ad5 transcriptome](https://www.biorxiv.org/content/10.1101/865485v1) required careful filtering of sequence alignments due to the preence of numerous overlapping transcripts that shared the same 5' and/or 3' ends. Following a detailed [characterization of the Adenovirus AD5 transcriptome](https://www.biorxiv.org/content/10.1101/2019.12.13.876037v1), we subequently aligned our nanopore DRS datasets against the transcriptome as follows
+The choice of alignment & filtering parameters for generated the input sorted.bam files will always be context dependent. For instance, our work on [mapping the locations of m6A modifications on the adenovirus Ad5 transcriptome](https://www.biorxiv.org/content/10.1101/865485v1) required careful filtering of sequence alignments due to the preence of numerous overlapping transcripts that shared the same 5' and/or 3' ends. Following a detailed [characterization of the Adenovirus AD5 transcriptome](https://www.biorxiv.org/content/10.1101/2019.12.13.876037v1), we subsequently used [minimap2](https://github.com/lh3/minimap2) to align our nanopore DRS datasets against the transcriptome as follows:
 
 ```
 minimap2 -t 8 -ax map-ont -p 0.99 Ad5.transcriptome.fasta dataset1.reads.fq > dataset1.aligned.sam
@@ -90,15 +90,9 @@ OR
 ```
 Optional flags
 ```
--x              specify log2fc required (default >= 0.5)
 -y              specify odds ratio requirement (default >= 1)
 -z              specify adjusted p_value (G-test) requirement (default<= 0.05)
 ```
-
-
-
-
-
 
 ## Output
 
@@ -138,6 +132,21 @@ p_val: p-value of G-test
 padj: bonferroni-corrected p-value
 candidate_site: Nucleotide predicted to be modified based on supplied cutoffs for padj, odds_ratio, and log2_fc
 ```
+
+## Running DRUMMER with the test datasets
+
+A simple test dataset is included in the DRUMMER repository and can be used to verify DRUMMER is working correctly in your environment. Both exome-mode and isoform-mode analyses should complete in a matter of minutes.
+
+exome mode
+```./drummer.sh -r TESTDATA/Adenovirus-Ad5.fasta -n Ad5 -c TESTDATA/exome.sample.MOD.bam -t TESTDATA/exome.sample.UNMOD.bam -o OUTPUTDIR_exome -m exome
+TESTDATA/Adenovirus-Ad5.fasta
+```
+
+isoform mode
+```
+./drummer.sh -r TESTDATA/Ad5_v9.1_complete.fasta -l TESTDATA/list.txt -c TESTDATA/isoform.sample.MOD.bam -t TESTDATA/isoform.sample.UNMOD.bam -o OUTPUTDIR_isoform -m isoform
+```
+
 
 ## Troubleshooting
 
