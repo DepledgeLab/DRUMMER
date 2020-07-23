@@ -11,13 +11,14 @@ requiredGrp.add_argument("-t",'--transcript_file', required=True, help="transcri
 requiredGrp.add_argument("-i",'--input', required=True, help="input csv file containing candidate sites")
 requiredGrp.add_argument("-o",'--output', required=True, help="input csv file containing candidate sites")
 
-args = vars(ap.parse_args())
-transcripts = args['transcript_file']
-path = args['input']
-output = args['output']
-include_candidate_df = pd.read_csv(path)
-transcripts = pd.read_csv(transcripts,sep = '\t',header= None)
-candidate_positions = include_candidate_df[include_candidate_df['candidate_site'] == 'Candidate']['pos_unmod'].tolist()
+# args = vars(ap.parse_args())
+# transcripts = args['transcript_file']
+# path = args['input']
+# output = args['output']
+# include_candidate_df = pd.read_csv(path,sep = '\t')
+# transcripts = pd.read_csv(transcripts,sep = '\t',header= None)
+# print('COLUMNS',include_candidate_df.columns)
+# candidate_positions = include_candidate_df[include_candidate_df['candidate_site'] == 'Candidate']['pos_mod'].tolist()
 
 # print('transcripts',transcripts)
 # transcript_of_interest = transcripts[transcripts['transcript'] == chromo_name]
@@ -106,17 +107,21 @@ args = vars(ap.parse_args())
 transcripts = args['transcript_file']
 path = args['input']
 output = args['output']
-include_candidate_df = pd.read_csv(path)
+include_candidate_df = pd.read_csv(path,sep = '\t')
 transcripts = pd.read_csv(transcripts,sep = '\t',header= None)
-candidate_positions = include_candidate_df[include_candidate_df['candidate_site'] == 'Candidate']['pos_unmod'].tolist()
+# print('INCLUDE_CANDIDATE_DF',include_candidate_df.head())
+include_candidate_df['candidate_site']=include_candidate_df['candidate_site'].fillna(' ')
+candidate_positions = include_candidate_df[include_candidate_df['candidate_site'] == 'candidate']['pos_mod'].tolist()
+
 
 if len(transcripts.columns) > 1:
+	print('\n###Genomic locations (ENABLED)###\n')
 	col_names = ['transcript','strand','genome_start','num_exons','length_exon','start_exon']
 	transcripts.columns = col_names
 
 	#Find relevant transcript using chromosome column of dataframe
-	if len(set(include_candidate_df['chr_unmod'])) == 1:
-		chromo_name = include_candidate_df['chr_unmod'][0]
+	if len(set(include_candidate_df['chr_mod'])) == 1:
+		chromo_name = include_candidate_df['chr_mod'][0]
 	else:
 		print('multiple chromosome names in csv file')
 
@@ -147,9 +152,10 @@ if len(transcripts.columns) > 1:
 	include_candidate_df['genomic_position'] = ' '
 	candidate_and_updated = list(zip(candidate_positions,updated_coordinates))
 	for cand,updt in candidate_and_updated:
-		include_candidate_df['genomic_position'].loc[include_candidate_df['pos_unmod'] == cand] = updt
+		include_candidate_df['genomic_position'].loc[include_candidate_df['pos_mod'] == cand] = updt
 	include_candidate_df.to_csv(output,sep = '\t')
-
+else:
+	print('\n###Genomic locations (disabled)###\n')
     
     
     

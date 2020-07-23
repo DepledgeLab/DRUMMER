@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import argparse
 import math
+import scipy.stats as stats
 from create_output_file import create_output
 
 #columns_names = ['chr','pos','ref','depth','A','C','G','T','N']
@@ -37,13 +38,13 @@ def return_odds(max_c,max_t,sum_c,sum_t):
     '''Takes in max control/test, and sum control/test returns odds.
     '''
     odds_list = []
+    pvalue_list = []
     for m_c,m_t,s_c,s_t in zip(max_c,max_t,sum_c,sum_t):
-        try:
-            odds = (m_c*(s_t-m_t))/((m_t*(s_c-m_c)))
-            odds_list.append(odds)
-        except ZeroDivisionError:
-            odds_list.append(1)
-    return odds_list
+        table = np.array([[m_c,s_c-m_c],[m_t,s_t-m_t]])
+        oddsratio, pvalue = stats.fisher_exact(table)
+        odds_list.append(oddsratio)
+        pvalue_list.append(pvalue)
+    return odds_list,pvalue_list
 
 def max_sum_function(ctrl:list,test:list):
     '''Takes in a control and test list and returns odds ratio
@@ -66,8 +67,8 @@ def max_sum_function(ctrl:list,test:list):
     #Get log2fc value
     log2_fc = [math.log2(fc) for fc in fold_change]
     #$odds = 1 /(($maxA*($sumB-$maxB))/(($maxB*($sumA-$maxA)))); 
-    odds_vals = return_odds(max_ctrl,max_test,sum_ctrl,sum_test)
-    return [ratio_ctrl,ratio_test,fold_change,log2_fc,odds_vals]
+    odds_vals,pvalues = return_odds(max_ctrl,max_test,sum_ctrl,sum_test)
+    return [ratio_ctrl,ratio_test,fold_change,log2_fc,odds_vals,pvalues]
     
 def return_ratio(max_list:list,sum_list:list):
     '''Takes in a list containing max values and the sum of the counts, returns ratio.
@@ -89,14 +90,14 @@ control = [[row['A_unmod'],row['C_unmod'],row['G_unmod'],row['T_unmod'],row['N_u
 test = [[row['A_mod'],row['C_mod'],row['G_mod'],row['T_mod'],row['N_mod']] for index,row in df.iterrows()]
 
 
-ratio_unmod,ratio_mod,fold_change, log2_fc, odds_vals = max_sum_function(control,test)
+ratio_unmod,ratio_mod,fold_change, log2_fc, odds_vals,pvalues = max_sum_function(control,test)
 
 df['ratio_unmod'] = ratio_unmod
 df['ratio_mod'] = ratio_mod
 df['fold_change'] = fold_change
 df['log2_fc'] = log2_fc
 df['odds_ratio'] = odds_vals
-
+df['p_values_OR'] = pvalues
 output = create_output(output,input,'odds_ratio')
 print(output)
 df.to_csv(output,sep = '\t', index = False)

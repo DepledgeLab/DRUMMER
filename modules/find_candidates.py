@@ -34,7 +34,29 @@ def is_candidate(df,odds_ratio,padj):
 
 include_candidate_df = pd.read_csv(input,sep = '\t')
 include_candidate_df = is_candidate(include_candidate_df,odds_ratio,padj)
-# print(include_candidate_df.head())
+
+index_candidates = list(include_candidate_df[include_candidate_df['candidate_site'] == 'candidate'].index)
+
+final_list = [[index_candidates.pop(0)]]
+
+for ind in index_candidates:
+    if ind - final_list[-1][0] < 5:
+        final_list[-1].append(ind)
+    else:
+        final_list.append([ind])
+        
+index_of_highest = []
+for i in final_list:
+    k = []
+    for j in i:
+        k.append(include_candidate_df.iloc[j]['G_test'])
+    index_of_highest.append(i[np.argmax(k)])
+    
+include_candidate_df['candidate_site'] = ''
+
+include_candidate_df.loc[index_of_highest,'candidate_site'] = 'candidate'
+
+include_candidate_df['candidate_site'].value_counts()
 
 print('Candidate sites:\n',include_candidate_df['candidate_site'].value_counts())
 # include_candidate_df.to_csv(output,index=False)
