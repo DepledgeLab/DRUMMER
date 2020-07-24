@@ -153,7 +153,7 @@ if len(transcripts.columns) > 1:
 	candidate_and_updated = list(zip(candidate_positions,updated_coordinates))
 	for cand,updt in candidate_and_updated:
 		include_candidate_df['genomic_position'].loc[include_candidate_df['pos_mod'] == cand] = updt
-	include_candidate_df.to_csv(output,sep = '\t')
+	include_candidate_df.to_csv(output,sep = '\t',index=False)
 else:
 	print('\n###Genomic locations (disabled)###\n')
     

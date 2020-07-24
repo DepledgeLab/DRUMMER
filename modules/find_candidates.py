@@ -56,7 +56,15 @@ include_candidate_df['candidate_site'] = ''
 
 include_candidate_df.loc[index_of_highest,'candidate_site'] = 'candidate'
 
-include_candidate_df['candidate_site'].value_counts()
+flattened_list = [indx for lsts in final_list for indx in lsts]
+
+def Diff(li1, li2): 
+    return (list(set(li1) - set(li2))) 
+candidate_masks = Diff(flattened_list,index_of_highest)
+
+include_candidate_df.loc[candidate_masks,'candidate_site'] = '[candidate_masked]'
+
+#include_candidate_df['candidate_site'].value_counts()
 
 print('Candidate sites:\n',include_candidate_df['candidate_site'].value_counts())
 # include_candidate_df.to_csv(output,index=False)
