@@ -114,7 +114,7 @@ include_candidate_df['candidate_site']=include_candidate_df['candidate_site'].fi
 candidate_positions = include_candidate_df[include_candidate_df['candidate_site'] == 'candidate']['pos_mod'].tolist()
 
 
-if len(transcripts.columns) > 1:
+if len(transcripts.columns) > 1 and len(candidate_positions) > 0:
 	print('\n###Genomic locations (ENABLED)###\n')
 	col_names = ['transcript','strand','genome_start','num_exons','length_exon','start_exon']
 	transcripts.columns = col_names

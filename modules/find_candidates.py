@@ -32,38 +32,41 @@ def is_candidate(df,odds_ratio,padj):
     df['candidate_site'] = ['candidate' if i == True else '' for i in idx ]
     return df
 
+def Diff(li1, li2): 
+    return (list(set(li1) - set(li2))) 
 include_candidate_df = pd.read_csv(input,sep = '\t')
 include_candidate_df = is_candidate(include_candidate_df,odds_ratio,padj)
 
 index_candidates = list(include_candidate_df[include_candidate_df['candidate_site'] == 'candidate'].index)
 
-final_list = [[index_candidates.pop(0)]]
+if len(index_candidates) > 2:
+	final_list = [[index_candidates.pop(0)]]
 
-for ind in index_candidates:
-    if ind - final_list[-1][0] < 5:
-        final_list[-1].append(ind)
-    else:
-        final_list.append([ind])
-        
-index_of_highest = []
-for i in final_list:
-    k = []
-    for j in i:
-        k.append(include_candidate_df.iloc[j]['G_test'])
-    index_of_highest.append(i[np.argmax(k)])
-    
-include_candidate_df['candidate_site'] = ''
+	for ind in index_candidates:
+		if ind - final_list[-1][0] < 5:
+			final_list[-1].append(ind)
+		else:
+			final_list.append([ind])
+		
+	index_of_highest = []
+	for i in final_list:
+		k = []
+		for j in i:
+			k.append(include_candidate_df.iloc[j]['G_test'])
+		index_of_highest.append(i[np.argmax(k)])
+	
+	include_candidate_df['candidate_site'] = ''
 
-include_candidate_df.loc[index_of_highest,'candidate_site'] = 'candidate'
+	include_candidate_df.loc[index_of_highest,'candidate_site'] = 'candidate'
 
-flattened_list = [indx for lsts in final_list for indx in lsts]
+	flattened_list = [indx for lsts in final_list for indx in lsts]
 
-def Diff(li1, li2): 
-    return (list(set(li1) - set(li2))) 
-candidate_masks = Diff(flattened_list,index_of_highest)
+	candidate_masks = Diff(flattened_list,index_of_highest)
 
-include_candidate_df.loc[candidate_masks,'candidate_site'] = '[candidate_masked]'
-
+	include_candidate_df.loc[candidate_masks,'candidate_site'] = '[candidate_masked]'
+else:
+	print('Found {} candidate sites'.format(len(index_candidates)))
+	
 #include_candidate_df['candidate_site'].value_counts()
 
 print('Candidate sites:\n',include_candidate_df['candidate_site'].value_counts())
