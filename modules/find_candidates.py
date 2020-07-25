@@ -40,6 +40,7 @@ include_candidate_df = is_candidate(include_candidate_df,odds_ratio,padj)
 index_candidates = list(include_candidate_df[include_candidate_df['candidate_site'] == 'candidate'].index)
 
 if len(index_candidates) > 2:
+	print('Found {} candidate sites'.format(len(index_candidates)))
 	final_list = [[index_candidates.pop(0)]]
 
 	for ind in index_candidates:
@@ -69,9 +70,9 @@ else:
 	
 #include_candidate_df['candidate_site'].value_counts()
 
-print('Candidate sites:\n',include_candidate_df['candidate_site'].value_counts())
+# print('Candidate sites:\n',include_candidate_df['candidate_site'].value_counts())
 # include_candidate_df.to_csv(output,index=False)
 
 # output = create_output(input,input,'candidates')
-print(input)
+# print(input)
 include_candidate_df.to_csv(output,sep = '\t', index = False)
