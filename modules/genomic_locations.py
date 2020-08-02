@@ -111,7 +111,7 @@ include_candidate_df = pd.read_csv(path,sep = '\t')
 transcripts = pd.read_csv(transcripts,sep = '\t',header= None)
 # print('INCLUDE_CANDIDATE_DF',include_candidate_df.head())
 include_candidate_df['candidate_site']=include_candidate_df['candidate_site'].fillna(' ')
-candidate_positions = include_candidate_df[include_candidate_df['candidate_site'] == 'candidate']['pos_mod'].tolist()
+candidate_positions = include_candidate_df['pos_mod'].tolist()
 
 
 if len(transcripts.columns) > 1 and len(candidate_positions) > 0:
@@ -148,11 +148,11 @@ if len(transcripts.columns) > 1 and len(candidate_positions) > 0:
 		updated_coordinates.append(summed_vals)
 
 	updated_coordinates = [location for locations in updated_coordinates for location in locations]
-
 	include_candidate_df['genomic_position'] = ' '
 	candidate_and_updated = list(zip(candidate_positions,updated_coordinates))
+	print('candidate_and_updated',candidate_and_updated)
 	for cand,updt in candidate_and_updated:
-		include_candidate_df['genomic_position'].loc[include_candidate_df['pos_mod'] == cand] = updt
+		include_candidate_df['genomic_position'].loc[include_candidate_df['pos_mod'] == int(cand)] = updt + 1
 	include_candidate_df.to_csv(output,sep = '\t',index=False)
 else:
 	print('\n###Genomic locations (disabled)###\n')
