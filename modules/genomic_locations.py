@@ -102,6 +102,14 @@ def adjust_negative(g_starts,e_starts,e_length):
         new_starts.append(g_starts + e_starts[i]+1)
     return [new_starts,new_ends]
 
+def return_homology(df):
+    index_of_interest = []
+    for index,rows in df.iterrows():
+#         print(rows['eleven_bp_motif'])
+        return_expression = re.findall(r'((\w)\2{2,})', rows['eleven_bp_motif'])
+        if len(return_expression) > 0 and return_expression[0][-1] != 'N' and rows['candidate_site'] == 'candidate':
+            index_of_interest.append(index)
+    return index_of_interest
 
 args = vars(ap.parse_args())
 transcripts = args['transcript_file']
@@ -150,9 +158,15 @@ if len(transcripts.columns) > 1 and len(candidate_positions) > 0:
 	updated_coordinates = [location for locations in updated_coordinates for location in locations]
 	include_candidate_df['genomic_position'] = ' '
 	candidate_and_updated = list(zip(candidate_positions,updated_coordinates))
-	print('candidate_and_updated',candidate_and_updated)
+# 	print('candidate_and_updated',candidate_and_updated)
 	for cand,updt in candidate_and_updated:
 		include_candidate_df['genomic_position'].loc[include_candidate_df['pos_mod'] == int(cand)] = updt + 1
+	
+	index_of_interests = return_homology(include_candidate_df)  
+	
+	include_candidate_df['homopol_3+'] = ' '
+	for i in index_of_interests:
+		include_candidate_df['homopol_3+'].loc[i] = 'homopolymer'
 	include_candidate_df.to_csv(output,sep = '\t',index=False)
 else:
 	print('\n###Genomic locations (disabled)###\n')
