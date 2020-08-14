@@ -21,6 +21,10 @@ args = vars(ap.parse_args())
 input = args['input']
 output = args['output']
 
+# Deletions subtract from the N column.
+# Every Negative N column value is equal to zero.
+# A flag option to disregard homopolymer indels > 3. (default is to include)
+
 
 # print('output',output)
 def proper_filter(read_metrics:list):
@@ -34,9 +38,20 @@ def proper_filter(read_metrics:list):
             keep_track[splitted_metrics[0]] += int(splitted_metrics[1])
         elif indiv_metrics[0] not in nucleotides and indiv_metrics[0] != '=':
             splitted_metrics = indiv_metrics.split(':')
-            keep_track['N'] += int(splitted_metrics[1]) 
+#             print('splitted_metrics',splitted_metrics)
+#             print('This is the sign', splitted_metrics[0][0])
+            if splitted_metrics[0][0] == '+':
+            	keep_track['N'] += int(splitted_metrics[1])
+            else:
+            	keep_track['N'] -= int(splitted_metrics[1])
+#             	print('splitted_metrics',splitted_metrics)
+#             	print(splitted_metrics[1])
 #             if len(splitted_metrics[0]) <= 3: #Keep in count the -2 - +2  indels
 #             	keep_track['N'] += int(splitted_metrics[1]) 
+#     print('keep track N', keep_track)
+    if keep_track['N'] < 0:
+    	keep_track['N'] = 0
+#     print(keep_track)
     return keep_track
     
 def new_depth(df):
