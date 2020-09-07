@@ -3,7 +3,7 @@ import numpy as np
 import argparse
 import math
 import re
-from create_output_file import create_output
+# from create_output_file import create_output
 
 ap = argparse.ArgumentParser(description = 'Takes in the output from the pipeline and determines candidate sites \
 using log2fc, odds_ratio and padj')
@@ -40,33 +40,40 @@ include_candidate_df = is_candidate(include_candidate_df,odds_ratio,padj)
 index_candidates = list(include_candidate_df[include_candidate_df['candidate_site'] == 'candidate'].index)
 
 if len(index_candidates) > 2:
-	print('Found {} candidate sites'.format(len(index_candidates)))
-	final_list = [[index_candidates.pop(0)]]
+    #print('Found {} candidate sites'.format(len(index_candidates)))
+    full_list = []
+    lst = []
+    for k,value in enumerate(index_candidates):
+        if k > 0:
+            if index_candidates[k] - index_candidates[k-1] < 5:
+                if index_candidates[k] not in lst:
+                    lst.append(index_candidates[k])
+            else:
+                full_list.append(lst)
+                lst = []
+                if index_candidates[k] not in lst:
+                    lst.append(index_candidates[k])
+        else:
+            lst.append(index_candidates[k])
+    full_list.append(lst)
+    index_of_highest = []
+    for i in full_list:
+        k = []
+        for j in i:
+            k.append(include_candidate_df.iloc[j]['G_test'])
+        index_of_highest.append(i[np.argmax(k)])
+    
+    include_candidate_df['candidate_site'] = ''
 
-	for ind in index_candidates:
-		if ind - final_list[-1][0] < 5:
-			final_list[-1].append(ind)
-		else:
-			final_list.append([ind])
-		
-	index_of_highest = []
-	for i in final_list:
-		k = []
-		for j in i:
-			k.append(include_candidate_df.iloc[j]['G_test'])
-		index_of_highest.append(i[np.argmax(k)])
-	
-	include_candidate_df['candidate_site'] = ''
+    include_candidate_df.loc[index_of_highest,'candidate_site'] = 'candidate'
 
-	include_candidate_df.loc[index_of_highest,'candidate_site'] = 'candidate'
+    flattened_list = [indx for lsts in full_list for indx in lsts]
 
-	flattened_list = [indx for lsts in final_list for indx in lsts]
+    candidate_masks = Diff(flattened_list,index_of_highest)
 
-	candidate_masks = Diff(flattened_list,index_of_highest)
-
-	include_candidate_df.loc[candidate_masks,'candidate_site'] = '[candidate_masked]'
+    include_candidate_df.loc[candidate_masks,'candidate_site'] = '[candidate_masked]'
 else:
-	print('Found {} candidate sites'.format(len(index_candidates)))
+    print('Found {} candidate sites'.format(len(index_candidates)))
 	
 #include_candidate_df['candidate_site'].value_counts()
 
