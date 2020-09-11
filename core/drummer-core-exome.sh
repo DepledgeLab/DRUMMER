@@ -104,8 +104,9 @@ candidate_transcripts="$output_dir"/gTest/$name.*
 python3 "$DIR"/../modules/find_candidates.py -i $candidate_transcripts -r $odds -p $padj -o $output_dir/$name.complete.txt
 
 
-python3 ../modules/genomic_locations.py -i $output_dir/$id.complete.txt -t $list -o $output_dir/$id.complete.txt
+#python3 "$DIR"/../modules/genomic_locations.py -i $output_dir/$id.complete.txt -t $list -o $output_dir/$id.complete.txt
 
+python3 "$DIR"/../modules/candidate_visualization.py -i $output_dir/$name.complete.txt -o $output_dir
 
 
 
