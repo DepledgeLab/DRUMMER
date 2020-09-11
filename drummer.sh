@@ -110,8 +110,8 @@ fi
 if [[ -v odds ]]; then
   echo "using user-specified value for Odds Ratio Test"
   else
-  odds=1
-  echo "using default value of 1.0 for Odds Ratio Test"
+  odds="1.5"
+  echo "using default value of 1.5 for Odds Ratio Test"
 fi
 
 if [[ -v padj ]]; then
