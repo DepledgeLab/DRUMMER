@@ -15,6 +15,8 @@ DRUMMER requires the following packages to be installed and available in the use
 [SAMTools](http://www.htslib.org/) v1.3 or higher
 [BEDTools](https://bedtools.readthedocs.io/en/latest/) v2.26 or higher
 
+BASH v4.2 or higher
+
 Python3 and modules: pandas, numpy, scipy
 
 ### Setting up DRUMMER
@@ -78,7 +80,7 @@ Required flags
 ```
 -r              fasta format reference genome (exome) or transcriptome (isoforms)
 
--u              list of transcripts (isoform) to be examined (single column or XX-column format)
+-u              list of transcripts (isoform) to be examined (single column or six-column format)
 OR
 -n              name of genome (exome) - must match fasta file header
 
