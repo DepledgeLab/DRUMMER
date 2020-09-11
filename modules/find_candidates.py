@@ -74,7 +74,15 @@ if len(index_candidates) > 2:
     include_candidate_df.loc[candidate_masks,'candidate_site'] = '[candidate_masked]'
 else:
     print('Found {} candidate sites'.format(len(index_candidates)))
-	
+
+
+
+def check_homopolymer(string):
+    return_val = []
+    for i in ['TTT','AAA','GGG','CCC']:
+        if i in string:
+            return True
+include_candidate_df['homopolymer'] = [check_homopolymer(i) for i in include_candidate_df['eleven_bp_motif']]
 #include_candidate_df['candidate_site'].value_counts()
 
 # print('Candidate sites:\n',include_candidate_df['candidate_site'].value_counts())
