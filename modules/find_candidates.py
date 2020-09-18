@@ -39,7 +39,7 @@ include_candidate_df = is_candidate(include_candidate_df,odds_ratio,padj)
 
 index_candidates = list(include_candidate_df[include_candidate_df['candidate_site'] == 'candidate'].index)
 
-if len(index_candidates) > 2:
+if len(index_candidates) > 1:
     #print('Found {} candidate sites'.format(len(index_candidates)))
     full_list = []
     lst = []
