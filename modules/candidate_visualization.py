@@ -8,6 +8,7 @@ import itertools
 import numpy as np
 import matplotlib.pyplot as plt
 from collections import defaultdict
+import math
 
 ap = argparse.ArgumentParser(description = 'Takes in the output from the pipeline and determines candidate sites \
 using log2fc, odds_ratio and padj')
@@ -55,10 +56,10 @@ def return_shape_size(df,color):
     
 fig, ax1 = plt.subplots(figsize=(20, 10))
 
-ax1.set_title('Visualization of Candidate and Masked sites (US1-1)',fontsize = 36)
+ax1.set_title('Visualization of Candidate and Masked sites ({})'.format(sample),fontsize = 36)
 ax1.set_xlabel('Position',fontsize = 20)
 ax1.set_ylabel('gTEST',fontsize = 20)
-plt.xticks(np.arange(0, max(df['pos_mod'])+50, 100))
+plt.xticks(np.arange(0, max(df['pos_mod'])+50, 100),rotation = 45)
 col_g,size,legend_dict,count = return_shape_size(df,'red')
 # print(legend_dict)
 scatter1 = ax1.scatter(list(df['pos_mod']), list(df['G_test']), c=col_g,s = size)
@@ -85,9 +86,12 @@ leg.legendHandles[1].set_color('red')
 leg.legendHandles[2].set_color('red')
 leg.legendHandles[3].set_color('black')
 # leg.legendHandles[3].set_color('grey')
+
+scaling_x = (int(math.ceil(df.shape[0] / 10.0)) * 10)/100
+scaling_y = math.ceil(max(df.G_test)/100)
 for index,value in df.iterrows():
     if value['candidate_site'] == 'candidate':
-        ax1.annotate(value.pos_mod,(value.pos_mod-25,value.G_test+25),size = 7.5)
+        ax1.annotate(value.pos_mod,(value.pos_mod-scaling_x,value.G_test+scaling_y),size = 7.5)
 #         ax1.annotate(value.five_bp_motif,(value.pos_mod-25,value.G_test+50),size = 7.5)
 # plt.savefig('/Users/mac/Desktop/DRUMMER_Figures/Fix_masked_issues/homopolymer-US-1-candidate-site_visualization.pdf')\
 make_dir = output_location = output +'/visualization/'
