@@ -162,11 +162,11 @@ if len(transcripts.columns) > 1 and len(candidate_positions) > 0:
 	for cand,updt in candidate_and_updated:
 		include_candidate_df['genomic_position'].loc[include_candidate_df['pos_mod'] == int(cand)] = updt + 1
 	
-	index_of_interests = return_homology(include_candidate_df)  
+# 	index_of_interests = return_homology(include_candidate_df)  
 	
-	include_candidate_df['homopol_3+'] = ' '
-	for i in index_of_interests:
-		include_candidate_df['homopol_3+'].loc[i] = 'homopolymer'
+# 	include_candidate_df['homopol_3+'] = ' '
+# 	for i in index_of_interests:
+# 		include_candidate_df['homopol_3+'].loc[i] = 'homopolymer'
 	include_candidate_df.to_csv(output,sep = '\t',index=False)
 else:
 	print('\n###Genomic locations (disabled)###\n')
