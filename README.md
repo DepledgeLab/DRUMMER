@@ -128,13 +128,15 @@ ratio_mod:
 fold_change: fold change difference between ratio_unmod and ratio_mod
 log2_fc: log2 fold change
 odds_ratio: odds ratio
+p_values_OR: pvalue calculated by odds_ratio
 nearest_ac: (m6A only) distance (nt) to nearest AC motif (-ve indicates upstream, +ve indicates downstream)
 nearest_ac_motif: (m6A only) sequence (5-mer) of nearest AC motif (centered on A)
 five_bp_motif: sequence (5-mer) centered on current position
 eleven_bp_motif: sequence (11-mer) centered on current position
 G_test: Result of 2x5 G-test
 p_val: p-value of G-test
-padj: bonferroni-corrected p-value
+padj: bonferroni-corrected p-value 
+p_values_OR_adj: bonferroni-corrected p-value (odds ratio)
 candidate_site: Nucleotide predicted to be modified based on supplied cutoffs for padj, odds_ratio, and log2_fc
 ```
 
