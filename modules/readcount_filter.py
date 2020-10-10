@@ -70,12 +70,12 @@ def do_math(df:'DataFrame',index:int):
     
 #argument = 'bamreadcount/E3.RIDb'.split('/')
 input = input.split('/')
-print('input',input)
+# print('input',input)
 # print(input)
 file = input.pop(-1)
 mypath = '/'.join(input)
 onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
-print('File',file)
+# print('File',file)
 #Test file is always second
 k = [mypath+'/'+i for i in onlyfiles if i.startswith(file)]
 k = sorted(k, key=lambda x:('TEST' in x, x))
@@ -114,11 +114,11 @@ cols = ['chr', 'pos', 'ref', 'depth', 'A', 'C', 'G', 'T', 'N', 'ref_fraction',
 # merged_df.columns = cols
 merged_df = lst[0].merge(lst[1],on = 'pos',suffixes = ('','.1'))
 merged_dir = output + '/' + 'merged/'
-print('merged_dir',merged_dir)
+# print('merged_dir',merged_dir)
 os.makedirs(merged_dir, exist_ok = True)
 
 output_dir = merged_dir + file + '.merged.txt'
-print('output_dir',output_dir)
+# print('output_dir',output_dir)
 #merged_dir = without_sub.split('.')
 #merged_dir.insert(-1,'merged')
 #merged_dir = '.'.join(merged_dir)

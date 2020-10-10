@@ -9,9 +9,10 @@ ap = argparse.ArgumentParser(description = 'Takes in the output from the pipelin
 using log2fc, odds_ratio and padj')
 requiredGrp = ap.add_argument_group('required arguments')
 requiredGrp.add_argument("-i",'--input', required=True, help="input file location")
-requiredGrp.add_argument("-r",'--odds_ratio', required=True, help="input file location")
+requiredGrp.add_argument("-r",'--odds_ratio', required=True, help="odds ratio cutoff")
 #requiredGrp.add_argument("-l",'--log2_fc', required=False, help="input file location")
-requiredGrp.add_argument("-p",'--padj', required=True, help="input file location")
+requiredGrp.add_argument("-p",'--padj', required=True, help="padj cutoff")
+requiredGrp.add_argument("-d",'--fraction_diff', required=True, help="fraction difference")
 requiredGrp.add_argument("-o",'--output', required=True, help="output file location")
 
 
@@ -22,12 +23,13 @@ odds_ratio = float(args['odds_ratio'])
 #log2fc = float(args['log2_fc'])
 padj = float(args['padj'])
 output = args['output']
-
+fraction_diff = args['fraction_diff']
+#print("FRACTION_DIFF",fraction_diff)
 # print(log2fc, odds_ratio, padj)
 def is_candidate(df,odds_ratio,padj):
     '''Takes in a dataframe looks at log2fc, odds and padj to determine if the site is a candidate'''
 #     print('log2fc',df[df['log2_fc']<log2fc])
-    idx = ((df['odds_ratio']>odds_ratio) &(df['padj']< padj) & (df['ref_fraction_mod'] < df['ref_fraction_unmod']) & (df['p_values_OR_adj']<padj))
+    idx = ((df['odds_ratio']>odds_ratio) &(df['padj']< padj) & ( (df['ref_fraction_unmod'] - df['ref_fraction_mod'] ) > float(fraction_diff)) & (df['p_values_OR_adj']<padj))
 	#idx = (df['log2_fc']>log2fc) & (df['odds_ratio']>odds_ratio) &(df['padj']< padj)
     df['candidate_site'] = ['candidate' if i == True else '' for i in idx ]
     return df
@@ -72,8 +74,6 @@ if len(index_candidates) > 1:
     candidate_masks = Diff(flattened_list,index_of_highest)
 
     include_candidate_df.loc[candidate_masks,'candidate_site'] = '[candidate_masked]'
-else:
-    print('Found {} candidate sites'.format(len(index_candidates)))
 
 
 

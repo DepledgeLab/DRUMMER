@@ -11,11 +11,12 @@ fraction of the reference nucleotide among all reads.')
 requiredGrp = ap.add_argument_group('required arguments')
 requiredGrp.add_argument("-i","--input", required=True, help="input file location")
 requiredGrp.add_argument("-o","--output", required=True, help="output file directory")
+requiredGrp.add_argument("-m","--m6A_status", required=True, help="m6A status")
 
 args = vars(ap.parse_args())
 input = args['input']
 output = args['output']
-
+m6A_status = args['m6A_status']
 def closest_ac(df):
     seq = ''.join(df['ref_unmod'])
     ac_location = [m.start() for m in re.finditer('AC', seq)]
@@ -54,9 +55,9 @@ df = pd.read_csv(input,sep = '\t')
 df = df.dropna()
 near_ac,five_bp_motif = closest_ac(df)
 five,eleven = get_kmers(df,5,11)
-
-df['nearest_ac'] = near_ac
-df['nearest_ac_motif'] = five_bp_motif
+if m6A_status == True:
+	df['nearest_ac'] = near_ac
+	df['nearest_ac_motif'] = five_bp_motif
 df['five_bp_motif'] = five
 df['eleven_bp_motif'] = eleven
 

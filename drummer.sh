@@ -39,7 +39,9 @@ Optional flags:
 -x		specify log2fc required (default >= 0.5)
 -y		specify odds ratio requirement (default >= 1)
 -z		specify adjusted p_value (G-test) requirement (default<= 0.05)
-
+-a		m6A mode (default = True), set to False to ignore m6A information
+-d 		reference fraction difference between unmodified and modified (default = 0.1)
+-f 		Candidate site visualization (default = True), set to False to not visualize candidate calls (m6A mode must be set to True)
 DRUMMER was written by Jonathan S. Abebe & Daniel P. Depledge.
 If you encounter any problems with DRUMMER, please log them as an issue at the GitHub page https://github.com/DepledgeLab/DRUMMER
 "
@@ -56,7 +58,7 @@ fi
 ### GETOPTS
 #PTSTRING contains the option letters to be recognized; if a letter is followed by a colon, the option is expected to have an argument
 
-while getopts ":r:n:c:t:o:m:u:x:y:z:" opt; do
+while getopts ":r:n:c:t:o:m:u:x:y:z:a:d:f:" opt; do
    case $opt in
       r) reference_file="$OPTARG";;
       n) name="$OPTARG";;
@@ -68,6 +70,9 @@ while getopts ":r:n:c:t:o:m:u:x:y:z:" opt; do
       y) odds="$OPTARG" ;;
       z) padj="$OPTARG" ;;
       m) runmode="$OPTARG";;
+      a) m6A_status="$OPTARG";;
+      d) fraction_diff="$OPTARG";;
+      f) visualization="$OPTARG";;
       ?) usage ;; # Print usage in case parameter is non-existent
    esac
 done
@@ -125,9 +130,29 @@ if [[ -v log2fc ]]; then
   echo "using user-specified value for Log2fc cutoff"
   else
   log2fc="0.5"
-  echo "using default value of 0.5 for Log2fc cutoff"
+  #echo "using default value of 0.5 for Log2fc cutoff"
+fi
+############### NEW 
+if [[ -v m6A_status ]]; then
+  echo "m6A status status set to False"
+  else
+  m6A_status="True"
+  echo "m6A status default to True"
 fi
 
+if [[ -v fraction_diff ]]; then
+  echo "using user-specified value for fraction difference"
+  else
+  fraction_diff="0.1"
+  echo "using default value of 0.1 for fraction difference"
+fi
+
+if [[ -v visualization ]]; then
+  echo "Visualization set to False"
+  else
+  visualization="True"
+  echo "Visualization status default to True"
+fi
 
 ### DETERMINE RUN PATH (EXOME VS ISOFORM)
 if [[ "$runmode" == "exome" ]]; then
@@ -138,7 +163,7 @@ if [[ "$runmode" == "exome" ]]; then
      exit
   fi
 #echo "Hallelujah"
-"$DIR"/core/drummer-core-exome.sh $reference_file $name $test_file $control_file $output_dir $log2fc $odds $padj
+"$DIR"/core/drummer-core-exome.sh $reference_file $name $test_file $control_file $output_dir $log2fc $odds $padj $m6A_status $fraction_diff $visualization
 #xargs -P 8 -n 1 ./core/drummer-core-exome.sh $reference_file $name $test_file $control_file $output_dir $log2fc $odds $padj
 
 elif [[ "$runmode" == "isoform" ]]; then
@@ -150,7 +175,7 @@ elif [[ "$runmode" == "isoform" ]]; then
   fi
 #echo "Hallelujah"
 #xargs -P 8 -n 1 ./core/drummer-core-isoform.sh $reference_file $transcripts $test_file $control_file $output_dir $log2fc $odds $padj
-"$DIR"/core/drummer-core-isoform.sh $reference_file $transcripts $test_file $control_file $output_dir $log2fc $odds $padj
+"$DIR"/core/drummer-core-isoform.sh $reference_file $transcripts $test_file $control_file $output_dir $log2fc $odds $padj $m6A_status $fraction_diff $visualization
 else
 echo "ERROR:: User must specify runmode as -m exome|isoform"
 echo ""

@@ -100,7 +100,7 @@ df['odds_ratio'] = odds_vals
 df['p_values_OR'] = pvalues
 df['p_values_OR_adj'] = df['p_values_OR'] * len(df)
 output = create_output(output,input,'odds_ratio')
-print(output)
+# print(output)
 df.to_csv(output,sep = '\t', index = False)
 
 

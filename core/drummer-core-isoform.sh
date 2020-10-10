@@ -20,6 +20,9 @@ output_dir=$5
 log2fc=$6
 odds=$7
 padj=$8
+m6A_status=$9 
+fraction_diff=${10} 
+visualization=${11}
 
 echo $transcriptome_file $list $test_file $control_file $output_dir 
 
@@ -103,7 +106,7 @@ python3 "$DIR"/../modules/odds_ratio.py -i $merged_transcripts -o $output_dir
 
 motif_transcripts="$output_dir"/odds_ratio/$id.*
 
-python3 "$DIR"/../modules/motif_information.py -i $motif_transcripts -o $output_dir
+python3 "$DIR"/../modules/motif_information.py -i $motif_transcripts -o $output_dir -m $m6A_status
 
 gtest_transcripts="$output_dir"/motif_information/$id.*
 
@@ -111,9 +114,16 @@ python3 "$DIR"/../modules/Gtest.py -i $gtest_transcripts -o $output_dir
 
 candidate_transcripts="$output_dir"/gTest/$id.*
 
-python3 "$DIR"/../modules/find_candidates.py -i $candidate_transcripts -r $odds -p $padj -o $output_dir/$id.complete.txt
+python3 "$DIR"/../modules/find_candidates.py -i $candidate_transcripts -r $odds -p $padj -d $fraction_diff -o $output_dir/$id.complete.txt
 python3 "$DIR"/../modules/genomic_locations.py -i $output_dir/$id.complete.txt -t $list -o $output_dir/$id.complete.txt
+
+if [ $visualization = "True" ]
+then
+if [ $m6A_status == "True" ]
+then
 python3 "$DIR"/../modules/candidate_visualization.py -i $output_dir/$id.complete.txt -o $output_dir
+fi
+fi 
 
 ##Location of transcript file?
 #python3 "$DIR"/../modules/genomic_locations.py -i $output_dir/$id.complete.txt -t $list -o $output_dir/$id.complete.txt
