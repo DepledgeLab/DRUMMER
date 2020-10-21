@@ -99,8 +99,17 @@ def return_shape_size(df,color,homopolymer):
             size.append(10)
             legend_dict['none'] += 1
     return [col_g,size,legend_dict,count]
-    
-fig, ax1 = plt.subplots(figsize=(50, 20),sharey= True)
+
+def get_step(x):
+    list1 = []
+    first = int(str(x)[0])+1
+    whole_length = '0'*len(str(x))
+    list1.extend(whole_length)
+    list1[0] = first
+    list1 = list(map(str,list1))
+    list1 = ''.join(list1)
+    return int(list1)
+fig, ax1 = plt.subplots(figsize=(50, 20))
 row = len(lst_of_paths)
 col = 1
 cnt = 1
@@ -114,7 +123,9 @@ for i in range(1,row+1):
     plt.ylabel('{} \n G-Test score'.format(names[i-1]),size = 25)
     col_g,size,legend_dict,count = return_shape_size(df,'red',homopolymer)
     plt.scatter(list(df['pos_mod']), list(df['G_test']), c=col_g,s = size)
-    plt.yticks(np.arange(0, max_shape, step=10),size = 20)
+    
+#     plt.locator_params(axis="y", nbins=10)
+    plt.yticks(np.linspace(0, get_step(max_shape), num=5),size = 20)
     if pos_label == True:
         for index,value in df.iterrows():
             if value['candidate_site'] == 'candidate':
@@ -129,9 +140,12 @@ plt.subplot(row,col,1)
 if m6A == True:
     for i,j in df.iterrows():
         if j['five_bp_motif'][2:4] == 'AC':
-            plt.annotate('', xy=(j['pos_mod'], max_shape_arrow),xycoords='data',xytext=(j['pos_mod'], max_shape),
+            top_limit = plt.ylim()[-1]
+            plt.annotate('', xy=(j['pos_mod'], top_limit),xycoords='data',xytext=(j['pos_mod'], top_limit+10),
 					textcoords='data',
 					arrowprops=dict(arrowstyle= '-|>',color='slategrey',lw=2.5,ls='--'))
+#             plt.axvline(j['pos_mod'])
+    plt.annotate('NNACN',xy=(plt.xlim()[0],top_limit+15),color = 'slategrey',size = 16,fontweight='bold')
 plt.subplot(row,col,row)
 plt.xlabel('Transcript Position',size = 40)
 fig.tight_layout()
