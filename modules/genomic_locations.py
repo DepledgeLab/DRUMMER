@@ -124,7 +124,7 @@ candidate_positions = include_candidate_df['pos_mod'].tolist()
 
 if len(transcripts.columns) > 1 and len(candidate_positions) > 0:
 	print('\n###Genomic locations (ENABLED)###\n')
-	col_names = ['transcript','strand','genome_start','num_exons','length_exon','start_exon']
+	col_names = ['chromosome','transcript','strand','genome_start','num_exons','length_exon','start_exon']
 	transcripts.columns = col_names
 
 	#Find relevant transcript using chromosome column of dataframe
@@ -161,12 +161,14 @@ if len(transcripts.columns) > 1 and len(candidate_positions) > 0:
 # 	print('candidate_and_updated',candidate_and_updated)
 	for cand,updt in candidate_and_updated:
 		include_candidate_df['genomic_position'].loc[include_candidate_df['pos_mod'] == int(cand)] = updt + 1
-	
+
 # 	index_of_interests = return_homology(include_candidate_df)  
 	
 # 	include_candidate_df['homopol_3+'] = ' '
 # 	for i in index_of_interests:
 # 		include_candidate_df['homopol_3+'].loc[i] = 'homopolymer'
+	final_chomo = transcripts[transcripts['transcript'] == chromo_name]['chromosome'].values[0]
+	include_candidate_df.insert(0, 'Chromosome', final_chomo)
 	include_candidate_df.to_csv(output,sep = '\t',index=False)
 else:
 	print('\n###Genomic locations (disabled)###\n')
