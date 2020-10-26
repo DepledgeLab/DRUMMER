@@ -3,7 +3,7 @@ import numpy as np
 import argparse
 import math
 import re
-# from create_output_file import create_output
+from create_output_file import create_output
 
 ap = argparse.ArgumentParser(description = 'Takes in the output from the pipeline and determines candidate sites \
 using log2fc, odds_ratio and padj')
@@ -88,6 +88,10 @@ include_candidate_df['homopolymer'] = [check_homopolymer(i) for i in include_can
 # print('Candidate sites:\n',include_candidate_df['candidate_site'].value_counts())
 # include_candidate_df.to_csv(output,index=False)
 
-# output = create_output(input,input,'candidates')
+output = create_output(input,input,'candidates')
 # print(input)
+# make_dir = output_location = output +'/all_transcripts_complete/'
+# os.makedirs(make_dir, exist_ok = True)
+# output_location = output +'/visualization/'+ sample + '.pdf'
+
 include_candidate_df.to_csv(output,sep = '\t', index = False)

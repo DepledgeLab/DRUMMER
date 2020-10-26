@@ -94,7 +94,7 @@ for index,value in df.iterrows():
         ax1.annotate(value.pos_mod,(value.pos_mod-scaling_x,value.G_test+scaling_y),size = 7.5)
 #         ax1.annotate(value.five_bp_motif,(value.pos_mod-25,value.G_test+50),size = 7.5)
 # plt.savefig('/Users/mac/Desktop/DRUMMER_Figures/Fix_masked_issues/homopolymer-US-1-candidate-site_visualization.pdf')\
-make_dir = output_location = output +'/visualization/'
+make_dir = output_location + output +'/visualization/'
 os.makedirs(make_dir, exist_ok = True)
 output_location = output +'/visualization/'+ sample + '.pdf'
 plt.savefig(output_location)

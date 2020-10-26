@@ -13,13 +13,14 @@ my_parser = argparse.ArgumentParser()
 my_parser.add_argument('-i','--input', action='store',help = "Directory containing DRUMMER outputs")
 my_parser.add_argument("-c", "--columns", action="store",nargs = "*",help="Additional columns to add to summary file")
 my_parser.add_argument('-o','--output', action='store', help="Output file ")
+my_parser.add_argument("-m", "--mode", action="store",help="Mode of analyis")
 
 args = my_parser.parse_args()
 
 target_dir = args.input
 additional_columns = args.columns
 output_dir = args.output
-
+mode = args.mode
 
 cwd = os.getcwd()
 onlydir = ['/'+f for f in listdir(target_dir) if isfile(join(target_dir, f))]
@@ -31,8 +32,10 @@ for i in onlydir:
     df = df[df['candidate_site'] == 'candidate']
     all_candidates = pd.concat([all_candidates,df])
 all_candidates = all_candidates.reset_index(drop = True)
-
-keep_columns = ['chr_mod','pos_mod','ref_mod','five_bp_motif','candidate_site','genomic_position']
+if mode == 'm6A'
+	keep_columns = ['Chromosome','pos_mod','depth_mod','ref_fraction_mod','depth_unmod','ref_fraction_unmod','odds_ratio','padj_OR','eleven_bp_motif','G_test','padj_Gtest','candidate_site','nearest_ac','nearest_ac_motif']
+else:
+	keep_columns = ['Chromosome','pos_mod','depth_mod','ref_fraction_mod','depth_unmod','ref_fraction_unmod','odds_ratio','padj_OR','eleven_bp_motif','G_test','padj_Gtest','candidate_site']
 
 if additional_columns != None:
 	keep_columns += additional_columns
