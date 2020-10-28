@@ -138,8 +138,8 @@ fi
 if [[ -v fraction_diff ]]; then
   echo "using user-specified value for fraction difference"
   else
-  fraction_diff="0.1"
-  echo "using default value of 0.1 for fraction difference"
+  fraction_diff="0.0001"
+  echo "using default value of 0.0001 for fraction difference"
 fi
 
 if [[ -v visualization ]]; then
