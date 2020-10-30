@@ -124,14 +124,24 @@ candidate_positions = include_candidate_df['pos_mod'].tolist()
 
 if len(transcripts.columns) > 1 and len(candidate_positions) > 0:
 	print('\n###Genomic locations (ENABLED)###\n')
-	col_names = ['chromosome','transcript','strand','genome_start','num_exons','length_exon','start_exon']
-	transcripts.columns = col_names
 
-	#Find relevant transcript using chromosome column of dataframe
+        #Find relevant transcript using chromosome column of dataframe
 	if len(set(include_candidate_df['chr_mod'])) == 1:
 		chromo_name = include_candidate_df['chr_mod'][0]
-	else:
+	else:  
 		print('multiple chromosome names in csv file')
+
+	if len(transcripts.columns) == 7:
+		col_names = ['chromosome','transcript','strand','genome_start','num_exons','length_exon','start_exon']
+		transcripts.columns = col_names
+		final_chomo = transcripts[transcripts['transcript'] == chromo_name]['chromosome'].values[0]
+		include_candidate_df.insert(0, 'Chromosome', final_chomo)
+	else:
+	    col_names = ['transcript','strand','genome_start','num_exons','length_exon','start_exon']
+
+	#col_names = ['chromosome','transcript','strand','genome_start','num_exons','length_exon','start_exon']
+	transcripts.columns = col_names
+
 
 	print('chromo_name',chromo_name)
 	transcript_of_interest = transcripts[transcripts['transcript'] == chromo_name].reset_index(drop=True)
@@ -167,8 +177,8 @@ if len(transcripts.columns) > 1 and len(candidate_positions) > 0:
 # 	include_candidate_df['homopol_3+'] = ' '
 # 	for i in index_of_interests:
 # 		include_candidate_df['homopol_3+'].loc[i] = 'homopolymer'
-	final_chomo = transcripts[transcripts['transcript'] == chromo_name]['chromosome'].values[0]
-	include_candidate_df.insert(0, 'Chromosome', final_chomo)
+#	final_chomo = transcripts[transcripts['transcript'] == chromo_name]['chromosome'].values[0]
+#	include_candidate_df.insert(0, 'Chromosome', final_chomo)
 	include_candidate_df.to_csv(output,sep = '\t',index=False)
 else:
 	print('\n###Genomic locations (disabled)###\n')

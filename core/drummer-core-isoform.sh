@@ -60,7 +60,7 @@ fi
 if [ -d "$output_dir"/complete_analysis ]; then
     echo "Directory /path/to/dir exists."
 else
-    mkdir "$output_dir"/transcripts
+    mkdir "$output_dir"/complete_analysis
 fi
 
 
@@ -128,7 +128,7 @@ if [ $visualization = "True" ]
 then
 if [ $m6A_status == "True" ]
 then
-python3 "$DIR"/../modules/candidate_visualization.py -i $output_dir/$id.complete.txt -o $output_dir
+python3 "$DIR"/../modules/candidate_visualization.py -i $output_dir/complete_analysis/$id.complete.txt -o $output_dir
 fi
 fi 
 
@@ -136,7 +136,7 @@ fi
 #python3 "$DIR"/../modules/genomic_locations.py -i $output_dir/$id.complete.txt -t $list -o $output_dir/$id.complete.txt
 done < $list
 
-
+python3 "$DIR"/../extras/summary.py -i $output_dir/complete_analysis/ -o $output_dir/summary.txt -m m6A_status
 #input_bamreadcounts=bam_readcount/$name
 #echo $transcript_name
 #echo $control_file

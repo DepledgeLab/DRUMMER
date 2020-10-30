@@ -55,7 +55,7 @@ df = pd.read_csv(input,sep = '\t')
 df = df.dropna()
 near_ac,five_bp_motif = closest_ac(df)
 five,eleven = get_kmers(df,5,11)
-if m6A_status == True:
+if m6A_status == "True":
 	df['nearest_ac'] = near_ac
 	df['nearest_ac_motif'] = five_bp_motif
 df['five_bp_motif'] = five

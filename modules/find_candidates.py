@@ -88,10 +88,10 @@ include_candidate_df['homopolymer'] = [check_homopolymer(i) for i in include_can
 # print('Candidate sites:\n',include_candidate_df['candidate_site'].value_counts())
 # include_candidate_df.to_csv(output,index=False)
 
-output = create_output(input,input,'candidates')
+#output = create_output(input,input,'candidates')
 # print(input)
 # make_dir = output_location = output +'/all_transcripts_complete/'
 # os.makedirs(make_dir, exist_ok = True)
 # output_location = output +'/visualization/'+ sample + '.pdf'
-
+print(output)
 include_candidate_df.to_csv(output,sep = '\t', index = False)
