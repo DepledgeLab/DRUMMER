@@ -150,8 +150,8 @@ fi
 if [[ -v visualization ]]; then
   echo "Visualization set to False"
   else
-  visualization="True"
-  echo "Visualization status default to True"
+  visualization="False"
+  echo "Visualization status default to False"
 fi
 
 ### DETERMINE RUN PATH (EXOME VS ISOFORM)
