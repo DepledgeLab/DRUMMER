@@ -33,9 +33,9 @@ for i in onlydir:
     all_candidates = pd.concat([all_candidates,df])
 all_candidates = all_candidates.reset_index(drop = True)
 if mode == 'True':
-	keep_columns = ['Chromosome','pos_mod','depth_mod','ref_fraction_mod','depth_unmod','ref_fraction_unmod','odds_ratio','p_values_OR_adj','eleven_bp_motif','G_test','padj','candidate_site','nearest_ac','nearest_ac_motif']
+	keep_columns = ['chr_mod','Chromosome','pos_mod','depth_mod','ref_fraction_mod','depth_unmod','ref_fraction_unmod','odds_ratio','p_values_OR_adj','eleven_bp_motif','G_test','padj','candidate_site','nearest_ac','nearest_ac_motif']
 else:
-	keep_columns = ['Chromosome','pos_mod','depth_mod','ref_fraction_mod','depth_unmod','ref_fraction_unmod','odds_ratio','p_values_OR_adj','eleven_bp_motif','G_test','padj','candidate_site']
+	keep_columns = ['chr_mod','Chromosome','pos_mod','depth_mod','ref_fraction_mod','depth_unmod','ref_fraction_unmod','odds_ratio','p_values_OR_adj','eleven_bp_motif','G_test','padj','candidate_site']
 
 if 'Chromosome' not in all_candidates.columns:
     	keep_columns.remove('Chromosome')
