@@ -114,39 +114,43 @@ row = len(lst_of_paths)
 col = 1
 cnt = 1
 max_value = []
-for i in range(1,row+1):
-    df = pd.read_csv(lst_of_paths[i-1],sep = '\t')
-    if args.range != None and len(args.range) == 2:
-    	df = filter_df(df,start,end)
-    plt.subplot(row,col,cnt)
-#     plt.xticks([], [])
-    plt.ylabel('{} \n G-Test score'.format(names[i-1]),size = 25)
-    col_g,size,legend_dict,count = return_shape_size(df,'red',homopolymer)
-    plt.scatter(list(df['pos_mod']), list(df['G_test']), c=col_g,s = size)
-    
-#     plt.locator_params(axis="y", nbins=10)
-    plt.yticks(np.linspace(0, get_step(max_shape), num=5),size = 20)
-    if pos_label == True:
-        for index,value in df.iterrows():
-            if value['candidate_site'] == 'candidate':
-                plt.annotate(value.pos_mod,(value.pos_mod+5,value.G_test-5),size = 12)
-    fig.tight_layout()
-    cnt += 1
-    if cnt - 1 == row:
-    	plt.xticks(np.arange(start, max(df['pos_mod']), linespace),size=40)
-    else:
-    	plt.xticks([], [])
-plt.subplot(row,col,1)
-if m6A == True:
-    for i,j in df.iterrows():
-        if j['five_bp_motif'][2:4] == 'AC':
-            top_limit = plt.ylim()[-1]
-            plt.annotate('', xy=(j['pos_mod'], top_limit),xycoords='data',xytext=(j['pos_mod'], top_limit+10),
-					textcoords='data',
-					arrowprops=dict(arrowstyle= '-|>',color='slategrey',lw=2.5,ls='--'))
-#             plt.axvline(j['pos_mod'])
-    plt.annotate('NNACN',xy=(plt.xlim()[0],top_limit+15),color = 'slategrey',size = 16,fontweight='bold')
-plt.subplot(row,col,row)
-plt.xlabel('Transcript Position',size = 40)
-fig.tight_layout()
-plt.savefig(args.output)
+if len(lst_of_paths) < 6 :
+	for i in range(1,row+1):
+		df = pd.read_csv(lst_of_paths[i-1],sep = '\t')
+		if args.range != None and len(args.range) == 2:
+			df = filter_df(df,start,end)
+		plt.subplot(row,col,cnt)
+	#     plt.xticks([], [])
+		plt.ylabel('{} \n G-Test score'.format(names[i-1]),size = 25)
+		col_g,size,legend_dict,count = return_shape_size(df,'red',homopolymer)
+		plt.scatter(list(df['pos_mod']), list(df['G_test']), c=col_g,s = size)
+	
+	#     plt.locator_params(axis="y", nbins=10)
+		plt.yticks(np.linspace(0, get_step(max_shape), num=5),size = 20)
+		if pos_label == True:
+			for index,value in df.iterrows():
+				if value['candidate_site'] == 'candidate':
+					plt.annotate(value.pos_mod,(value.pos_mod+len(df)*.001,value.G_test),size = 12)
+		fig.tight_layout()
+		cnt += 1
+		if cnt - 1 == row:
+			plt.xticks(np.arange(start, max(df['pos_mod']), linespace),size=40)
+		else:
+			plt.xticks([], [])
+	plt.subplot(row,col,1)
+	if m6A == True:
+		for i,j in df.iterrows():
+			if j['five_bp_motif'][2:4] == 'AC':
+				top_limit = plt.ylim()[-1]
+				plt.annotate('', xy=(j['pos_mod'], top_limit),xycoords='data',xytext=(j['pos_mod'], top_limit+10),
+						textcoords='data',
+						arrowprops=dict(arrowstyle= '-|>',color='slategrey',lw=2.5,ls='--'))
+	#             plt.axvline(j['pos_mod'])
+		plt.annotate('NNACN',xy=(plt.xlim()[0],top_limit+15),color = 'slategrey',size = 16,fontweight='bold')
+	plt.subplot(row,col,row)
+	plt.xlabel('Transcript Position',size = 40)
+	fig.tight_layout()
+	plt.savefig(args.output)
+else:
+	print('Too many tracks to plot (max == 5)')
+
