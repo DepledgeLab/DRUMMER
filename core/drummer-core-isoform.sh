@@ -77,7 +77,7 @@ cat $transcriptome_file | awk '{ if (substr($0, 1, 1)==">") {filename=(substr($0
 #for id in $(echo $list | cut -f1 -d$'\t'); do
 
 
-while IFS=$'\t' read id remainder; 
+while IFS=$'\t' read chromo id remainder; 
 do
 
 echo $id
