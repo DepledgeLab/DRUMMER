@@ -37,7 +37,7 @@ OR
 
 Optional flags:
 -x		specify log2fc required (default >= 0.5)
--y		specify odds ratio requirement (default >= 1)
+-y		specify odds ratio requirement (default >= 1.5)
 -z		specify adjusted p_value (G-test) requirement (default<= 0.05)
 -a		m6A mode (default = True), set to False to ignore m6A information
 -d 		reference fraction difference between unmodified and modified (default = 0.01)
