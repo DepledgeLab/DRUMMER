@@ -95,8 +95,8 @@ Optional flags
 -y              specify odds ratio requirement (default >= 1.5)
 -z              specify adjusted p_value (G-test) requirement (default<= 0.05)
 -a              m6A mode (default = True), set to False to ignore m6A information
--d              reference fraction difference between unmodified and modified (default = 0.1)
--f              Candidate site visualization (default = True), set to False to not visualize candidate calls (m6A mode must be set to True)
+-d              reference fraction difference between unmodified and modified (default = 0.01)
+-f              Candidate site visualization (default = False), set to True to visualize candidate calls
 ```
 
 ## Output
