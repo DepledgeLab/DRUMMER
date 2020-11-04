@@ -131,7 +131,7 @@ python3 "$DIR"/../modules/genomic_locations.py -i $output_dir/complete_analysis/
 
 if [ $visualization = "True" ]
 then
-python3 "$DIR"/../modules/candidate_visualization.py -i $output_dir/complete_analysis/$id.complete.txt -o $output_dir
+python3 "$DIR"/../modules/candidate_visualization.py -i $output_dir/complete_analysis/$id.complete.txt -o $output_dir -m $m6A_status
 fi 
 
 ##Location of transcript file?
@@ -141,40 +141,10 @@ done < $list
 python3 "$DIR"/../extras/summary.py -i $output_dir/complete_analysis/ -o $output_dir/summary.txt -m $m6A_status
 rm -r "$output_dir"/bam_readcount "$output_dir"/filtered "$output_dir"/gTest "$output_dir"/map "$output_dir"/merged "$output_dir"/motif_information "$output_dir"/odds_ratio "$output_dir"/transcripts
 
-#input_bamreadcounts=bam_readcount/$name
-#echo $transcript_name
-#echo $control_file
-#echo $test_file
+if [ $m6A_status = "True" ]
+then
+python3 "$DIR"/../extras/m6a_summary_plot.py -d $output_dir/complete_analysis/ -i $output_dir/summary.txt -o $output_dir/summary_visualization_m6A.txt -m "True"
+fi 
 
-#Creates a directory called filter and subdir of transcript name
-#python3 ../modules/readcount_filter.py -i $input_bamreadcounts
-
-#paste -d "\t" "$input_bamreadcounts".TEST.filtered.txt "$input_bamreadcounts".TEST.filtered.txt > "$input_bamreadcounts".merged.filtered.txt
-
-#odds_ratio / make new directory with odds ratio added to individual reads
-#merged_transcripts=merged/$transcript_name.*
-#merged_transcripts=merged/$name.*
-#echo $transcript_name
-#echo $merged_transcripts
-#python3 ../modules/odds_ratio.py -i $merged_transcripts
-
-#motif_information / make new directory with motif information added to individual reads
-#python3 motif_information.py -i odds_ratio/AdPol.merged.filtered.odds_ratio.txt
-
-#motif_transcripts=odds_ratio/$name.*
-#motif_transcripts=odds_ratio/$transcript_name.*
-#echo $motif_transcripts
-#python3 ../modules/motif_information.py -i $motif_transcripts
-
-#Gtest/ make new directory of gtest values added to individual reads
-#gtest_transcripts=motif_information/$transcript_name.*
-#gtest_transcripts=motif_information/$transcript_name.*
-#python3 create_output_file.py -i _ -o gTest
-#echo $gtest_transcripts
-# Rscript ../modules/Gtest.R $gtest_transcripts "$output_dir"/gTest/$transcript_name.merged.odds_ratio.motif_information.gtest.csv
-#python3 ../modules/Gtest.py -i $gtest_transcripts
-
-#candidate_transcripts=gTest/$transcript_name.*
-#python3 ../modules/find_candidates.py -i $candidate_transcripts -r $odds -l $log2fc -p $padj -o $output_dir/$transcript_name.complete.txt
 
 

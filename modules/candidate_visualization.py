@@ -15,10 +15,11 @@ using log2fc, odds_ratio and padj')
 requiredGrp = ap.add_argument_group('required arguments')
 requiredGrp.add_argument("-i",'--input', required=True, help="input file location")
 requiredGrp.add_argument("-o",'--output', required=True, help="output file location")
-
+requiredGrp.add_argument("-m",'--m6A', required=True, help="output file location")
 args = vars(ap.parse_args())
 input = args['input']
 output = args['output']
+m6A = args['m6A']
 
 sample = input.split('/')[-1].strip('.complete.txt')
 
@@ -94,6 +95,18 @@ for index,value in df.iterrows():
         ax1.annotate(value.pos_mod,(value.pos_mod-scaling_x,value.G_test+scaling_y),size = 7.5)
 #         ax1.annotate(value.five_bp_motif,(value.pos_mod-25,value.G_test+50),size = 7.5)
 # plt.savefig('/Users/mac/Desktop/DRUMMER_Figures/Fix_masked_issues/homopolymer-US-1-candidate-site_visualization.pdf')\
+
+if m6A == 'True':
+	for i,j in df.iterrows():
+		if j['five_bp_motif'][2:4] == 'AC':
+			top_limit = plt.ylim()[0]
+			
+			plt.annotate('', xy=(j['pos_mod'], top_limit),xycoords='data',xytext=(j['pos_mod'], -abs(top_limit)/2),
+					textcoords='data',
+					arrowprops=dict(arrowstyle= '<|-',color='slategrey',lw=2.5,ls='--'))
+	plt.annotate('NNACN', xy=(plt.xlim()[0], top_limit),xycoords='data',xytext=(plt.xlim()[0], -abs(top_limit)/2),
+			textcoords='data',fontsize = 12,color = 'slategrey',fontweight='bold')
+
 make_dir = output_location = output +'/visualization/'
 os.makedirs(make_dir, exist_ok = True)
 output_location = output +'/visualization/'+ sample + '.pdf'
