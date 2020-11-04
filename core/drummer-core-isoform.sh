@@ -143,7 +143,7 @@ rm -r "$output_dir"/bam_readcount "$output_dir"/filtered "$output_dir"/gTest "$o
 
 if [ $m6A_status = "True" ]
 then
-python3 "$DIR"/../extras/m6a_summary_plot.py -d $output_dir/complete_analysis/ -i $output_dir/summary.txt -o $output_dir/summary_visualization_m6A.txt -m "True"
+python3 "$DIR"/../extras/m6a_summary_plot.py -d $output_dir/complete_analysis/ -i $output_dir/summary.txt -o $output_dir/summary_visualization_m6A.pdf
 fi 
 
 
