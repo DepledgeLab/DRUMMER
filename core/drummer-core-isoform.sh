@@ -76,11 +76,16 @@ cat $transcriptome_file | awk '{ if (substr($0, 1, 1)==">") {filename=(substr($0
 
 #for id in $(echo $list | cut -f1 -d$'\t'); do
 
+length_list=$(head -n 1 $list | awk '{print NF}')
 
 while IFS=$'\t' read chromo id remainder; 
 do
-
+#variable=$(head -n 1 $remainder | awk '{print NF}')
 echo $id
+
+if (( $length_list == 1 )); then
+    id=$chromo
+fi
 
 ### ONE LINER TO DETERMINE SEQUENCE LENGTH
 #bam_readcount=/gpfs/data/tsirigoslab/home/ja3539/Nanopore/OPEN/bam-readcount/bam-readcount/build/bin/bam-readcount
@@ -126,17 +131,16 @@ python3 "$DIR"/../modules/genomic_locations.py -i $output_dir/complete_analysis/
 
 if [ $visualization = "True" ]
 then
-if [ $m6A_status == "True" ]
-then
 python3 "$DIR"/../modules/candidate_visualization.py -i $output_dir/complete_analysis/$id.complete.txt -o $output_dir
-fi
 fi 
 
 ##Location of transcript file?
 #python3 "$DIR"/../modules/genomic_locations.py -i $output_dir/$id.complete.txt -t $list -o $output_dir/$id.complete.txt
 done < $list
 
-python3 "$DIR"/../extras/summary.py -i $output_dir/complete_analysis/ -o $output_dir/summary.txt -m m6A_status
+python3 "$DIR"/../extras/summary.py -i $output_dir/complete_analysis/ -o $output_dir/summary.txt -m $m6A_status
+rm -r "$output_dir"/bam_readcount "$output_dir"/filtered "$output_dir"/gTest "$output_dir"/map "$output_dir"/merged "$output_dir"/motif_information "$output_dir"/odds_ratio "$output_dir"/transcripts
+
 #input_bamreadcounts=bam_readcount/$name
 #echo $transcript_name
 #echo $control_file

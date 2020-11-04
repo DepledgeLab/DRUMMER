@@ -7,6 +7,8 @@ import math
 import os
 from os import listdir
 from os.path import isdir, join, isfile
+import warnings
+warnings.filterwarnings("ignore")
 
 
 my_parser = argparse.ArgumentParser()
@@ -33,17 +35,30 @@ for i in onlydir:
     all_candidates = pd.concat([all_candidates,df])
 all_candidates = all_candidates.reset_index(drop = True)
 if mode == 'True':
-	keep_columns = ['chr_mod','Chromosome','pos_mod','depth_mod','ref_fraction_mod','depth_unmod','ref_fraction_unmod','odds_ratio','p_values_OR_adj','eleven_bp_motif','G_test','padj','candidate_site','nearest_ac','nearest_ac_motif']
+	keep_columns = ['chr_mod','Chromosome','ref_mod','pos_mod','depth_mod','ref_fraction_mod','depth_unmod','ref_fraction_unmod','frac_diff','odds_ratio','p_values_OR_adj','eleven_bp_motif','G_test','padj','candidate_site','nearest_ac','nearest_ac_motif','genomic_position']
 else:
-	keep_columns = ['chr_mod','Chromosome','pos_mod','depth_mod','ref_fraction_mod','depth_unmod','ref_fraction_unmod','odds_ratio','p_values_OR_adj','eleven_bp_motif','G_test','padj','candidate_site']
+	keep_columns = ['chr_mod','Chromosome','ref_mod','pos_mod','depth_mod','ref_fraction_mod','depth_unmod','ref_fraction_unmod','frac_diff','odds_ratio','p_values_OR_adj','eleven_bp_motif','G_test','padj','candidate_site','genomic_position']
 
 if 'Chromosome' not in all_candidates.columns:
     	keep_columns.remove('Chromosome')
-
+if 'genomic_position' not in all_candidates.columns:
+    	keep_columns.remove('genomic_position')
+    	
 if additional_columns != None:
 	keep_columns += additional_columns
 	
 
 final_candidates = all_candidates[keep_columns]
+
+final_candidates['ref_fraction_mod'] = final_candidates['ref_fraction_mod'].astype(float).map('{:0.2e}'.format)
+final_candidates['ref_fraction_unmod'] = final_candidates['ref_fraction_unmod'].astype(float).map('{:0.2e}'.format)
+final_candidates['odds_ratio'] = final_candidates['odds_ratio'].astype(float).map('{:0.2e}'.format)
+final_candidates['p_values_OR_adj'] = final_candidates['p_values_OR_adj'].astype(float).map('{:0.2e}'.format)
+final_candidates['ref_fraction_unmod'] = final_candidates['ref_fraction_unmod'].astype(float).map('{:0.2e}'.format)
+final_candidates['padj'] = final_candidates['padj'].astype(float).map('{:0.2e}'.format)
+final_candidates['frac_diff'] = final_candidates['frac_diff'].astype(float).map('{:0.2e}'.format)
+
+final_candidates=final_candidates.rename(columns = {'p_values_OR_adj':'OR_padj','padj':'G_padj','chr_mod':"transcript_id",'ref_mod':'reference_base'})
+
 #final_candidates = final_candidates.sort_values('chr_mod',ascending = True)
 final_candidates.to_csv(output_dir, sep ='\t',index = False)

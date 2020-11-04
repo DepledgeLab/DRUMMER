@@ -84,7 +84,8 @@ def check_homopolymer(string):
             return True
 include_candidate_df['homopolymer'] = [check_homopolymer(i) for i in include_candidate_df['eleven_bp_motif']]
 #include_candidate_df['candidate_site'].value_counts()
-
+#ide_candidate_df['frac_diff'] = include_candidate_df['ref_fraction_unmod'] - include_candidate_df['ref_fraction_mod']
+include_candidate_df.insert(20, 'frac_diff', include_candidate_df['ref_fraction_mod'] - include_candidate_df['ref_fraction_unmod'])
 # print('Candidate sites:\n',include_candidate_df['candidate_site'].value_counts())
 # include_candidate_df.to_csv(output,index=False)
 

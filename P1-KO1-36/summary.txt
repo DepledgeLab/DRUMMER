@@ -1,0 +1,6 @@
+transcript_id	Chromosome	reference_base	pos_mod	depth_mod	ref_fraction_mod	depth_unmod	ref_fraction_unmod	frac_diff	odds_ratio	OR_padj	eleven_bp_motif	G_test	G_padj	candidate_site	nearest_ac	nearest_ac_motif	genomic_position
+E3.12K	Ad5	T	1962	992	8.63e-01	672	9.43e-01	-8.05e-02	2.65e+00	1.78e-04	GGACTTACATC	31.0	7.26e-03	candidate	-1	TTACA	29530
+E3.10K	Ad5	A	517	4003	9.59e-01	3818	9.84e-01	-2.50e-02	2.63e+00	2.57e-08	AAACCAGACTT	48.0	9.50e-07	candidate	-2	AGACT	28443
+E3.10K	Ad5	C	589	3977	9.84e-01	3764	9.95e-01	-1.08e-02	3.30e+00	2.38e-03	GGCTTCCTGGA	25.0	4.18e-02	candidate	17	CAACC	29407
+E3.10K	Ad5	T	710	3004	8.14e-01	3038	9.21e-01	-1.06e-01	2.65e+00	5.63e-32	GGACTTACATC	158.0	4.55e-30	candidate	-1	TTACA	29528
+E3.10K	Ad5	C	921	4191	8.92e-01	3830	9.58e-01	-6.58e-02	2.77e+00	9.10e-27	ACGGACTGAAA	138.0	6.11e-26	candidate	1	GGACT	29739
