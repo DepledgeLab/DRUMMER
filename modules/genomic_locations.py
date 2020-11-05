@@ -115,7 +115,7 @@ def return_homology(df):
 
 args = vars(ap.parse_args())
 transcripts = args['transcript_file']
-# path = args['input']
+path = args['input']
 output = args['output']
 include_candidate_df = pd.read_csv(path,sep = '\t')
 transcripts = pd.read_csv(transcripts,sep = '\t',header= None)
