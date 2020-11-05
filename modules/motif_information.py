@@ -4,6 +4,7 @@ import argparse
 import math
 import re
 from create_output_file import create_output
+import warnings
 warnings.filterwarnings("ignore")
 
 ap = argparse.ArgumentParser(description = 'Takes in the output of bam-readcount \

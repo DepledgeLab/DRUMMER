@@ -4,7 +4,7 @@ import argparse
 import math
 from create_output_file import create_output
 from scipy.stats import chi2_contingency
-
+import warnings
 warnings.filterwarnings("ignore")
 
 #columns_names = ['chr','pos','ref','depth','A','C','G','T','N']

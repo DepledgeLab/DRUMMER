@@ -7,7 +7,7 @@ import numpy as np
 import argparse
 from create_output_file import create_output
 import pandas as pd
-
+import warnings
 warnings.filterwarnings("ignore")
 
 columns_names = ['chr','pos','ref','depth','A','C','G','T','N']

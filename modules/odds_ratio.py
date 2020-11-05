@@ -4,7 +4,7 @@ import argparse
 import math
 import scipy.stats as stats
 from create_output_file import create_output
-
+import warnings
 warnings.filterwarnings("ignore")
 #columns_names = ['chr','pos','ref','depth','A','C','G','T','N']
 

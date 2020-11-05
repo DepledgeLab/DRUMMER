@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from collections import defaultdict
 import math
+import warnings
 warnings.filterwarnings("ignore")
 
 ap = argparse.ArgumentParser(description = 'Takes in the output from the pipeline and determines candidate sites \
