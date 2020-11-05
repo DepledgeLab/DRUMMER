@@ -49,7 +49,8 @@ df['G_test'] = gtests
 df['p_val'] = p_vals
 
 #Padj is obtained by multiplying pval by length of dataframe
-df['padj'] = df['p_val'] * len(df)
+df['padj'] = df['p_val'] * * df.shape[0]
+print('G-test shape',df.shape[0])
 df['padj'] = [1 if i > 1 else i for i in df['padj']]
 output = create_output(output,input,'gTest')
 df.to_csv(output,sep = '\t', index = False)

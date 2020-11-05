@@ -92,15 +92,15 @@ test = [[row['A_mod'],row['C_mod'],row['G_mod'],row['T_mod'],row['N_mod']] for i
 
 
 ratio_unmod,ratio_mod,fold_change, log2_fc, odds_vals,pvalues = max_sum_function(control,test)
-
+print('odds-ratio shape',df.shape[0])
 df['ratio_unmod'] = ratio_unmod
 df['ratio_mod'] = ratio_mod
 df['fold_change'] = fold_change
 df['log2_fc'] = log2_fc
 df['odds_ratio'] = odds_vals
 df['p_values_OR'] = pvalues
-print('length df',len(df))
-df['p_values_OR_adj'] = df['p_values_OR'] * len(df)
+# print('length df',len(df))
+df['p_values_OR_adj'] = df['p_values_OR'] * df.shape[0]
 output = create_output(output,input,'odds_ratio')
 # print(output)
 df.to_csv(output,sep = '\t', index = False)
