@@ -5,6 +5,8 @@ import math
 from create_output_file import create_output
 from scipy.stats import chi2_contingency
 
+warnings.filterwarnings("ignore")
+
 #columns_names = ['chr','pos','ref','depth','A','C','G','T','N']
 
 ap = argparse.ArgumentParser(description = 'Takes in the output of bam-readcount \

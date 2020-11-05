@@ -4,6 +4,8 @@ import argparse
 import math
 import re
 
+warnings.filterwarnings("ignore")
+
 ap = argparse.ArgumentParser(description = 'Takes in the output from the pipeline and determines candidate sites \
 using log2fc, odds_ratio and padj')
 requiredGrp = ap.add_argument_group('required arguments')

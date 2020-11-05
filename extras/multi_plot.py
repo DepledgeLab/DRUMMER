@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from collections import defaultdict
 import math
+warnings.filterwarnings("ignore")
 
 my_parser = argparse.ArgumentParser()
 my_parser.add_argument('--inputs', action='store', nargs="*")

@@ -50,13 +50,13 @@ if additional_columns != None:
 
 final_candidates = all_candidates[keep_columns]
 
-final_candidates['ref_fraction_mod'] = final_candidates['ref_fraction_mod'].astype(float).map('{:0.2e}'.format)
-final_candidates['ref_fraction_unmod'] = final_candidates['ref_fraction_unmod'].astype(float).map('{:0.2e}'.format)
-final_candidates['odds_ratio'] = final_candidates['odds_ratio'].astype(float).map('{:0.2e}'.format)
+final_candidates['ref_fraction_mod'] = final_candidates['ref_fraction_mod'].round(3)
+final_candidates['ref_fraction_unmod'] = final_candidates['ref_fraction_unmod'].round(3)
+final_candidates['odds_ratio'] = final_candidates['odds_ratio'].round(3)
 final_candidates['p_values_OR_adj'] = final_candidates['p_values_OR_adj'].astype(float).map('{:0.2e}'.format)
-final_candidates['ref_fraction_unmod'] = final_candidates['ref_fraction_unmod'].astype(float).map('{:0.2e}'.format)
+final_candidates['ref_fraction_unmod'] = final_candidates['ref_fraction_unmod'].round(3)
 final_candidates['padj'] = final_candidates['padj'].astype(float).map('{:0.2e}'.format)
-final_candidates['frac_diff'] = final_candidates['frac_diff'].astype(float).map('{:0.2e}'.format)
+final_candidates['frac_diff'] = final_candidates['frac_diff'].round(3)
 
 final_candidates=final_candidates.rename(columns = {'p_values_OR_adj':'OR_padj','padj':'G_padj','chr_mod':"transcript_id",'ref_mod':'reference_base'})
 

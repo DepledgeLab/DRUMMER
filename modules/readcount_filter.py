@@ -8,6 +8,8 @@ import argparse
 from create_output_file import create_output
 import pandas as pd
 
+warnings.filterwarnings("ignore")
+
 columns_names = ['chr','pos','ref','depth','A','C','G','T','N']
 
 ap = argparse.ArgumentParser(description = 'Takes in the output of bam-readcount \

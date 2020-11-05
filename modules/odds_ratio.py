@@ -5,6 +5,7 @@ import math
 import scipy.stats as stats
 from create_output_file import create_output
 
+warnings.filterwarnings("ignore")
 #columns_names = ['chr','pos','ref','depth','A','C','G','T','N']
 
 ap = argparse.ArgumentParser(description = 'Takes in the output of bam-readcount \
@@ -98,6 +99,7 @@ df['fold_change'] = fold_change
 df['log2_fc'] = log2_fc
 df['odds_ratio'] = odds_vals
 df['p_values_OR'] = pvalues
+print('length df',len(df))
 df['p_values_OR_adj'] = df['p_values_OR'] * len(df)
 output = create_output(output,input,'odds_ratio')
 # print(output)

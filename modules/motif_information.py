@@ -4,6 +4,7 @@ import argparse
 import math
 import re
 from create_output_file import create_output
+warnings.filterwarnings("ignore")
 
 ap = argparse.ArgumentParser(description = 'Takes in the output of bam-readcount \
 and returns a text file containing the count of each nucleotide at the position and the \

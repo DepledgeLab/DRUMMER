@@ -4,6 +4,7 @@ import argparse
 import math
 import re
 from create_output_file import create_output
+warnings.filterwarnings("ignore")
 
 ap = argparse.ArgumentParser(description = 'Takes in the output from the pipeline and determines candidate sites \
 using log2fc, odds_ratio and padj')
