@@ -146,13 +146,14 @@ A simple test dataset is included in the DRUMMER repository and can be used to v
 
 exome mode ( runtime < 20 mins on a 'standard' desktop )
 ```
-./drummer.sh -r TESTDATA/Adenovirus-Ad5.fasta -n Ad5 -c TESTDATA/exome.sample.MOD.bam -t TESTDATA/exome.sample.UNMOD.bam -o OUTPUTDIR_exome -m exome
+./drummer.sh -r TESTDATA/Adenovirus-Ad5.fasta -n Ad5 -c TESTDATA/exome.Ad5.MOD.bam -t TESTDATA/exome.Ad5.UNMOD.bam -o OUTPUTDIR_exome -m exome
 ```
 
 isoform mode ( runtime < 20 mins on a 'standard' desktop )
 ```
 ./drummer.sh -r TESTDATA/Ad5_v9.1_complete.fasta -u TESTDATA/list.txt -c TESTDATA/isoform.sample.MOD.bam -t TESTDATA/isoform.sample.UNMOD.bam -o OUTPUTDIR_isoform -m isoform
 ```
+ 
 
 
 ## Troubleshooting
