@@ -69,6 +69,7 @@ if len(candidates_df) > 50:
 	labels = ['Candidates','Random']
 	alpha = [1,.5]
 	edge = ['black','black']
+	total_sums = [' ({})'.format(sum(candiates_distance)),'']
 
 
 	fig, ax = plt.subplots(figsize=(20, 10))
@@ -78,7 +79,7 @@ if len(candidates_df) > 50:
 		y = list(current_df)
 	#     new_x,new_y = filtered_for_10(x,y)
 		ax.bar(x, y, linestyle=type_line[i], color=colors[i], lw=2.5,
-			alpha=alpha[i], label=labels[i],edgecolor = edge[i])
+			alpha=alpha[i], label=labels[i]+total_sums[i],edgecolor = edge[i])
 		plt.xlim(-25, 25) 
 	ax.legend(fontsize = 15)
 	ax.set_xlabel('AC distance from Candidate Site',fontsize = 20)
