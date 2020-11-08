@@ -59,15 +59,17 @@ def return_shape_size(df,color):
     return [col_g,size,legend_dict,count]
     
 if mode == "exome":
-	size = 10
+	size = 5
+	tickmarks= 1000
 else:
 	size = 16
+	tickmarks = 100
 fig, ax1 = plt.subplots(figsize=(20, 10))
 
 ax1.set_title('Visualization of Candidate and Masked sites ({})'.format(sample),fontsize = 36)
 ax1.set_xlabel('Position',fontsize = 20)
 ax1.set_ylabel('gTEST',fontsize = 20)
-plt.xticks(np.arange(0, max(df['pos_mod'])+50, 100),rotation = 45,size = 12)
+plt.xticks(np.arange(0, max(df['pos_mod'])+50, tickmarks),rotation = 45,size = 12)
 col_g,size,legend_dict,count = return_shape_size(df,'red')
 # print(legend_dict)
 scatter1 = ax1.scatter(list(df['pos_mod']), list(df['G_test']), c=col_g,s = size)
@@ -82,7 +84,7 @@ ax1.legend((scatter1,scatter1,scatter1,scatter1), ('Candidate & homopolymer = {}
                                                    'Candidate & no homopolymer = {}'.format(legend_dict['no_homopolymer']),
                                            "Candidate Masked = {}".format(legend_dict['masked']),
                                         'none = {}'.format(legend_dict['none'])),
-                                           loc='upper left', bbox_to_anchor=(0, 1))
+                                           loc='upper right', bbox_to_anchor=(0, 0),fontsize = 7.5)
 leg = ax1.get_legend()
 leg.legendHandles[0]._sizes = [50]
 leg.legendHandles[1]._sizes = [50]
