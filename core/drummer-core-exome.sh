@@ -110,7 +110,7 @@ python3 "$DIR"/../modules/find_candidates.py -i $candidate_transcripts -r $odds 
 
 if [ $visualization = "True" ]
 then
-python3 "$DIR"/../modules/candidate_visualization.py -i $output_dir/$name.complete.txt -o $output_dir -m $m6A_status
+python3 "$DIR"/../modules/candidate_visualization.py -i $output_dir/$name.complete.txt -o $output_dir -m $m6A_status -t exome
 fi 
 
 rm -r "$output_dir"/bam_readcount "$output_dir"/filtered "$output_dir"/gTest "$output_dir"/map "$output_dir"/merged "$output_dir"/motif_information "$output_dir"/odds_ratio 

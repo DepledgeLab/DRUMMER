@@ -131,7 +131,7 @@ python3 "$DIR"/../modules/genomic_locations.py -i $output_dir/complete_analysis/
 
 if [ $visualization = "True" ]
 then
-python3 "$DIR"/../modules/candidate_visualization.py -i $output_dir/complete_analysis/$id.complete.txt -o $output_dir -m $m6A_status
+python3 "$DIR"/../modules/candidate_visualization.py -i $output_dir/complete_analysis/$id.complete.txt -o $output_dir -m $m6A_status -t isoform
 fi 
 
 ##Location of transcript file?

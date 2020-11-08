@@ -17,11 +17,13 @@ using log2fc, odds_ratio and padj')
 requiredGrp = ap.add_argument_group('required arguments')
 requiredGrp.add_argument("-i",'--input', required=True, help="input file location")
 requiredGrp.add_argument("-o",'--output', required=True, help="output file location")
-requiredGrp.add_argument("-m",'--m6A', required=True, help="output file location")
+requiredGrp.add_argument("-m",'--m6A', required=True, help="m6A mode (True/False)")
+requiredGrp.add_argument("-t",'--type', required=True, help="Type of analysis")
 args = vars(ap.parse_args())
 input = args['input']
 output = args['output']
 m6A = args['m6A']
+mode = args['type']
 
 sample = input.split('/')[-1].strip('.complete.txt')
 
@@ -56,13 +58,16 @@ def return_shape_size(df,color):
             legend_dict['none'] += 1
     return [col_g,size,legend_dict,count]
     
-    
+if mode == "exome":
+	size = 10
+else:
+	size = 16
 fig, ax1 = plt.subplots(figsize=(20, 10))
 
 ax1.set_title('Visualization of Candidate and Masked sites ({})'.format(sample),fontsize = 36)
 ax1.set_xlabel('Position',fontsize = 20)
 ax1.set_ylabel('gTEST',fontsize = 20)
-plt.xticks(np.arange(0, max(df['pos_mod'])+50, 100),rotation = 45)
+plt.xticks(np.arange(0, max(df['pos_mod'])+50, 100),rotation = 45,size = 12)
 col_g,size,legend_dict,count = return_shape_size(df,'red')
 # print(legend_dict)
 scatter1 = ax1.scatter(list(df['pos_mod']), list(df['G_test']), c=col_g,s = size)
