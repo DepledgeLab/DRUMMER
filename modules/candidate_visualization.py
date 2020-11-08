@@ -60,11 +60,8 @@ def return_shape_size(df,color):
     
 if mode == "exome":
 	size = 5
-<<<<<<< HEAD
 	tickmarks= 1000
-=======
 # 	print("EXOME")
->>>>>>> 43fe907a7e340a91f92f6ae5130180ca497c9e5d
 else:
 	size = 16
 	tickmarks = 100
@@ -73,11 +70,11 @@ fig, ax1 = plt.subplots(figsize=(20, 10))
 ax1.set_title('Visualization of Candidate and Masked sites ({})'.format(sample),fontsize = 36)
 ax1.set_xlabel('Position',fontsize = 20)
 ax1.set_ylabel('gTEST',fontsize = 20)
-<<<<<<< HEAD
+
 plt.xticks(np.arange(0, max(df['pos_mod'])+50, tickmarks),rotation = 45,size = 12)
-=======
+
 plt.xticks(np.arange(0, max(df['pos_mod'])+50, 1000),rotation = 45,size = 12)
->>>>>>> 43fe907a7e340a91f92f6ae5130180ca497c9e5d
+
 col_g,size,legend_dict,count = return_shape_size(df,'red')
 # print(legend_dict)
 scatter1 = ax1.scatter(list(df['pos_mod']), list(df['G_test']), c=col_g,s = size)
@@ -91,12 +88,10 @@ scatter1 = ax1.scatter(list(df['pos_mod']), list(df['G_test']), c=col_g,s = size
 ax1.legend((scatter1,scatter1,scatter1,scatter1), ('Candidate & homopolymer = {}'.format(legend_dict['homopolymer']),
                                                    'Candidate & no homopolymer = {}'.format(legend_dict['no_homopolymer']),
                                            "Candidate Masked = {}".format(legend_dict['masked']),
-<<<<<<< HEAD
                                         'none = {}'.format(legend_dict['none'])),
                                            loc='upper right', bbox_to_anchor=(0, 0),fontsize = 7.5)
-=======
                                         'none = {}'.format(legend_dict['none'])),bbox_to_anchor=(0, 1), loc='lower right',fontsize = 7.5)
->>>>>>> 43fe907a7e340a91f92f6ae5130180ca497c9e5d
+
 leg = ax1.get_legend()
 leg.legendHandles[0]._sizes = [50]
 leg.legendHandles[1]._sizes = [50]
