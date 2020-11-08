@@ -90,7 +90,7 @@ ax1.legend((scatter1,scatter1,scatter1,scatter1), ('Candidate & homopolymer = {}
                                            "Candidate Masked = {}".format(legend_dict['masked']),
                                         'none = {}'.format(legend_dict['none'])),
                                            loc='upper right', bbox_to_anchor=(0, 0),fontsize = 7.5)
-                                        'none = {}'.format(legend_dict['none'])),bbox_to_anchor=(0, 1), loc='lower right',fontsize = 7.5)
+#                                         'none = {}'.format(legend_dict['none'])),bbox_to_anchor=(0, 1), loc='lower right',fontsize = 7.5)
 
 leg = ax1.get_legend()
 leg.legendHandles[0]._sizes = [50]
