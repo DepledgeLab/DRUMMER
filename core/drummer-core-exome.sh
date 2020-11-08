@@ -107,15 +107,13 @@ python3 "$DIR"/../modules/find_candidates.py -i $candidate_transcripts -r $odds 
 
 
 #python3 "$DIR"/../modules/genomic_locations.py -i $output_dir/$id.complete.txt -t $list -o $output_dir/$id.complete.txt
+
 if [ $visualization = "True" ]
 then
-if [ $m6A_status == "True" ]
-then
-python3 "$DIR"/../modules/candidate_visualization.py -i $output_dir/$name.complete.txt -o $output_dir
-fi
+python3 "$DIR"/../modules/candidate_visualization.py -i $output_dir/$name.complete.txt -o $output_dir -m $m6A_status
 fi 
 
-
+rm -r "$output_dir"/bam_readcount "$output_dir"/filtered "$output_dir"/gTest "$output_dir"/map "$output_dir"/merged "$output_dir"/motif_information "$output_dir"/odds_ratio 
 
 
 
