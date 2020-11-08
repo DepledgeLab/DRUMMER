@@ -73,7 +73,7 @@ ax1.set_ylabel('gTEST',fontsize = 20)
 
 plt.xticks(np.arange(0, max(df['pos_mod'])+50, tickmarks),rotation = 45,size = 12)
 
-plt.xticks(np.arange(0, max(df['pos_mod'])+50, 1000),rotation = 45,size = 12)
+# plt.xticks(np.arange(0, max(df['pos_mod'])+50, tickmarks),rotation = 45,size = 12)
 
 col_g,size,legend_dict,count = return_shape_size(df,'red')
 # print(legend_dict)
