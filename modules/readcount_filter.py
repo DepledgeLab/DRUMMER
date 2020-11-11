@@ -83,49 +83,52 @@ k = [mypath+'/'+i for i in onlyfiles if i.startswith(file)]
 k = sorted(k, key=lambda x:('TEST' in x, x))
 
 # print('k',k)
-lst = []
-for i in k:
-    list_of_rows = []
-    with open(i) as FileObj:
-        for lines in FileObj:
-            initial_split = lines.split('\t')
-            first_4_dict = dict(zip([1,2,3,4],initial_split[:4])) #First four columns into dict with random keynames
-            nucleotide_count = proper_filter(initial_split[4:])
-            first_4_dict.update(nucleotide_count)
-            list_of_rows.append(pd.DataFrame([first_4_dict]))
-    filtered_df = pd.concat(list_of_rows).reset_index(drop=True)
-    filtered_df.columns = columns_names
-    filtered_df['depth'] = new_depth(filtered_df)
-    filtered_df = filtered_df[filtered_df['depth'] != 0].reset_index(drop=True)
-    filtered_df['ref_fraction'] = [do_math(filtered_df,i) for i in range(len(filtered_df))]
-    lst.append(filtered_df)
-#     print(i)
-#     print('file',file)
-    output_path = create_output(output,i,'filtered',file)
-#     print('output',output)
-    without_sub = create_output(output,i,'filtered')
-#     print('without_sub',without_sub)
-#     print(# output)
-    filtered_df.to_csv(output_path,sep = '\t', index = False)
+try:
+	lst = []
+	for i in k:
+		list_of_rows = []
+		with open(i) as FileObj:
+			for lines in FileObj:
+				initial_split = lines.split('\t')
+				first_4_dict = dict(zip([1,2,3,4],initial_split[:4])) #First four columns into dict with random keynames
+				nucleotide_count = proper_filter(initial_split[4:])
+				first_4_dict.update(nucleotide_count)
+				list_of_rows.append(pd.DataFrame([first_4_dict]))
+		filtered_df = pd.concat(list_of_rows).reset_index(drop=True)
+		filtered_df.columns = columns_names
+		filtered_df['depth'] = new_depth(filtered_df)
+		filtered_df = filtered_df[filtered_df['depth'] != 0].reset_index(drop=True)
+		filtered_df['ref_fraction'] = [do_math(filtered_df,i) for i in range(len(filtered_df))]
+		lst.append(filtered_df)
+	#     print(i)
+	#     print('file',file)
+		output_path = create_output(output,i,'filtered',file)
+	#     print('output',output)
+		without_sub = create_output(output,i,'filtered')
+	#     print('without_sub',without_sub)
+	#     print(# output)
+		filtered_df.to_csv(output_path,sep = '\t', index = False)
 
-cols = ['chr', 'pos', 'ref', 'depth', 'A', 'C', 'G', 'T', 'N', 'ref_fraction',
-       'chr.1', 'pos.1', 'ref.1', 'depth.1', 'A.1', 'C.1', 'G.1', 'T.1', 'N.1',
-       'ref_fraction.1']
-       
-# merged_df = pd.concat([lst[0],lst[1]],axis =1)
-# merged_df.columns = cols
-merged_df = lst[0].merge(lst[1],on = 'pos',suffixes = ('','.1'))
-merged_dir = output + '/' + 'merged/'
-# print('merged_dir',merged_dir)
-os.makedirs(merged_dir, exist_ok = True)
+	cols = ['chr', 'pos', 'ref', 'depth', 'A', 'C', 'G', 'T', 'N', 'ref_fraction',
+		   'chr.1', 'pos.1', 'ref.1', 'depth.1', 'A.1', 'C.1', 'G.1', 'T.1', 'N.1',
+		   'ref_fraction.1']
+	   
+	# merged_df = pd.concat([lst[0],lst[1]],axis =1)
+	# merged_df.columns = cols
+	merged_df = lst[0].merge(lst[1],on = 'pos',suffixes = ('','.1'))
+	merged_dir = output + '/' + 'merged/'
+	# print('merged_dir',merged_dir)
+	os.makedirs(merged_dir, exist_ok = True)
 
-output_dir = merged_dir + file + '.merged.txt'
-# print('output_dir',output_dir)
-#merged_dir = without_sub.split('.')
-#merged_dir.insert(-1,'merged')
-#merged_dir = '.'.join(merged_dir)
+	output_dir = merged_dir + file + '.merged.txt'
+	# print('output_dir',output_dir)
+	#merged_dir = without_sub.split('.')
+	#merged_dir.insert(-1,'merged')
+	#merged_dir = '.'.join(merged_dir)
 
-merged_df.to_csv(output_dir,sep = '\t', index = False)
+	merged_df.to_csv(output_dir,sep = '\t', index = False)
+except ValueError:
+	print("Problem merging:",file)
 
 
 
