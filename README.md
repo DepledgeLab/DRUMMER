@@ -41,7 +41,7 @@ BASH v4.2 or higher
 
 Python3 and modules: pandas, numpy, scipy
 
-### Setting up DRUMMER
+### Installation
 git clone https://github.com/DepledgeLab/DRUMMER
 
 ## Running DRUMMER
