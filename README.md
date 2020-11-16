@@ -14,17 +14,16 @@ DRUMMER v0.2 will shortly be released with the following improvements
 - [Introduction](#introduction)
 - [Installation](#installation)
   * [Pre-requisites](#pre-requisites)
-  * [Setting up DRUMMER](#setting-up-drummer)
+  * [Installation](#installation-1)
 - [Running DRUMMER](#running-drummer)
 - [Output](#output)
 - [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
 - [Data preparation](#data-preparation)
   * [Alignment and filtering](#alignment-and-filtering)
   * [Setting up a transcript list file (isoform mode only)](#setting-up-a-transcript-list-file--isoform-mode-only-)
-- [Troubleshooting](#troubleshooting)
-- [Wisdom](#wisdom)
-  
-  <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 
 ## Introduction
 Experimental design defines the context of analysis and the modifications likely to be identified. For instance, comparison of DRS datasets from a parental cell line and METTL3-knockout cell line allows for the detection of m6A.
