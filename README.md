@@ -22,7 +22,7 @@ DRUMMER v0.2 will shortly be released with the following improvements
   * [Alignment and filtering](#alignment-and-filtering)
   * [Setting up a transcript list file (isoform mode only)](#setting-up-a-transcript-list-file--isoform-mode-only-)
 - [Troubleshooting](#troubleshooting)
-  * [Wisdom](#wisdom)
+- [Wisdom](#wisdom)
   
   <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
