@@ -32,7 +32,8 @@ Experimental design defines the context of analysis and the modifications likely
 ## Installation 
 
 ### Pre-requisites
-DRUMMER requires the following packages to be installed and available in the users path: 
+DRUMMER requires the following packages to be installed and available in the users path:
+
 [SAMTools](http://www.htslib.org/) v1.3 or higher
 [BEDTools](https://bedtools.readthedocs.io/en/latest/) v2.26 or higher
 
