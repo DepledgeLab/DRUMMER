@@ -3,9 +3,14 @@ DRUMMER is designed to identify RNA modifications at nucleotide-level resolution
 
 DRUMMER was designed and implemented by Jonathan S. Abebe and [Daniel P. Depledge](https://med.nyu.edu/faculty/daniel-p-depledge)
 
+## Updates
+DRUMMER v0.2 will shortly be released with the following improvements
+- a single output summary file containing all candidate sites
+- improved visualizations for both transcript and genome level analyses
+- improved speed through parallelization
+- improved tutorials for both human and viral datasets
+
 ## Table of contents
-- [Table of contents](#table-of-contents)
-- [Updates](#updates)
 - [Introduction](#introduction)
 - [Installation](#installation)
   * [Pre-requisites](#pre-requisites)
@@ -24,14 +29,6 @@ DRUMMER was designed and implemented by Jonathan S. Abebe and [Daniel P. Depledg
   * [Wisdom](#wisdom)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
-## Updates
-DRUMMER v0.2 will shortly be released with the following improvements
-- a single output summary file containing all candidate sites
-- improved visualizations for both transcript and genome level analyses
-- improved speed through parallelization
-- improved tutorials for both human and viral datasets
-
 
 ## Introduction
 Experimental design defines the context of analysis and the modifications likely to be identified. For instance, comparison of DRS datasets from a parental cell line and METTL3-knockout cell line allows for the detection of m6A.
