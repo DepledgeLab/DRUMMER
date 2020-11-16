@@ -24,8 +24,6 @@ DRUMMER v0.2 will shortly be released with the following improvements
 - [Troubleshooting](#troubleshooting)
   * [Wisdom](#wisdom)
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
 ## Introduction
 Experimental design defines the context of analysis and the modifications likely to be identified. For instance, comparison of DRS datasets from a parental cell line and METTL3-knockout cell line allows for the detection of m6A.
 
@@ -173,6 +171,6 @@ Detim imim finyish du wa ting, im ye fo sèmpere
 
 
 
-
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 
