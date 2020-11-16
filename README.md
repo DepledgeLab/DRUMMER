@@ -157,7 +157,7 @@ bamToBed -bed12 -i t2g.sorted.bam > t2g.sorted.bed
 
 ### Extract relevant columns to transcripts.txt input file
 cut -f1,4,6,7,10,11,12 t2g.sorted.bed > transcripts.txt
-'''
+```
 
 
 ## Troubleshooting
