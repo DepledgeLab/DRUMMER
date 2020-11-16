@@ -1,7 +1,7 @@
 # DRUMMER
-DRUMMER is a software packaged designed to identify RNA modifications at both transcript and nucleotide-level resolution through the comparative analysis of basecall errors in Nanopore direct RNA sequencing (DRS) datasets. 
+DRUMMER is designed to identify RNA modifications at nucleotide-level resolution on distinct transcript isoforms through the comparative analysis of basecall errors in Nanopore direct RNA sequencing (DRS) datasets. 
 
-DRUMMER was designed and implemented by Jonathan Abebe and [Daniel Depledge](https://med.nyu.edu/faculty/daniel-p-depledge)
+DRUMMER was designed and implemented by Jonathan S. Abebe and [Daniel P. Depledge](https://med.nyu.edu/faculty/daniel-p-depledge)
 
 
 ## Introduction
@@ -65,12 +65,12 @@ samtools index t2g.sorted.bam
 bamToBed -bed12 -i t2g.sorted.bam > t2g.sorted.bed
 
 ### Extract relevant columns to transcripts.txt input file
-cut -f4,6,7,10,11,12 t2g.sorted.bed > transcripts.txt
+cut -f1,4,6,7,10,11,12 t2g.sorted.bed > transcripts.txt
 
 ```
 
 ## Running DRUMMER
-DRUMMER can be run in either exome or isoform mode. Exome mode (-m exome) uses DRS read alignments against the genome of a given organism to identify putatively modified bases while isoform mode (-m isoform) uses DRS read alignments against the transcriptome of a given organism to provide a high resolution mapping. While isoform mode is superior, it is also slower. 
+DRUMMER requires two co-ordinate sorted and indexed BAM files as input. These should contain read alignments for the test (RNA modification absent) and control (RNA modification present) datasets (see Data Preparation section below). DRUMMER can be run in either exome or isoform mode. Exome mode (-m exome) uses DRS read alignments against the genome of a given organism to identify putatively modified bases while isoform mode (-m isoform) uses DRS read alignments against the transcriptome of a given organism to provide a high resolution mapping. While isoform mode is superior, it is also slower. 
 
 Usage:
 ```
@@ -93,51 +93,39 @@ OR
 Optional flags
 ```
 -y              specify odds ratio requirement (default >= 1.5)
--z              specify adjusted p_value (G-test) requirement (default<= 0.05)
+-z              specify adjusted p_value requirement for both G-test and Odds Ratio (default<= 0.05)
 -a              m6A mode (default = True), set to False to ignore m6A information
 -d              reference fraction difference between unmodified and modified (default = 0.01)
--f              Candidate site visualization (default = False), set to True to visualize candidate calls
+-f              Candidate site visualization (default = False), set to True to visualize candidate calls for each individual transcript
 ```
 
 ## Output
 
-When run to completion, DRUMMER outputs a single text file containing the results. A detailed description of the column headers follow.
+When run to completion, DRUMMER generates a single tab-seperated text file (summary.txt) containing all predicted candidate RNA modification sites with contextual information (genome position, isoform position, sequence motif, etc). When run in m6A mode (-a TRUE), a distribution plot is also generated in an accompanying .pdf file (summary_visualization_m6A.pdf). The output directory 'complete_analysis' contains individual data files for each reference sequence provided. A second (optionall) directory 'visualization' contains individual plots of G-test scores versus position for each individual reference sequence. 
+
+A detailed description of column headers in the summary.txt file is shown below. For the individual outputs, please see the accompanying file 'individual_output_headers.txt' for a full description of headers. 
+
+transcript_id   Chromosome      reference_base  pos_mod depth_mod       ref_fraction_mod        depth_unmod     ref_fraction_unmod      frac_diff       odds_ratio      OR_padj eleven_bp_motif G_test  G_padj  candidate_site  nearest_ac  nearest_ac_motif genomic_position
+
 ```
-chr_unmod: name of chromosome or transcript
-pos_unmod: position of nucleotide on chromosome/transcript
-ref_unmod: nucleotide at this position
-depth_unmod: read depth at this position
-A_unmod: number of reads supporting an Adenine at this position
-C_unmod: number of reads supporting an Cytosine at this position
-G_unmod: number of reads supporting an Guanine at this position
-T_unmod: number of reads supporting an Thymine at this position
-N_unmod: number of reads supporting an indel (N) at this position
-ref_fraction_unmod: fraction of reads matching the reference nucleotide
-chr_mod: name of chromosome or transcript
-pos_mod: position of nucleotide on chromosome/transcript
-ref_mod: nucleotide at this position
-depth_mod: read depth at this position
-A_mod: number of reads supporting an Adenine at this position
-C_mod: number of reads supporting an Cytosine at this position
-G_mod: number of reads supporting an Guanine at this position
-T_mod: number of reads supporting an Thymine at this position
-N_mod: number of reads supporting an indel (N) at this position
-ref_fraction_mod: fraction of reads matching the reference nucleotide
-ratio_unmod: 
-ratio_mod: 
-fold_change: fold change difference between ratio_unmod and ratio_mod
-log2_fc: log2 fold change
+transcript_id: name of transcript (isoform mode only)
+chromosome: name of chromosome
+reference_base: reference nucleotide at this position
+pos_mod: position of nucleotide on transcript (isoform mode) or genome (exome mode)
+depth_mod: read depth at this position (RNA modification present dataset)
+ref_fraction_mod: fraction of reads with reference base at this position (RNA modification present dataset)
+depth_unmod: read depth at this position (RNA modification absent dataset)
+ref_fraction_unmod: fraction of reads with reference base at this position (RNA modification absent dataset)
+frac_diff: difference between ref_fraction_unmod and ref_fraction_mod
 odds_ratio: odds ratio
-p_values_OR: pvalue calculated by odds_ratio
+OR_padj: odds ratio adjusted p-value (bonferroni)
+eleven_bp_motif: sequence (11-mer) centered on current position
+G_test: result of 2x5 G-test
+G_padj: G-test adjusted p-value (bonferroni)
+candidate_site: values limited to candidate, \[candidate masked \], or empty based on cutoffs chosen
 nearest_ac: (m6A only) distance (nt) to nearest AC motif (-ve indicates upstream, +ve indicates downstream)
 nearest_ac_motif: (m6A only) sequence (5-mer) of nearest AC motif (centered on A)
-five_bp_motif: sequence (5-mer) centered on current position
-eleven_bp_motif: sequence (11-mer) centered on current position
-G_test: Result of 2x5 G-test
-p_val: p-value of G-test
-padj: bonferroni-corrected p-value 
-p_values_OR_adj: bonferroni-corrected p-value (odds ratio)
-candidate_site: Nucleotide predicted to be modified based on supplied cutoffs for padj, odds_ratio, and log2_fc
+genomic_position: position of nucleotide on genome (isoform mode)
 ```
 
 ## Running DRUMMER with the test datasets
