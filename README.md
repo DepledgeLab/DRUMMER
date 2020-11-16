@@ -1,31 +1,29 @@
-- [DRUMMER](#drummer)
-  * [Updates](#updates)
-  * [Introduction](#introduction)
-  * [Installation](#installation)
-    + [Pre-requisites](#pre-requisites)
-    + [Setting up DRUMMER](#setting-up-drummer)
-  * [Running DRUMMER](#running-drummer)
-  * [Output](#output)
-  * [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
-  * [Data preparation](#data-preparation)
-    + [Alignment and filtering](#alignment-and-filtering)
-    + [Setting up a transcript list file (isoform mode only)](#setting-up-a-transcript-list-file--isoform-mode-only-)
-    + [Align transcript sequences (e.g. TESTDATA/Ad5_v9.1_complete.fasta) against the genome (e.g. TESTDATA/Adenovirus-Ad5.fasta). Note that -uf flag should be replaced with -un when working with coronaviruses or other viruses with non-canonical splicing](#align-transcript-sequences--eg-testdata-ad5-v91-completefasta--against-the-genome--eg-testdata-adenovirus-ad5fasta--note-that--uf-flag-should-be-replaced-with--un-when-working-with-coronaviruses-or-other-viruses-with-non-canonical-splicing)
-    + [Convert to BAM (retaining only primary alignments)](#convert-to-bam--retaining-only-primary-alignments-)
-    + [Convert to BED](#convert-to-bed)
-    + [Extract relevant columns to transcripts.txt input file](#extract-relevant-columns-to-transcriptstxt-input-file)
-  * [Troubleshooting](#troubleshooting)
-    + [Wisdom](#wisdom)
-
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
-
-
-
 # DRUMMER
 DRUMMER is designed to identify RNA modifications at nucleotide-level resolution on distinct transcript isoforms through the comparative analysis of basecall errors in Nanopore direct RNA sequencing (DRS) datasets. 
 
 DRUMMER was designed and implemented by Jonathan S. Abebe and [Daniel P. Depledge](https://med.nyu.edu/faculty/daniel-p-depledge)
+
+## Table of contents
+- [Table of contents](#table-of-contents)
+- [Updates](#updates)
+- [Introduction](#introduction)
+- [Installation](#installation)
+  * [Pre-requisites](#pre-requisites)
+  * [Setting up DRUMMER](#setting-up-drummer)
+- [Running DRUMMER](#running-drummer)
+- [Output](#output)
+- [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
+- [Data preparation](#data-preparation)
+  * [Alignment and filtering](#alignment-and-filtering)
+  * [Setting up a transcript list file (isoform mode only)](#setting-up-a-transcript-list-file--isoform-mode-only-)
+  * [Align transcript sequences (e.g. TESTDATA/Ad5_v9.1_complete.fasta) against the genome (e.g. TESTDATA/Adenovirus-Ad5.fasta). Note that -uf flag should be replaced with -un when working with coronaviruses or other viruses with non-canonical splicing](#align-transcript-sequences--eg-testdata-ad5-v91-completefasta--against-the-genome--eg-testdata-adenovirus-ad5fasta--note-that--uf-flag-should-be-replaced-with--un-when-working-with-coronaviruses-or-other-viruses-with-non-canonical-splicing)
+  * [Convert to BAM (retaining only primary alignments)](#convert-to-bam--retaining-only-primary-alignments-)
+  * [Convert to BED](#convert-to-bed)
+  * [Extract relevant columns to transcripts.txt input file](#extract-relevant-columns-to-transcriptstxt-input-file)
+- [Troubleshooting](#troubleshooting)
+  * [Wisdom](#wisdom)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 ## Updates
 DRUMMER v0.2 will shortly be released with the following improvements
