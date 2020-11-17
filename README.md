@@ -47,7 +47,7 @@ git clone https://github.com/DepledgeLab/DRUMMER
 Note that upon installation, we strongly recommend testing DRUMMER using one or more of the test datasets included - see [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
 
 ## Running DRUMMER
-DRUMMER requires two co-ordinate sorted and indexed BAM files as input. These should contain read alignments for the test (RNA modification absent) and control (RNA modification present) datasets (see Data Preparation section below). DRUMMER can be run in either exome or isoform mode. Exome mode (-m exome) uses DRS read alignments against the genome of a given organism to identify putatively modified bases while isoform mode (-m isoform) uses DRS read alignments against the transcriptome of a given organism to provide a high resolution mapping. While isoform mode is superior, it is also slower. 
+DRUMMER requires two co-ordinate sorted and indexed BAM files as input. These should contain read alignments for the test (RNA modification absent) and control (RNA modification present) datasets (see Data Preparation section below). DRUMMER can be run in either exome or isoform mode. Exome mode (-m exome) uses DRS read alignments against the genome of a given organism to identify putatively modified bases while isoform mode (-m isoform) uses DRS read alignments against the transcriptome of a given organism to provide a high resolution mapping. While isoform mode is more sensitive, it is also (currently) slower. 
 
 Usage:
 ```
@@ -57,7 +57,7 @@ Required flags
 ```
 -r              fasta format reference genome (exome) or transcriptome (isoforms)
 
--u              list of transcripts (isoform) to be examined (single column or six-column format)
+-u              list of transcripts (isoform) to be examined (single column or seven-column format)
 OR
 -n              name of genome (exome) - must match fasta file header
 
@@ -73,7 +73,7 @@ Optional flags
 -z              specify adjusted p_value requirement for both G-test and Odds Ratio (default<= 0.05)
 -a              m6A mode (default = True), set to False to ignore m6A information
 -d              reference fraction difference between unmodified and modified (default = 0.01)
--f              Candidate site visualization (default = False), set to True to visualize candidate calls for each individual transcript
+-f              candidate site visualization (default = False), set to True to visualize candidate calls for each individual transcript
 ```
 
 ## Output
