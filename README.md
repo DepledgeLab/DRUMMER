@@ -82,24 +82,24 @@ When run to completion, DRUMMER generates a single tab-seperated text file (summ
 
 A detailed description of column headers in the summary.txt file is shown below. For the individual outputs, please see the accompanying file 'individual_output_headers.txt' for a full description of headers. 
 ```
-[1] transcript_id: name of transcript (isoform mode only)
-chromosome: name of chromosome
-reference_base: reference nucleotide at this position
-pos_mod: position of nucleotide on transcript (isoform mode) or genome (exome mode)
-depth_mod: read depth at this position (RNA modification present dataset)
-ref_fraction_mod: fraction of reads with reference base at this position (RNA modification present dataset)
-depth_unmod: read depth at this position (RNA modification absent dataset)
-ref_fraction_unmod: fraction of reads with reference base at this position (RNA modification absent dataset)
-frac_diff: difference between ref_fraction_unmod and ref_fraction_mod
-odds_ratio: odds ratio
-OR_padj: odds ratio adjusted p-value (bonferroni)
-eleven_bp_motif: sequence (11-mer) centered on current position
-G_test: result of 2x5 G-test
-G_padj: G-test adjusted p-value (bonferroni)
-candidate_site: values limited to candidate, [candidate masked], or empty based on cutoffs chosen
-nearest_ac: (m6A only) distance (nt) to nearest AC motif (-ve indicates upstream, +ve indicates downstream)
-nearest_ac_motif: (m6A only) sequence (5-mer) of nearest AC motif (centered on A)
-genomic_position: position of nucleotide on genome (isoform mode)
+[1] transcript_id:      name of transcript (isoform mode only)
+[2] chromosome:         name of chromosome
+[3] reference_base:     reference nucleotide at this position
+[4] pos_mod:            position of nucleotide on transcript (isoform mode) or genome (exome mode)
+[5] depth_mod:          read depth at this position (RNA modification present dataset)
+[6] ref_fraction_mod:   fraction of reads with reference base at this position (RNA modification present dataset)
+[7] depth_unmod:        read depth at this position (RNA modification absent dataset)
+[8] ref_fraction_unmod: fraction of reads with reference base at this position (RNA modification absent dataset)
+[9] frac_diff:          difference between ref_fraction_unmod and ref_fraction_mod
+[10] odds_ratio:        odds ratio
+[11] OR_padj:           odds ratio adjusted p-value (bonferroni)
+[12] eleven_bp_motif:   sequence (11-mer) centered on current position
+[13] G_test:            result of 2x5 G-test
+[14] G_padj:            G-test adjusted p-value (bonferroni)
+[15] candidate_site:    values limited to candidate, [candidate masked], or empty based on cutoffs chosen
+[16] nearest_ac:        (m6A only) distance (nt) to nearest AC motif (-ve indicates upstream, +ve indicates downstream)
+[17] nearest_ac_motif:  (m6A only) sequence (5-mer) of nearest AC motif (centered on A)
+[18] genomic_position:  position of nucleotide on genome (isoform mode)
 ```
 
 ## Running DRUMMER with the test datasets
@@ -124,9 +124,6 @@ The following command parses transcriptome-level alignments to identify putative
 ./drummer.sh -r TESTDATA/Hsapiens.sample.fasta -u TESTDATA/Hsapiens.sample.transcripts.txt -c TESTDATA/isoform.Hsapiens.MOD.sorted.bam -t TESTDATA/isoform.Hsapiens.UNMOD.sorted.bam -o ./DRUMTEST_HUMAN_ISO -m isoform
 ```
 
-
- 
- 
  
  
 ## Data preparation
