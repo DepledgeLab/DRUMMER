@@ -7,7 +7,6 @@ DRUMMER was designed and implemented by Jonathan S. Abebe and [Daniel P. Depledg
 DRUMMER v0.2 will shortly be released with the following improvements
 - a single output summary file containing all candidate sites
 - improved visualizations for both transcript and genome level analyses
-- improved speed through parallelization
 - improved tutorials for both human and viral datasets
 
 ## Table of contents
@@ -83,7 +82,7 @@ When run to completion, DRUMMER generates a single tab-seperated text file (summ
 
 A detailed description of column headers in the summary.txt file is shown below. For the individual outputs, please see the accompanying file 'individual_output_headers.txt' for a full description of headers. 
 ```
-transcript_id: name of transcript (isoform mode only)
+[1] transcript_id: name of transcript (isoform mode only)
 chromosome: name of chromosome
 reference_base: reference nucleotide at this position
 pos_mod: position of nucleotide on transcript (isoform mode) or genome (exome mode)
