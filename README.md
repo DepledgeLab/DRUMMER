@@ -45,6 +45,8 @@ Python3 and modules: pandas, numpy, scipy
 ### Installation
 git clone https://github.com/DepledgeLab/DRUMMER
 
+Note that upon installation, we strongly recommend testing DRUMMER using one or more of the test datasets included - see [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
+
 ## Running DRUMMER
 DRUMMER requires two co-ordinate sorted and indexed BAM files as input. These should contain read alignments for the test (RNA modification absent) and control (RNA modification present) datasets (see Data Preparation section below). DRUMMER can be run in either exome or isoform mode. Exome mode (-m exome) uses DRS read alignments against the genome of a given organism to identify putatively modified bases while isoform mode (-m isoform) uses DRS read alignments against the transcriptome of a given organism to provide a high resolution mapping. While isoform mode is superior, it is also slower. 
 
@@ -103,20 +105,32 @@ genomic_position: position of nucleotide on genome (isoform mode)
 
 ## Running DRUMMER with the test datasets
 
-A simple test dataset is included in the DRUMMER repository and can be used to verify DRUMMER is working correctly in your environment. Both exome-mode and isoform-mode analyses should complete in a matter of minutes.
+Several test datasets are included in the DRUMMER repository and can be used to verify DRUMMER is working correctly in your environment. Note that expected outputs are reliant on default parameters and changing these may change the output.
 
-exome mode ( runtime < 20 mins on a 'standard' desktop )
+### m6A detection in a sample adenovirus dataset using 'exome' mode
+The following command parses genome-level alignments to identify putative m6A sites in the adenovirus exome. The command should run to completion in ~5 mins and identify 7 candidate sites
 ```
-./drummer.sh -r TESTDATA/Adenovirus-Ad5.fasta -n Ad5 -c TESTDATA/exome.Ad5.MOD.bam -t TESTDATA/exome.Ad5.UNMOD.bam -o OUTPUTDIR_exome -m exome
+./drummer.sh -r TESTDATA/Adenovirus-Ad5.fasta -n Ad5 -c TESTDATA/exome.Ad5.MOD.bam -t TESTDATA/exome.Ad5.UNMOD.bam -o ./DRUMTEST_ADENO_EXO -m exome
 ```
 
-isoform mode ( runtime < 20 mins on a 'standard' desktop )
+### m6A detection in a sample adenovirus dataset using 'isoform' mode
+The following command parses transcriptome-level alignments to identify putative m6A sites in a limited adenovirus transcriptome comprising seven transcript isoforms originating from the E3 locus. The command should run to completion in ~5 mins and identify 5 candidate sites across three distinct transcripts (E3.12K '1', E3.RIDa '1', E3.10K '3')
 ```
-./drummer.sh -r TESTDATA/Ad5_v9.1_complete.fasta -u TESTDATA/list.txt -c TESTDATA/isoform.sample.MOD.bam -t TESTDATA/isoform.sample.UNMOD.bam -o OUTPUTDIR_isoform -m isoform
+./drummer.sh -r TESTDATA/Ad5_v9.1_complete.fasta -u TESTDATA/Ad5.sample.transcripts.txt -c TESTDATA/isoform.Ad5.MOD.bam -t TESTDATA/isoform.Ad5.UNMOD.bam -o ./DRUMTEST_ADENO_ISO -m isoform
 ```
  
-## Data preparation
+### m6A detection in a sample H. sapiens dataset using 'isoform' mode
+The following command parses transcriptome-level alignments to identify putative m6A sites in a limited human transcriptome comprising five abundantly expressed transcript isoforms. The command should run to completion in ~10 mins and identify 108 candidate sites across three distinct transcripts as well as producing a summary visualization file.
+```
+./drummer.sh -r TESTDATA/Hsapiens.sample.fasta -u TESTDATA/Hsapiens.sample.transcripts.txt -c TESTDATA/isoform.Hsapiens.MOD.sorted.bam -t TESTDATA/isoform.Hsapiens.UNMOD.sorted.bam -o ./DRUMTEST_HUMAN_ISO -m isoform
+```
 
+
+ 
+ 
+ 
+ 
+## Data preparation
 ### Alignment and filtering
 
 DRUMMER requires sorted.bam files containing transcriptome- or genome-level read alignments for each of the two experimental conditions being compared. Note that this is **_the_** most critical consideration when running DRUMMER (or comparable tools). Working to the adage that what you give is what you get, it is vital that **_you_** are confident that the following conditions are satisified.
