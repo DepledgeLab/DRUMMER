@@ -14,7 +14,7 @@ DRUMMER v0.2 will shortly be released with the following improvements
 - [Introduction](#introduction)
 - [Installation](#installation)
   * [Pre-requisites](#pre-requisites)
-  * [Installation](#installation-1)
+  * [Setup](#setup-1)
 - [Running DRUMMER](#running-drummer)
 - [Output](#output)
 - [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
@@ -42,7 +42,7 @@ BASH v4.2 or higher
 
 Python3 and modules: pandas, numpy, scipy
 
-### Installation
+### Setup
 git clone https://github.com/DepledgeLab/DRUMMER
 
 Note that upon installation, we strongly recommend testing DRUMMER using one or more of the test datasets included - see [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
