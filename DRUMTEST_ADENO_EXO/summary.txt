@@ -1,0 +1,4 @@
+transcript_id	reference_base	pos_mod	depth_mod	ref_fraction_mod	depth_unmod	ref_fraction_unmod	frac_diff	odds_ratio	OR_padj	eleven_bp_motif	G_test	G_padj	candidate_site	nearest_ac	nearest_ac_motif
+Ad5	A	1487	813	0.865	928	0.959	0.094	3.665	1.59e-08	CGAGGACTTGC	53.0	2.32e-07	candidate	0	GGACT
+Ad5	A	1517	819	0.877	906	0.965	0.088	3.842	3.89e-08	TTTGGACTTGA	50.0	1.37e-06	candidate	0	GGACT
+Ad5	G	1603	873	0.974	845	0.999	0.025	22.838	2.64e-02	TTGATGTAAGT	30.0	1.48e-02	candidate	27	TAACG

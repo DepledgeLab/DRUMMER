@@ -35,7 +35,7 @@ random.seed(30)
 onlydir = ['/'+f for f in listdir(target_dir) if isfile(join(target_dir, f))]
 
 candidates_df = pd.read_csv(only_candidates_path,sep = '\t')
-print('LENGTH CANDIDATES',len(candidates_df))
+print('Total Candidates',len(candidates_df))
 if len(candidates_df) > 50:
 	all_sites = pd.DataFrame()
 	for i in onlydir:

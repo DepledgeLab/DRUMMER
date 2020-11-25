@@ -76,7 +76,7 @@ input_bamreadcounts="$output_dir"/bam_readcount/$name
 
 #Creates a directory called filter and subdir of transcript name
 
-if [ -f "$input_bamreadcounts.UNMOD.bamreadcount.txt" -a -f "$input_bamreadcounts.UNMOD.bamreadcount.txt" ]
+if [ -f "$input_bamreadcounts.TEST.bamreadcount.txt" -a -f "$input_bamreadcounts.CTRL.bamreadcount.txt" ]
 then
 python3 "$DIR"/../modules/readcount_filter.py -i $input_bamreadcounts -o $output_dir
 else 

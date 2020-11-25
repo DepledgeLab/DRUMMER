@@ -92,7 +92,7 @@ test = [[row['A_mod'],row['C_mod'],row['G_mod'],row['T_mod'],row['N_mod']] for i
 
 
 ratio_unmod,ratio_mod,fold_change, log2_fc, odds_vals,pvalues = max_sum_function(control,test)
-print('odds-ratio shape',df.shape[0])
+#print('odds-ratio shape',df.shape[0])
 df['ratio_unmod'] = ratio_unmod
 df['ratio_mod'] = ratio_mod
 df['fold_change'] = fold_change

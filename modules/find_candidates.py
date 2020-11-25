@@ -96,5 +96,5 @@ include_candidate_df.insert(20, 'frac_diff', include_candidate_df['ref_fraction_
 # make_dir = output_location = output +'/all_transcripts_complete/'
 # os.makedirs(make_dir, exist_ok = True)
 # output_location = output +'/visualization/'+ sample + '.pdf'
-print(output)
+#print(output)
 include_candidate_df.to_csv(output,sep = '\t', index = False)
