@@ -1,7 +1,27 @@
 # DRUMMER
-DRUMMER is a software packaged designed to identify RNA modifications at both transcript and nucleotide-level resolution through the comparative analysis of basecall errors in Nanopore direct RNA sequencing (DRS) datasets. 
+DRUMMER is designed to identify RNA modifications at nucleotide-level resolution on distinct transcript isoforms through the comparative analysis of basecall errors in Nanopore direct RNA sequencing (DRS) datasets. 
 
-DRUMMER was designed and implemented by Jonathan Abebe and [Daniel Depledge](https://med.nyu.edu/faculty/daniel-p-depledge)
+DRUMMER was designed and implemented by Jonathan S. Abebe and [Daniel P. Depledge](https://med.nyu.edu/faculty/daniel-p-depledge)
+
+## Updates
+DRUMMER v0.2 will shortly be released with the following improvements
+- a single output summary file containing all candidate sites
+- improved visualizations for both transcript and genome level analyses
+- improved tutorials for both human and viral datasets
+
+## Table of contents
+- [Introduction](#introduction)
+- [Installation](#installation)
+  * [Pre-requisites](#pre-requisites)
+  * [Setup](#setup-1)
+- [Running DRUMMER](#running-drummer)
+- [Output](#output)
+- [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
+- [Data preparation](#data-preparation)
+  * [Alignment and filtering](#alignment-and-filtering)
+  * [Setting up a transcript list file (isoform mode only)](#setting-up-a-transcript-list-file--isoform-mode-only-)
+- [Troubleshooting](#troubleshooting)
+- [Wisdom](#wisdom)
 
 
 ## Introduction
@@ -11,19 +31,102 @@ Experimental design defines the context of analysis and the modifications likely
 ## Installation 
 
 ### Pre-requisites
-DRUMMER requires the following packages to be installed and available in the users path: 
+DRUMMER requires the following packages to be installed and available in the users path:
+
 [SAMTools](http://www.htslib.org/) v1.3 or higher
+
 [BEDTools](https://bedtools.readthedocs.io/en/latest/) v2.26 or higher
 
 BASH v4.2 or higher
 
 Python3 and modules: pandas, numpy, scipy
 
-### Setting up DRUMMER
+### Setup
 git clone https://github.com/DepledgeLab/DRUMMER
 
-## Data preparation
+Note that upon installation, we strongly recommend testing DRUMMER using one or more of the test datasets included - see [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
 
+## Running DRUMMER
+DRUMMER requires two co-ordinate sorted and indexed BAM files as input. These should contain read alignments for the test (RNA modification absent) and control (RNA modification present) datasets (see Data Preparation section below). DRUMMER can be run in either exome or isoform mode. Exome mode (-m exome) uses DRS read alignments against the genome of a given organism to identify putatively modified bases while isoform mode (-m isoform) uses DRS read alignments against the transcriptome of a given organism to provide a high resolution mapping. While isoform mode is more sensitive, it is also (currently) slower. 
+
+Usage:
+```
+Usage: drummer.sh -r [FASTA] -u|-n [TARGETS] -c [CONTROL] -t [TEST] -o [OUTPUT] -m [RUNMODE] (OPTIONS)
+```
+Required flags
+```
+-r              fasta format reference genome (exome) or transcriptome (isoforms)
+
+-u              list of transcripts (isoform) to be examined (single column or seven-column format)
+OR
+-n              name of genome (exome) - must match fasta file header
+
+-c              sorted.bam file - control (RNA modification(s) present)
+-t              sorted.bam file - treatment (RNA modification(s) absent)
+-o              output directory
+-m              runmode (exome|isoform)
+
+```
+Optional flags
+```
+-y              specify odds ratio requirement (default >= 1.5)
+-z              specify adjusted p_value requirement for both G-test and Odds Ratio (default<= 0.05)
+-a              m6A mode (default = True), set to False to ignore m6A information
+-d              reference fraction difference between unmodified and modified (default = 0.01)
+-f              candidate site visualization (default = False), set to True to visualize candidate calls for each individual transcript
+```
+
+## Output
+
+When run to completion, DRUMMER generates a single tab-seperated text file (summary.txt) containing all predicted candidate RNA modification sites with contextual information (genome position, isoform position, sequence motif, etc). When run in m6A mode (-a TRUE), a distribution plot is also generated in an accompanying .pdf file (summary_visualization_m6A.pdf). The output directory 'complete_analysis' contains individual data files for each reference sequence provided. A second (optionall) directory 'visualization' contains individual plots of G-test scores versus position for each individual reference sequence. 
+
+A detailed description of column headers in the summary.txt file is shown below. For the individual outputs, please see the accompanying file 'individual_output_headers.txt' for a full description of headers. 
+```
+[1] transcript_id:      name of transcript (isoform mode only)
+[2] chromosome:         name of chromosome
+[3] reference_base:     reference nucleotide at this position
+[4] pos_mod:            position of nucleotide on transcript (isoform mode) or genome (exome mode)
+[5] depth_mod:          read depth at this position (RNA modification present dataset)
+[6] ref_fraction_mod:   fraction of reads with reference base at this position (RNA modification present dataset)
+[7] depth_unmod:        read depth at this position (RNA modification absent dataset)
+[8] ref_fraction_unmod: fraction of reads with reference base at this position (RNA modification absent dataset)
+[9] frac_diff:          difference between ref_fraction_unmod and ref_fraction_mod
+[10] odds_ratio:        odds ratio
+[11] OR_padj:           odds ratio adjusted p-value (bonferroni)
+[12] eleven_bp_motif:   sequence (11-mer) centered on current position
+[13] G_test:            result of 2x5 G-test
+[14] G_padj:            G-test adjusted p-value (bonferroni)
+[15] candidate_site:    values limited to candidate, [candidate masked], or empty based on cutoffs chosen
+[16] nearest_ac:        (m6A only) distance (nt) to nearest AC motif (-ve indicates upstream, +ve indicates downstream)
+[17] nearest_ac_motif:  (m6A only) sequence (5-mer) of nearest AC motif (centered on A)
+[18] genomic_position:  position of nucleotide on genome (isoform mode)
+```
+
+## Running DRUMMER with the test datasets
+
+Several test datasets are included in the DRUMMER repository and can be used to verify DRUMMER is working correctly in your environment. Note that expected outputs are reliant on default parameters and changing these may change the output.
+
+### m6A detection in a sample adenovirus dataset using 'exome' mode
+The following command parses genome-level alignments to identify putative m6A sites in the adenovirus exome. The command should run to completion in ~5 mins and identify 7 candidate sites
+```
+./drummer.sh -r TESTDATA/Adenovirus-Ad5.fasta -n Ad5 -c TESTDATA/exome.Ad5.MOD.bam -t TESTDATA/exome.Ad5.UNMOD.bam -o ./DRUMTEST_ADENO_EXO -m exome
+```
+
+### m6A detection in a sample adenovirus dataset using 'isoform' mode
+The following command parses transcriptome-level alignments to identify putative m6A sites in a limited adenovirus transcriptome comprising seven transcript isoforms originating from the E3 locus. The command should run to completion in ~5 mins and identify 5 candidate sites across three distinct transcripts (E3.12K '1', E3.RIDa '1', E3.10K '3')
+```
+./drummer.sh -r TESTDATA/Ad5_v9.1_complete.fasta -u TESTDATA/Ad5.sample.transcripts.txt -c TESTDATA/isoform.Ad5.MOD.bam -t TESTDATA/isoform.Ad5.UNMOD.bam -o ./DRUMTEST_ADENO_ISO -m isoform
+```
+ 
+### m6A detection in a sample H. sapiens dataset using 'isoform' mode
+The following command parses transcriptome-level alignments to identify putative m6A sites in a limited human transcriptome comprising five abundantly expressed transcript isoforms. The command should run to completion in ~10 mins and identify 108 candidate sites across three distinct transcripts as well as producing a summary visualization file.
+```
+./drummer.sh -r TESTDATA/Hsapiens.sample.fasta -u TESTDATA/Hsapiens.sample.transcripts.txt -c TESTDATA/isoform.Hsapiens.MOD.sorted.bam -t TESTDATA/isoform.Hsapiens.UNMOD.sorted.bam -o ./DRUMTEST_HUMAN_ISO -m isoform
+```
+
+ 
+ 
+## Data preparation
 ### Alignment and filtering
 
 DRUMMER requires sorted.bam files containing transcriptome- or genome-level read alignments for each of the two experimental conditions being compared. Note that this is **_the_** most critical consideration when running DRUMMER (or comparable tools). Working to the adage that what you give is what you get, it is vital that **_you_** are confident that the following conditions are satisified.
@@ -65,95 +168,8 @@ samtools index t2g.sorted.bam
 bamToBed -bed12 -i t2g.sorted.bam > t2g.sorted.bed
 
 ### Extract relevant columns to transcripts.txt input file
-cut -f4,6,7,10,11,12 t2g.sorted.bed > transcripts.txt
-
+cut -f1,4,6,7,10,11,12 t2g.sorted.bed > transcripts.txt
 ```
-
-## Running DRUMMER
-DRUMMER can be run in either exome or isoform mode. Exome mode (-m exome) uses DRS read alignments against the genome of a given organism to identify putatively modified bases while isoform mode (-m isoform) uses DRS read alignments against the transcriptome of a given organism to provide a high resolution mapping. While isoform mode is superior, it is also slower. 
-
-Usage:
-```
-Usage: drummer.sh -r [FASTA] -u|-n [TARGETS] -c [CONTROL] -t [TEST] -o [OUTPUT] -m [RUNMODE] (OPTIONS)
-```
-Required flags
-```
--r              fasta format reference genome (exome) or transcriptome (isoforms)
-
--u              list of transcripts (isoform) to be examined (single column or six-column format)
-OR
--n              name of genome (exome) - must match fasta file header
-
--c              sorted.bam file - control (RNA modification(s) present)
--t              sorted.bam file - treatment (RNA modification(s) absent)
--o              output directory
--m              runmode (exome|isoform)
-
-```
-Optional flags
-```
--y              specify odds ratio requirement (default >= 1.5)
--z              specify adjusted p_value (G-test) requirement (default<= 0.05)
--a              m6A mode (default = True), set to False to ignore m6A information
--d              reference fraction difference between unmodified and modified (default = 0.01)
--f              Candidate site visualization (default = False), set to True to visualize candidate calls
-```
-
-## Output
-
-When run to completion, DRUMMER outputs a single text file containing the results. A detailed description of the column headers follow.
-```
-chr_unmod: name of chromosome or transcript
-pos_unmod: position of nucleotide on chromosome/transcript
-ref_unmod: nucleotide at this position
-depth_unmod: read depth at this position
-A_unmod: number of reads supporting an Adenine at this position
-C_unmod: number of reads supporting an Cytosine at this position
-G_unmod: number of reads supporting an Guanine at this position
-T_unmod: number of reads supporting an Thymine at this position
-N_unmod: number of reads supporting an indel (N) at this position
-ref_fraction_unmod: fraction of reads matching the reference nucleotide
-chr_mod: name of chromosome or transcript
-pos_mod: position of nucleotide on chromosome/transcript
-ref_mod: nucleotide at this position
-depth_mod: read depth at this position
-A_mod: number of reads supporting an Adenine at this position
-C_mod: number of reads supporting an Cytosine at this position
-G_mod: number of reads supporting an Guanine at this position
-T_mod: number of reads supporting an Thymine at this position
-N_mod: number of reads supporting an indel (N) at this position
-ref_fraction_mod: fraction of reads matching the reference nucleotide
-ratio_unmod: 
-ratio_mod: 
-fold_change: fold change difference between ratio_unmod and ratio_mod
-log2_fc: log2 fold change
-odds_ratio: odds ratio
-p_values_OR: pvalue calculated by odds_ratio
-nearest_ac: (m6A only) distance (nt) to nearest AC motif (-ve indicates upstream, +ve indicates downstream)
-nearest_ac_motif: (m6A only) sequence (5-mer) of nearest AC motif (centered on A)
-five_bp_motif: sequence (5-mer) centered on current position
-eleven_bp_motif: sequence (11-mer) centered on current position
-G_test: Result of 2x5 G-test
-p_val: p-value of G-test
-padj: bonferroni-corrected p-value 
-p_values_OR_adj: bonferroni-corrected p-value (odds ratio)
-candidate_site: Nucleotide predicted to be modified based on supplied cutoffs for padj, odds_ratio, and log2_fc
-```
-
-## Running DRUMMER with the test datasets
-
-A simple test dataset is included in the DRUMMER repository and can be used to verify DRUMMER is working correctly in your environment. Both exome-mode and isoform-mode analyses should complete in a matter of minutes.
-
-exome mode ( runtime < 20 mins on a 'standard' desktop )
-```
-./drummer.sh -r TESTDATA/Adenovirus-Ad5.fasta -n Ad5 -c TESTDATA/exome.Ad5.MOD.bam -t TESTDATA/exome.Ad5.UNMOD.bam -o OUTPUTDIR_exome -m exome
-```
-
-isoform mode ( runtime < 20 mins on a 'standard' desktop )
-```
-./drummer.sh -r TESTDATA/Ad5_v9.1_complete.fasta -u TESTDATA/list.txt -c TESTDATA/isoform.sample.MOD.bam -t TESTDATA/isoform.sample.UNMOD.bam -o OUTPUTDIR_isoform -m isoform
-```
- 
 
 
 ## Troubleshooting
@@ -162,10 +178,8 @@ COMING SOON...
 
 
 
-### Wisdom
+## Wisdom
 Detim imim finyish du wa ting, im ye fo sèmpere
-
-
 
 
 

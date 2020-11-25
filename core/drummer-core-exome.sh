@@ -44,11 +44,11 @@ else
     mkdir "$output_dir"/bam_readcount
 fi
 
-# if [ -d "$output_dir"/gTest ]; then
-#     echo "Directory /path/to/dir exists."
-# else
-#     mkdir "$output_dir"/gTest
-# fi
+if [ -d "$output_dir"/complete_analysis ]; then
+    echo "Directory /path/to/dir exists."
+else
+    mkdir "$output_dir"/complete_analysis
+fi
 
 
 ## ONE LINER TO DETERMINE SEQUENCE LENGTH
@@ -75,16 +75,24 @@ input_bamreadcounts="$output_dir"/bam_readcount/$name
 #echo $test_file
 
 #Creates a directory called filter and subdir of transcript name
+
+if [ -f "$input_bamreadcounts.UNMOD.bamreadcount.txt" -a -f "$input_bamreadcounts.UNMOD.bamreadcount.txt" ]
+then
 python3 "$DIR"/../modules/readcount_filter.py -i $input_bamreadcounts -o $output_dir
+else 
+    echo "Failed at bam_readcount"
+fi
 
-#paste -d "\t" "$input_bamreadcounts".TEST.filtered.txt "$input_bamreadcounts".TEST.filtered.txt > "$input_bamreadcounts".merged.filtered.txt
-
-#odds_ratio / make new directory with odds ratio added to individual reads
 #merged_transcripts=merged/$transcript_name.*
 merged_transcripts="$output_dir"/merged/$name.*
 #echo $transcript_name
 #echo $merged_transcripts
+if [ -f $merged_transcripts ] 
+then
 python3 "$DIR"/../modules/odds_ratio.py -i $merged_transcripts -o $output_dir
+else 
+    echo "Failed at odds ratio"
+fi
 
 #motif_information / make new directory with motif information added to individual reads
 #python3 motif_information.py -i odds_ratio/AdPol.merged.filtered.odds_ratio.txt
@@ -92,7 +100,11 @@ python3 "$DIR"/../modules/odds_ratio.py -i $merged_transcripts -o $output_dir
 motif_transcripts="$output_dir"/odds_ratio/$name.*
 #motif_transcripts=odds_ratio/$transcript_name.*
 #echo $motif_transcripts
+if [ -f $motif_transcripts ]; then
 python3 "$DIR"/../modules/motif_information.py -i $motif_transcripts -o $output_dir -m $m6A_status
+else 
+    echo "Failed at motif information"
+fi
 
 #Gtest/ make new directory of gtest values added to individual reads
 gtest_transcripts="$output_dir"/motif_information/$name.*
@@ -100,18 +112,42 @@ gtest_transcripts="$output_dir"/motif_information/$name.*
 #python3 create_output_file.py -i _ -o gTest
 #echo $gtest_transcripts
 # Rscript ../modules/Gtest.R $gtest_transcripts "$output_dir"/gTest/$transcript_name.merged.odds_ratio.motif_information.gtest.csv
+
+if [ -f $gtest_transcripts ]; then
 python3 "$DIR"/../modules/Gtest.py -i $gtest_transcripts -o $output_dir
+else 
+    echo "Failed at gtest"
+fi
 
 candidate_transcripts="$output_dir"/gTest/$name.*
-python3 "$DIR"/../modules/find_candidates.py -i $candidate_transcripts -r $odds -p $padj -d $fraction_diff -o $output_dir/$name.complete.txt
-
-
+# python3 "$DIR"/../modules/find_candidates.py -i $candidate_transcripts -r $odds -p $padj -d $fraction_diff -o $output_dir/$name.complete.txt
+if [ -f $candidate_transcripts ]; then
+python3 "$DIR"/../modules/find_candidates.py -i $candidate_transcripts -r $odds -p $padj -d $fraction_diff -o $output_dir/complete_analysis/$name.complete.txt
+else 
+    echo "Failed at find_candidates"
+fi
 #python3 "$DIR"/../modules/genomic_locations.py -i $output_dir/$id.complete.txt -t $list -o $output_dir/$id.complete.txt
 
+if [ "$(ls -A $output_dir/complete_analysis/)" ] 
+then
+python3 "$DIR"/../extras/summary.py -i $output_dir/complete_analysis/ -o $output_dir/summary.txt -m $m6A_status
+fi
+
+
+if [ -f $output_dir/complete_analysis/$name.complete.txt ]; then
 if [ $visualization = "True" ]
 then
-python3 "$DIR"/../modules/candidate_visualization.py -i $output_dir/$name.complete.txt -o $output_dir -m $m6A_status -t exome
+python3 "$DIR"/../modules/candidate_visualization.py -i $output_dir/complete_analysis/$name.complete.txt -o $output_dir -m $m6A_status -t exome
 fi 
+fi
+
+
+if [ -f "$output_dir/summary.txt" ]; then
+if [ $m6A_status = "True" ]
+then
+python3 "$DIR"/../extras/m6a_summary_plot.py -d $output_dir/complete_analysis/ -i $output_dir/summary.txt -o $output_dir/summary_visualization_m6A.pdf
+fi 
+fi
 
 rm -r "$output_dir"/bam_readcount "$output_dir"/filtered "$output_dir"/gTest "$output_dir"/map "$output_dir"/merged "$output_dir"/motif_information "$output_dir"/odds_ratio 
 
