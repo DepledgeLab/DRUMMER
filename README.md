@@ -4,7 +4,7 @@ DRUMMER is designed to identify RNA modifications at nucleotide-level resolution
 DRUMMER was designed and implemented by Jonathan S. Abebe and [Daniel P. Depledge](https://med.nyu.edu/faculty/daniel-p-depledge)
 
 ## Updates
-DRUMMER v0.2 will shortly be released with the following improvements
+DRUMMER v0.2 has now been released with the following improvements
 - a single output summary file containing all candidate sites
 - improved visualizations for both transcript and genome level analyses
 - improved tutorials for both human and viral datasets
