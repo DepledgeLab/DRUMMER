@@ -65,12 +65,13 @@ def new_depth(df):
 def do_math(df:'DataFrame',index:int):
     """Takes in dataframe and row index, returns that rows reference fraction
     """
+    reference_nucleotide = df.loc[index,'ref']
+    depth = df.loc[index,'depth']
     if int(depth) == 0:
         return 0
     else:
-	numerator = df.loc[index,reference_nucleotide]
+        numerator = df.loc[index,reference_nucleotide]
         return int(numerator)/int(depth)
-    #return int(numerator)/int(depth)
     
 #argument = 'bamreadcount/E3.RIDb'.split('/')
 input = input.split('/')
@@ -84,7 +85,7 @@ onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 k = [mypath+'/'+i for i in onlyfiles if i.startswith(file)]
 k = sorted(k, key=lambda x:('TEST' in x, x))
 
-# print('k',k)
+print('k',k)
 try:
 	lst = []
 	for i in k:
@@ -98,8 +99,8 @@ try:
 				list_of_rows.append(pd.DataFrame([first_4_dict]))
 		filtered_df = pd.concat(list_of_rows).reset_index(drop=True)
 		filtered_df.columns = columns_names
-		#filtered_df['depth'] = new_depth(filtered_df)
-		filtered_df = filtered_df[filtered_df['depth'] != 0].reset_index(drop=True)
+		filtered_df['depth'] = new_depth(filtered_df)
+#		filtered_df = filtered_df[filtered_df['depth'] != 0].reset_index(drop=True)
 		filtered_df['ref_fraction'] = [do_math(filtered_df,i) for i in range(len(filtered_df))]
 		lst.append(filtered_df)
 	#     print(i)
