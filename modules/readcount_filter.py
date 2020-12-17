@@ -98,7 +98,7 @@ try:
 				list_of_rows.append(pd.DataFrame([first_4_dict]))
 		filtered_df = pd.concat(list_of_rows).reset_index(drop=True)
 		filtered_df.columns = columns_names
-		filtered_df['depth'] = new_depth(filtered_df)
+		#filtered_df['depth'] = new_depth(filtered_df)
 		filtered_df = filtered_df[filtered_df['depth'] != 0].reset_index(drop=True)
 		filtered_df['ref_fraction'] = [do_math(filtered_df,i) for i in range(len(filtered_df))]
 		lst.append(filtered_df)
