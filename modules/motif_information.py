@@ -54,7 +54,7 @@ def get_kmers(df,num_kmers1,num_kmers2):
 
 df = pd.read_csv(input,sep = '\t')
 # print(df.columns)
-df = df.dropna()
+#df = df.dropna()
 near_ac,five_bp_motif = closest_ac(df)
 five,eleven = get_kmers(df,5,11)
 if m6A_status == "True":
