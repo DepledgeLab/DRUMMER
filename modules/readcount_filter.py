@@ -65,10 +65,12 @@ def new_depth(df):
 def do_math(df:'DataFrame',index:int):
     """Takes in dataframe and row index, returns that rows reference fraction
     """
-    reference_nucleotide = df.loc[index,'ref']
-    depth = df.loc[index,'depth']
-    numerator = df.loc[index,reference_nucleotide]
-    return int(numerator)/int(depth)
+    if int(depth) == 0:
+        return 0
+    else:
+	numerator = df.loc[index,reference_nucleotide]
+        return int(numerator)/int(depth)
+    #return int(numerator)/int(depth)
     
 #argument = 'bamreadcount/E3.RIDb'.split('/')
 input = input.split('/')
