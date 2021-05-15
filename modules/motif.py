@@ -1,26 +1,5 @@
-import pandas as pd
-import numpy as np
-import argparse
-import math
-import re
-from create_output_file import create_output
-import warnings
-warnings.filterwarnings("ignore")
-
-ap = argparse.ArgumentParser(description = 'Takes in the output of bam-readcount \
-and returns a text file containing the count of each nucleotide at the position and the \
-fraction of the reference nucleotide among all reads.')
-requiredGrp = ap.add_argument_group('required arguments')
-requiredGrp.add_argument("-i","--input", required=True, help="input file location")
-requiredGrp.add_argument("-o","--output", required=True, help="output file directory")
-requiredGrp.add_argument("-m","--m6A_status", required=True, help="m6A status")
-
-args = vars(ap.parse_args())
-input = args['input']
-output = args['output']
-m6A_status = args['m6A_status']
 def closest_ac(df):
-    seq = ''.join(df['ref_unmod'])
+    seq = ''.join(df['ref_treat'])
     ac_location = [m.start() for m in re.finditer('AC', seq)]
     nearest_ac = []
     five_base_motif = []
@@ -42,7 +21,7 @@ def get_kmers(df,num_kmers1,num_kmers2):
     all_motifs = []
     for num_motif in motif_length:
         current_kmer_motif = []
-        seq = ''.join(df['ref_unmod'])
+        seq = ''.join(df['ref_treat'])
         seq = num_motif * 'N' + seq + num_motif * 'N'
         for index,string in enumerate(seq[num_motif:len(seq)-num_motif]):
             correct_index = index + num_motif
@@ -50,18 +29,30 @@ def get_kmers(df,num_kmers1,num_kmers2):
             current_kmer_motif.append(motif)
         all_motifs.append(current_kmer_motif)
     return all_motifs
+    
+import pandas as pd
+import re 
+import math
+#m6A_status = "True"
+#path = '/Users/mac/Desktop/DRUMMER/virus_7_vis_m6a_True/odds_ratio/E3.10K.merged.odds_ratio.txt'
+#df = pd.read_csv(path,sep = '\t')
+def run_motif(df,m6A_status):
+    df = df.dropna()
+    #print(df.head())
+    near_ac,five_bp_motif = closest_ac(df)
+    five,eleven = get_kmers(df,5,11)
+    if m6A_status == True:
+#         print('M6A STATUS',m6A_status)
+        df['nearest_ac'] = near_ac
+        df['nearest_ac_motif'] = five_bp_motif
+    df['five_bp_motif'] = five
+    df['eleven_bp_motif'] = eleven
+    #df = df[(df['depth_treat'] > 100) & (df['depth_ctrl'] > 100)]
+    #print(df.head())
+    return df
 
-
-df = pd.read_csv(input,sep = '\t')
-# print(df.columns)
-#df = df.dropna()
-near_ac,five_bp_motif = closest_ac(df)
-five,eleven = get_kmers(df,5,11)
-if m6A_status == "True":
-	df['nearest_ac'] = near_ac
-	df['nearest_ac_motif'] = five_bp_motif
-df['five_bp_motif'] = five
-df['eleven_bp_motif'] = eleven
-
-output = create_output(output,input,'motif_information')
-df.to_csv(output,sep = '\t', index = False)
+if __name__ == "__main__":
+    df = pd.read_csv('/Users/mac/Desktop/DRUMMER_Figures/march14th/Ad5.complete.filter.txt',sep = '\t',dtype={"depletion": "string", "accumulation": "string"})
+    new_df = run_motif(df,True)
+    #print(new_df.head())
+    new_df.to_csv('/Users/mac/Desktop/DRUMMER_Figures/march14th/Ad5.complete.filter.m6a.txt',sep = '\t',index = None)

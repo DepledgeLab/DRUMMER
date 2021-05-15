@@ -1,56 +1,36 @@
 import pandas as pd
-import numpy as np
-import argparse
-import math
-from create_output_file import create_output
 from scipy.stats import chi2_contingency
-import warnings
-warnings.filterwarnings("ignore")
+import numpy as np
 
-#columns_names = ['chr','pos','ref','depth','A','C','G','T','N']
+def run_gtest(df):
+    control = [[row['A_treat'],row['C_treat'],row['G_treat'],row['T_treat'],row['N_treat']] for index,row in df.iterrows()]
+    test = [[row['A_ctrl'],row['C_ctrl'],row['G_ctrl'],row['T_ctrl'],row['N_ctrl']] for index,row in df.iterrows()]
+    #print('REGULAR REGULAR df',df_depth.shape[0])
+    #Replace 0 with 0.0001 for G-test calculations
+    control = [ list(map(lambda x: x if x != 0 else 0.0001, i)) for i in control ]
+    test = [list(map(lambda x: x if x != 0 else 0.0001, i)) for i in test]
+    
+    #Perform G-test on each row and grab the gtest and pval
+    lst = [chi2_contingency(np.array([c,t]),lambda_ = 'log-likelihood')[0:2] for c,t in zip(control,test)]
+    #df_depth = df[(df['depth_treat'] > 100) & (df['depth_ctrl'] > 100)]
+    
+    #Save G and pval to variable and assign to column in dataframe
+    df['G_test'] = [round(g) for g,p in lst]
+    df['p_val'] = [p for g,p in lst] 
 
-ap = argparse.ArgumentParser(description = 'Takes in the output of bam-readcount \
-and returns a text file containing the count of each nucleotide at the position and the \
-fraction of the reference nucleotide among all reads.')
-requiredGrp = ap.add_argument_group('required arguments')
-requiredGrp.add_argument("-i","--input", required=True, help="input file location")
-requiredGrp.add_argument("-o","--output", required=True, help="output file directory")
-
-#requiredGrp.add_argument("-i2","--input2", required=True, help="input2 file location")
-
-args = vars(ap.parse_args())
-input = args['input']
-output = args['output']
-
-
-df = pd.read_csv(input,sep = '\t')
-
-# print(df.columns)
-#Get columns of interest
-control = [[row['A_unmod'],row['C_unmod'],row['G_unmod'],row['T_unmod'],row['N_unmod']] for index,row in df.iterrows()]
-test = [[row['A_mod'],row['C_mod'],row['G_mod'],row['T_mod'],row['N_mod']] for index,row in df.iterrows()]
-
-
-#Replace 0 with 0.0001 for G-test calculations
-control = [ list(map(lambda x: x if x != 0 else 0.0001, i)) for i in control ]
-test = [list(map(lambda x: x if x != 0 else 0.0001, i)) for i in test]
-
-#Perform G-test on each row and grab the gtest and pval
-lst = [chi2_contingency(np.array([c,t]),lambda_ = 'log-likelihood')[0:2] for c,t in zip(control,test)]
-
-#Save G and pval to variable and assign to column in dataframe
-gtests = []
-p_vals = []
-for g,p in lst:
-    gtests.append(round(g))
-    p_vals.append(p)
-
-df['G_test'] = gtests
-df['p_val'] = p_vals
-
-#Padj is obtained by multiplying pval by length of dataframe
-df['padj'] = df['p_val'] * df.shape[0]
-#print('G-test shape',df.shape[0])
-df['padj'] = [1 if i > 1 else i for i in df['padj']]
-output = create_output(output,input,'gTest')
-df.to_csv(output,sep = '\t', index = False)
+    #Padj is obtained by multiplying pval by length of dataframe
+    #df['padj'] = df['p_val'] * df_depth.shape[0]
+    #df['p_values_OR_adj'] = df['p_values_OR'] * df_depth.shape[0]
+    df['padj'] = df['p_val'] * df.shape[0]
+    df['p_values_OR_adj'] = df['p_values_OR'] * df.shape[0]
+    #print('df_depth (post filter) shape',df_depth.shape[0])
+    #print('REGULAR df',df_depth.shape[0])
+    #df['p_values_OR_adj'] = df['p_values_OR'] * df_depth.shape[0]
+    #print('G-test shape',df.shape[0])
+    df['padj'] = [1 if i > 1 else i for i in df['padj']]
+    df['p_values_OR_adj'] = [1 if i > 1 else i for i in df['p_values_OR_adj']]
+    return df
+if __name__ == "__main__":
+    df = pd.read_csv('/Users/mac/Desktop/Fast-DRUMMER/HSV1-Kos.txt',sep = '\t')
+    return_df = run_gtest(df)
+    return_df.to_csv('/Users/mac/Desktop/Fast-DRUMMER/HSV1-Kos.gtest.txt',sep = '\t',index =None)
