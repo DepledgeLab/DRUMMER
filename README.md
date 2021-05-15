@@ -39,7 +39,14 @@ DRUMMER requires the following packages to be installed and available in the use
 
 BASH v4.2 or higher
 
-Python3 and modules: pandas, numpy, scipy
+Python3 and modules: 
+seaborn
+scipy
+pandas
+numpy
+biopython
+matplotlib
+
 
 ### Setup
 git clone https://github.com/DepledgeLab/DRUMMER
