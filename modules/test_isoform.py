@@ -83,8 +83,8 @@ def run_bedtools(comp,comp2,output_dir,rep):
 def run_bamreadcounts(output_dir,transcript_id,rep,length):
 	bam_readcount_unmod =  "modules/bam-readcount -q 0 -b 0 -d 1000000 -w 1 -f {}/transcripts/{}.fa {}/{}/map/{}.UNMOD.sorted.bam {}:1-{}".format(output_dir,transcript_id,output_dir,rep,transcript_id,transcript_id,length).split(' ')
 	bam_readcount_mod =  "modules/bam-readcount -q 0 -b 0 -d 1000000 -w 1 -f {}/transcripts/{}.fa {}/{}/map/{}.MOD.sorted.bam {}:1-{}".format(output_dir,transcript_id,output_dir,rep,transcript_id,transcript_id,length).split(' ')
-	print(bam_readcount_unmod)
-	print(bam_readcount_mod)
+# 	print(bam_readcount_unmod)
+# 	print(bam_readcount_mod)
 	with open(bam_readcount_dir+transcript_id+'.UNMOD.bamreadcount.txt','w') as fout: #context manager is OK since `call` blocks :)
 		subprocess.call(bam_readcount_unmod,stdout=fout, stderr=subprocess.DEVNULL)
 	with open(bam_readcount_dir+transcript_id+'.MOD.bamreadcount.txt','w') as fout: #context manager is OK since `call` blocks :)
