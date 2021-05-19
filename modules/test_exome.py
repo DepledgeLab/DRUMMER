@@ -25,6 +25,7 @@ import concurrent.futures
 import modules.multiple_combine
 from modules.plot_multi import run_main
 from Bio import SeqIO
+from modules.parsing_check import exome_mode_parsing
 devnull = open(os.devnull, 'w')
 def exome_mode(transcriptome_file,transcript_directory):
     length_dictionary = {}
@@ -53,7 +54,7 @@ def exome_mode(transcriptome_file,transcript_directory):
 
 def run_samtools(comp,comp2,transcript_id,length,output_dir,rep):
 	view_test_format = "samtools view -b {} {}:1-{} -o {}/{}/map/{}.UNMOD.bam".format(comp,transcript_id,length,output_dir,rep,transcript_id).split(' ')
-# 	print(view_test_format)
+	bedtools_unmod = "bedtools genomecov -d -split -ibam {}".format(comp).split(' ')
 	sort_test_format = "samtools sort -o {}/{}/map/{}.UNMOD.sorted.bam {}/{}/map/{}.UNMOD.bam".format(output_dir,rep,transcript_id,output_dir,rep,transcript_id).split(' ')
 	index_test_format = "samtools index {}/{}/map/{}.UNMOD.sorted.bam".format(output_dir,rep,transcript_id).split(' ')
 
@@ -62,15 +63,25 @@ def run_samtools(comp,comp2,transcript_id,length,output_dir,rep):
 	subprocess.call(index_test_format)
 	
 	view_ctrl_format = "samtools view -b {} {}:1-{} -o {}/{}/map/{}.MOD.bam".format(comp2,transcript_id,length,output_dir,rep,transcript_id).split(' ')
+	bedtools_mod = "bedtools genomecov -d -split -ibam {}".format(comp2).split(' ')
 	sort_ctrl_format = "samtools sort -o {}/{}/map/{}.MOD.sorted.bam {}/{}/map/{}.MOD.bam".format(output_dir,rep,transcript_id,output_dir,rep,transcript_id).split(' ')
 	index_ctrl_format = "samtools index {}/{}/map/{}.MOD.sorted.bam".format(output_dir,rep,transcript_id).split(' ')
 	subprocess.call(view_ctrl_format)
 	subprocess.call(sort_ctrl_format)
 	subprocess.call(index_ctrl_format)
+# 	print(comp)
+	print(output_dir+'/'+rep +'/map/' + transcript_id + '.unmod.genomecov.txt')
+	with open(output_dir+'/'+rep +'/map/' + transcript_id + '.unmod.genomecov.txt','w') as fout:
+	    subprocess.call(bedtools_unmod,stdout=fout)
+	with open(output_dir+'/'+rep +'/map/' + transcript_id + '.mod.genomecov.txt','w') as fout:
+	    subprocess.call(bedtools_mod,stdout=fout)
+	#subprocess.call(bedtools_mod)
+	#subprocess.call(bedtools_unmod)
 
+    
 def run_bamreadcounts(output_dir,transcript_id,rep,length):
-	bam_readcount_unmod =  "/gpfs/data/depledgelab/Jonathan/Final-DRUMMER/bam-readcount -q 0 -b 0 -d 1000000 -w 1 -f {}/transcript/{}.fa {}/{}/map/{}.UNMOD.sorted.bam {}:1-{}".format(output_dir,transcript_id,output_dir,rep,transcript_id,transcript_id,length).split(' ')
-	bam_readcount_mod =  "/gpfs/data/depledgelab/Jonathan/Final-DRUMMER/bam-readcount -q 0 -b 0 -d 1000000 -w 1 -f {}/transcript/{}.fa {}/{}/map/{}.MOD.sorted.bam {}:1-{}".format(output_dir,transcript_id,output_dir,rep,transcript_id,transcript_id,length).split(' ')
+	bam_readcount_unmod =  "modules/bam-readcount -q 0 -b 0 -d 1000000 -w 1 -f {}/transcript/{}.fa {}/{}/map/{}.UNMOD.sorted.bam {}:1-{}".format(output_dir,transcript_id,output_dir,rep,transcript_id,transcript_id,length).split(' ')
+	bam_readcount_mod =  "modules/bam-readcount -q 0 -b 0 -d 1000000 -w 1 -f {}/transcript/{}.fa {}/{}/map/{}.MOD.sorted.bam {}:1-{}".format(output_dir,transcript_id,output_dir,rep,transcript_id,transcript_id,length).split(' ')
 # 	print('OUTPUT_DIR',output_dir)
 # 	print('transcript_id',transcript_id)
 # 	print('rep',rep)
@@ -150,8 +161,8 @@ def do_work(all_permuations_w_replicates,i,transcript_directory,output_dir,m6A_s
 	#print(candidates_df)
 	#os.makedirs(output_dir+'/'+rep+'/complete_analysis/',exist_ok = True)
 	candidates_df.to_csv(output_dir+'/'+rep+'/complete_analysis/' +i+'.complete.txt',sep = '\t',index =False)
-	#os.makedirs(output_dir+'/'+rep+'/complete_analysis/',exist_ok = True)
-	#candidates_df.to_csv(output_dir+'/'+rep+'/complete_analysis/' +i+'.complete.txt',sep = '\t',index =False)
+	os.makedirs(output_dir+'/'+rep+'/complete_analysis/',exist_ok = True)
+	candidates_df.to_csv(output_dir+'/'+rep+'/complete_analysis/' +i+'.complete.txt',sep = '\t',index =False)
 	
 	os.makedirs(output_dir+'/'+rep+'/visualization/', exist_ok = True)
 # 	run_visualization(candidates_df,m6A_status,output_dir+'/'+rep + '/visualization/'+i+'.pdf',mode_of_analysis,i)
@@ -180,6 +191,7 @@ def main(transcriptome_file,test_file,name,control_file,odds,padj,m6A_status,fra
     for repl in replicate_names:
         summary_df = run_summary(output_dir+'/'+repl + '/complete_analysis/',m6A_status)
         summary_df.to_csv(output_dir+'/'+repl + '/summary.txt',sep = '\t',index = False)
+        exome_mode_parsing(output_dir+'/'+repl,name)
         if m6A_status == True:
             run_plotting(output_dir+'/'+repl + '/complete_analysis/',summary_df,output_dir+'/'+repl + '/m6A_plot.pdf')
     if len(replicate_names) > 1:
@@ -187,8 +199,8 @@ def main(transcriptome_file,test_file,name,control_file,odds,padj,m6A_status,fra
         final_df.to_csv(output_dir +'/'+'multiple_comp.txt',sep = '\t',na_rep='NaN',index= False)
         run_main(final_df,output_dir)
     
-    
-    
+    #python3 FAST-DRUMMER.py -r /gpfs/data/depledgelab/Jonathan/Evaluation/transcripts/Adenovirus-Ad5.fasta -n Ad5 -o exome-test -c /gpfs/home/ja3539/depledge/Jonathan/DRUMMER/TESTDATA/exome.Ad5.MOD.bam  /gpfs/home/ja3539/depledge/Jonathan/DRUMMER/TESTDATA/exome2.Ad5.MOD.bam -t /gpfs/home/ja3539/depledge/Jonathan/DRUMMER/TESTDATA/exome.Ad5.UNMOD.bam /gpfs/home/ja3539/depledge/Jonathan/DRUMMER/TESTDATA/exome2.Ad5.UNMOD.bam  -a exome -m True
+    #python3 FAST-DRUMMER.py -r /gpfs/data/depledgelab/Jonathan/Evaluation/transcripts/Ad5_v9.1_complete.fasta -l /gpfs/home/ja3539/depledge/Jonathan/DRUMMER/TESTDATA/Ad5.sample.transcripts.txt -o isoform-test -c /gpfs/home/ja3539/depledge/Jonathan/DRUMMER/TESTDATA/isoform.Ad5.MOD.bam /gpfs/home/ja3539/depledge/Jonathan/DRUMMER/TESTDATA/isoform2.Ad5.MOD.bam -t /gpfs/home/ja3539/depledge/Jonathan/DRUMMER/TESTDATA/isoform.Ad5.UNMOD.bam /gpfs/home/ja3539/depledge/Jonathan/DRUMMER/TESTDATA/isoform2.Ad5.UNMOD.bam  -a isoform -m True
 if __name__ == "__main__":
     main('/Users/mac/Desktop/DRUMMER/TESTDATA/Adenovirus-Ad5.fasta',['/Users/mac/Desktop/DRUMMER/TESTDATA/exome.Ad5.MOD.bam'],
     'Ad5',['/Users/mac/Desktop/DRUMMER/TESTDATA/exome.Ad5.UNMOD.bam'],1,1,True,1,'test-exome-runs','exome')

@@ -49,7 +49,17 @@ def check_samtools():
         sys.stdout.write('\nDRUMMER requires samtools')
         sys.stdout.write('\n\nPlease install samtools and add it to your path following the instructions at: http://www.htslib.org/download/')
         return False
-
+def check_bedtools():
+#Adapted from https://github.com/pinellolab/CRISPResso2/blob/master/CRISPResso2/CRISPRessoPooledCORE.py
+    cmd_path=which('bedtools')
+    if cmd_path:
+        print('Bedtools in path')
+        return True
+    else:
+        sys.stdout.write('\nDRUMMER requires Bedtools')
+#         sys.stdout.write('\n\nPlease install Bedtools and add it to your path following the instructions at: http://www.htslib.org/download/')
+        return False
+        
 def print_logo(mode):
     pooled_string = '''
      ________________________________

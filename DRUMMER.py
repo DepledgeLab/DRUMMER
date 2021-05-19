@@ -31,6 +31,7 @@ args = vars(ap.parse_args())
 
 
 modules.support.check_samtools()
+modules.support.check_bedtools()
 #transcriptome_file,test_file,control_file,log2fc,odds,padj,m6A_status,fraction_diff,output_dir,additional_columns,mode
 
 if args['analysis_mode'].lower() == 'exome':

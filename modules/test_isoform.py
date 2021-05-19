@@ -17,7 +17,9 @@ from modules.m6a_summary import run_plotting
 import sys
 import math
 import numpy as np
-import os 
+import os
+from os import listdir
+from os.path import isfile, join
 import pandas as pd
 import subprocess
 import modules.genomic
@@ -25,6 +27,8 @@ import concurrent.futures
 import modules.multiple_combine
 from modules.plot_multi import run_main
 from Bio import SeqIO
+from modules.parsing_check import isoform_mode_parsing
+from functools import reduce
 
 def isoform_mode(transcriptome_file,transcript_directory,path_transcripts):
     f_open = open(transcriptome_file, "rU")
@@ -47,31 +51,10 @@ def isoform_mode(transcriptome_file,transcript_directory,path_transcripts):
     else:
         list_of_transcripts_df.columns = ['chrom','name','strand','thickStart','blockCount','blockSizes','blockStarts']
     return list_of_transcripts_df,length_dictionary,shape_lst
-# 	with open(transcriptome_file, 'r') as reader:
-# 		all_transcripts = [l.rstrip("\n") for l in reader]
-# 	transcripts_dict = dict([all_transcripts[i:i+2] for i in range(0,len(all_transcripts),2)])
-# 	
-# 
-# 	length_dictionary = {}
-# 	for transcript,sequence in transcripts_dict.items():
-# 		file_name = transcript.strip('>')
-# 		length_dictionary[file_name] = len(sequence)
-# 		f = open(transcript_directory + file_name + '.fa', "w")
-# 		write_file = [transcript+'\n',sequence]
-# 		f.writelines(write_file)
-# 		f.close()
-
-# 	list_of_transcripts_df = pd.read_csv(path_transcripts,sep = '\t',header = None)
-# 	shape_lst = list_of_transcripts_df.shape[-1]
-# 	if shape_lst == 1:
-# 		list_of_transcripts_df.columns = ['name']
-# 	else:
-# 		list_of_transcripts_df.columns = ['chrom','name','strand','thickStart','blockCount','blockSizes','blockStarts']
-# 	return list_of_transcripts_df,length_dictionary,shape_lst
 
 def run_samtools(comp,comp2,transcript_id,length,output_dir,rep):
 	view_test_format = "samtools view -b {} {}:1-{} -o {}/{}/map/{}.UNMOD.bam".format(comp,transcript_id,length,output_dir,rep,transcript_id).split(' ')
-	#print(view_test_format)
+	#bedtools_unmod = "bedtools genomecov -d -split -ibam {}".format(comp).split(' ')
 	sort_test_format = "samtools sort -o {}/{}/map/{}.UNMOD.sorted.bam {}/{}/map/{}.UNMOD.bam".format(output_dir,rep,transcript_id,output_dir,rep,transcript_id).split(' ')
 	index_test_format = "samtools index {}/{}/map/{}.UNMOD.sorted.bam".format(output_dir,rep,transcript_id).split(' ')
 
@@ -80,17 +63,28 @@ def run_samtools(comp,comp2,transcript_id,length,output_dir,rep):
 	subprocess.call(index_test_format)
 	
 	view_ctrl_format = "samtools view -b {} {}:1-{} -o {}/{}/map/{}.MOD.bam".format(comp2,transcript_id,length,output_dir,rep,transcript_id).split(' ')
+	#bedtools_mod = "bedtools genomecov -d -split -ibam {}".format(comp2).split(' ')
 	sort_ctrl_format = "samtools sort -o {}/{}/map/{}.MOD.sorted.bam {}/{}/map/{}.MOD.bam".format(output_dir,rep,transcript_id,output_dir,rep,transcript_id).split(' ')
 	index_ctrl_format = "samtools index {}/{}/map/{}.MOD.sorted.bam".format(output_dir,rep,transcript_id).split(' ')
 	subprocess.call(view_ctrl_format)
 	subprocess.call(sort_ctrl_format)
 	subprocess.call(index_ctrl_format)
 
+def run_bedtools(comp,comp2,output_dir,rep):
+	bedtools_unmod = "bedtools genomecov -d -split -ibam {}".format(comp).split(' ')
+	bedtools_mod = "bedtools genomecov -d -split -ibam {}".format(comp2).split(' ')
+	with open(output_dir+'/'+rep +'/map/'  + 'FULL.unmod.genomecov.txt','w') as fout:
+	    subprocess.call(bedtools_unmod,stdout=fout)
+	with open(output_dir+'/'+rep +'/map/' + 'FULL.mod.genomecov.txt','w') as fout:
+	    subprocess.call(bedtools_mod,stdout=fout)   
+    
+    
+    
 def run_bamreadcounts(output_dir,transcript_id,rep,length):
-	#print('transcript_id and Length',transcript_id,length)
-
-	bam_readcount_unmod =  "/gpfs/data/depledgelab/Jonathan/Final-DRUMMER/bam-readcount -q 0 -b 0 -d 1000000 -w 1 -f {}/transcripts/{}.fa {}/{}/map/{}.UNMOD.sorted.bam {}:1-{}".format(output_dir,transcript_id,output_dir,rep,transcript_id,transcript_id,length).split(' ')
-	bam_readcount_mod =  "/gpfs/data/depledgelab/Jonathan/Final-DRUMMER/bam-readcount -q 0 -b 0 -d 1000000 -w 1 -f {}/transcripts/{}.fa {}/{}/map/{}.MOD.sorted.bam {}:1-{}".format(output_dir,transcript_id,output_dir,rep,transcript_id,transcript_id,length).split(' ')
+	bam_readcount_unmod =  "modules/bam-readcount -q 0 -b 0 -d 1000000 -w 1 -f {}/transcripts/{}.fa {}/{}/map/{}.UNMOD.sorted.bam {}:1-{}".format(output_dir,transcript_id,output_dir,rep,transcript_id,transcript_id,length).split(' ')
+	bam_readcount_mod =  "modules/bam-readcount -q 0 -b 0 -d 1000000 -w 1 -f {}/transcripts/{}.fa {}/{}/map/{}.MOD.sorted.bam {}:1-{}".format(output_dir,transcript_id,output_dir,rep,transcript_id,transcript_id,length).split(' ')
+	print(bam_readcount_unmod)
+	print(bam_readcount_mod)
 	with open(bam_readcount_dir+transcript_id+'.UNMOD.bamreadcount.txt','w') as fout: #context manager is OK since `call` blocks :)
 		subprocess.call(bam_readcount_unmod,stdout=fout, stderr=subprocess.DEVNULL)
 	with open(bam_readcount_dir+transcript_id+'.MOD.bamreadcount.txt','w') as fout: #context manager is OK since `call` blocks :)
@@ -126,7 +120,6 @@ def split_rep(lst):
 def do_work(i,rep,comp2,comp,transcript_directory,output_dir,m6A_status,odds,padj,fraction_diff,path_transcripts,visualization_input,mode_of_analysis,deletion_filter):
 	#print('started..{}'.format(i))
 	current_file = transcript_directory + i + '.fa'
-	os.makedirs(output_dir+'/'+rep+'/map/',exist_ok = True)
 	length = length_dictionary[i]
 	global bam_readcount_dir
 	bam_readcount_dir = output_dir +'/'+rep+ '/bam_readcount/'
@@ -161,13 +154,25 @@ def do_work(i,rep,comp2,comp,transcript_directory,output_dir,m6A_status,odds,pad
 		run_visualization(candidates_df,m6A_status,output_dir+'/'+rep + '/visualization/'+i+'.pdf',mode_of_analysis,i)
 	print('completed..{}'.format(i))
 
-
+def return_top3_transcripts(path):
+    transcript_max = {}
+    onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
+    for i in onlyfiles:
+        current_df = pd.read_csv(path+i,sep = '\t',usecols = ['depth_ctrl','depth_treat'])
+        current_df['mean'] = current_df.mean(axis = 1)
+        max_mean = max(current_df['mean'])
+        transcript_max[i] = max_mean
+    top_3_trans = sorted(transcript_max, key=transcript_max.get, reverse=True)[:3]
+    print(top_3_trans)
+    top_3_trans = list(map(lambda x:x.replace('.complete.txt',''),top_3_trans))
+    return top_3_trans
 
 def main(transcriptome_file,test_file,path_transcripts,control_file,odds,padj,m6A_status,fraction_diff,visualization_input,output_dir,mode,deletion_filter):
     transcript_directory = output_dir + '/transcripts/'
     global length_dictionary
     global shape_lst
     os.makedirs(output_dir+'/'+'/transcripts/',exist_ok = True)
+    #os.makedirs(output_dir+'/'+rep+'/map/',exist_ok = True)
     all_permutations = [(x,y) for x in control_file for y in test_file]
     replicate_names = split_rep(all_permutations)
     all_permutations_w_rep = list(zip(replicate_names,all_permutations))
@@ -175,6 +180,8 @@ def main(transcriptome_file,test_file,path_transcripts,control_file,odds,padj,m6
     iterate,length_dictionary,shape_lst = isoform_mode(transcriptome_file,transcript_directory,path_transcripts)
     #print('iterate',iterate)
     print(all_permutations_w_rep)
+    [os.makedirs(output_dir+'/'+output_loc+'/map/',exist_ok = True) for output_loc,compare in all_permutations_w_rep]
+    [run_bedtools(compare[0],compare[1],output_dir,output_loc) for output_loc,compare in all_permutations_w_rep]
     for replicate,comparisons in all_permutations_w_rep:
         try:
             with concurrent.futures.ProcessPoolExecutor() as executor:
@@ -186,6 +193,8 @@ def main(transcriptome_file,test_file,path_transcripts,control_file,odds,padj,m6
     for repl in replicate_names:
         summary_df = run_summary(output_dir+'/'+repl + '/complete_analysis/',m6A_status)
         summary_df.to_csv(output_dir+'/'+repl + '/summary.txt',sep = '\t',index = False)
+        top_3 = return_top3_transcripts(output_dir+'/'+repl + '/complete_analysis/')
+        isoform_mode_parsing(output_dir+'/'+repl,top_3)
         if m6A_status == True:
             run_plotting(output_dir+'/'+repl + '/complete_analysis/',summary_df,output_dir+'/'+repl + '/m6A_plot.pdf')
     if len(replicate_names) > 1:
