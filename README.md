@@ -5,8 +5,8 @@ DRUMMER was designed and implemented by Jonathan S. Abebe and [Daniel P. Depledg
 
 ## Updates
 DRUMMER v1.0 has now been released with the following improvements
-- a single output summary file containing all candidate sites across all biological replicates
-- parsing test figure to ensure all reads have been included
+- a single output summary file containing all candidate site information across all biological replicates
+- parsing test figure to confirm that all reads have been included
 - improved tutorials for both human and viral datasets
 
 ## Table of contents
