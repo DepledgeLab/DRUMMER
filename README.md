@@ -54,7 +54,7 @@ git clone https://github.com/DepledgeLab/DRUMMER
 Note that upon installation, we strongly recommend testing DRUMMER using one or more of the test datasets included - see [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
 
 ### DRUMMER installation 
-
+```
 Install enviroment 
 conda env create --file enviroment-setup.yml 
 
@@ -66,7 +66,7 @@ python path/to/DRUMMER.py -h
 
 Deactivate DRUMMER enviroment
 conda deactivate
-
+```
 ## Running DRUMMER
 DRUMMER requires two co-ordinate sorted and indexed BAM files as input. These should contain read alignments for the test (RNA modification absent) and control (RNA modification present) datasets (see Data Preparation section below). DRUMMER can be run in either exome or isoform mode. Exome mode (-a exome) uses DRS read alignments against the genome of a given organism to identify putatively modified bases while isoform mode (-a isoform) uses DRS read alignments against the transcriptome of a given organism to provide a high resolution mapping. While isoform mode is more sensitive, it is also (currently) slower. 
 
