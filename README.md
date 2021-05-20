@@ -4,9 +4,9 @@ DRUMMER is designed to identify RNA modifications at nucleotide-level resolution
 DRUMMER was designed and implemented by Jonathan S. Abebe and [Daniel P. Depledge](https://med.nyu.edu/faculty/daniel-p-depledge)
 
 ## Updates
-DRUMMER v0.2 has now been released with the following improvements
-- a single output summary file containing all candidate sites
-- improved visualizations for both transcript and genome level analyses
+DRUMMER v1.0 has now been released with the following improvements
+- a single output summary file containing all candidate sites across all biological replicates
+- parsing test figure to ensure all reads have been included
 - improved tutorials for both human and viral datasets
 
 ## Table of contents
@@ -53,39 +53,54 @@ git clone https://github.com/DepledgeLab/DRUMMER
 
 Note that upon installation, we strongly recommend testing DRUMMER using one or more of the test datasets included - see [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
 
+### DRUMMER installation 
+
+Install enviroment 
+conda env create --file enviroment-setup.yml 
+
+Activate DRUMMER enviroment
+conda activate DRUMMER
+
+Run DRUMMER
+python path/to/DRUMMER.py -h
+
+Deactivate DRUMMER enviroment
+conda deactivate
+
 ## Running DRUMMER
-DRUMMER requires two co-ordinate sorted and indexed BAM files as input. These should contain read alignments for the test (RNA modification absent) and control (RNA modification present) datasets (see Data Preparation section below). DRUMMER can be run in either exome or isoform mode. Exome mode (-m exome) uses DRS read alignments against the genome of a given organism to identify putatively modified bases while isoform mode (-m isoform) uses DRS read alignments against the transcriptome of a given organism to provide a high resolution mapping. While isoform mode is more sensitive, it is also (currently) slower. 
+DRUMMER requires two co-ordinate sorted and indexed BAM files as input. These should contain read alignments for the test (RNA modification absent) and control (RNA modification present) datasets (see Data Preparation section below). DRUMMER can be run in either exome or isoform mode. Exome mode (-a exome) uses DRS read alignments against the genome of a given organism to identify putatively modified bases while isoform mode (-a isoform) uses DRS read alignments against the transcriptome of a given organism to provide a high resolution mapping. While isoform mode is more sensitive, it is also (currently) slower. 
 
 Usage:
 ```
-Usage: drummer.sh -r [FASTA] -u|-n [TARGETS] -c [CONTROL] -t [TEST] -o [OUTPUT] -m [RUNMODE] (OPTIONS)
+Usage: drummer.sh -r [FASTA] -l|-n [TARGETS] -c [CONTROL] -t [TREATMENT] -o [OUTPUT] -a [RUNMODE] (OPTIONS)
 ```
 Required flags
 ```
 -r              fasta format reference genome (exome) or transcriptome (isoforms)
 
--u              list of transcripts (isoform) to be examined (single column or seven-column format)
+-l              list of transcripts (isoform) to be examined (single column or seven-column format)
 OR
 -n              name of genome (exome) - must match fasta file header
 
 -c              sorted.bam file - control (RNA modification(s) present)
 -t              sorted.bam file - treatment (RNA modification(s) absent)
 -o              output directory
--m              runmode (exome|isoform)
+-a              runmode (exome|isoform)
 
 ```
 Optional flags
 ```
--y              specify odds ratio requirement (default >= 1.5)
--z              specify adjusted p_value requirement for both G-test and Odds Ratio (default<= 0.05)
--a              m6A mode (default = True), set to False to ignore m6A information
--d              reference fraction difference between unmodified and modified (default = 0.01)
--f              candidate site visualization (default = False), set to True to visualize candidate calls for each individual transcript
+-z              odds ratio cutoff (default = +/- 1.5)
+-p              padj cutoff (default = < 0.05 for both OR and G-test)
+-m              run in m6A mode (default = false)
+-f              Reference fraction difference (default = 0.01)
+-v              produce visualizations for individual transcripts (default = false)
+-i              Filter for indels or retain
 ```
 
 ## Output
 
-When run to completion, DRUMMER generates a single tab-seperated text file (summary.txt) containing all predicted candidate RNA modification sites with contextual information (genome position, isoform position, sequence motif, etc). When run in m6A mode (-a TRUE), a distribution plot is also generated in an accompanying .pdf file (summary_visualization_m6A.pdf). The output directory 'complete_analysis' contains individual data files for each reference sequence provided. A second (optionall) directory 'visualization' contains individual plots of G-test scores versus position for each individual reference sequence. 
+When run to completion, DRUMMER generates a single tab-seperated text file (summary.txt) within each comparison directory containing all predicted candidate RNA modification sites with contextual information (genome position, isoform position, sequence motif, etc). When run in m6A mode (-a TRUE), a distribution plot is also generated in an accompanying .pdf file (m6A_plot.pdf). The output directory 'complete_analysis' contains individual data files for each reference sequence provided. A second (optional [-v]) directory 'visualization' contains individual plots of both G-test scores (accumulation/depletion) versus position for each individual reference sequence, along with each odd-ratio score. 
 
 A detailed description of column headers in the summary.txt file is shown below. For the individual outputs, please see the accompanying file 'individual_output_headers.txt' for a full description of headers. 
 ```
@@ -109,6 +124,31 @@ A detailed description of column headers in the summary.txt file is shown below.
 [18] genomic_position:  position of nucleotide on genome (isoform mode)
 ```
 
+When run to completion, assuming multiple biological replicates, a single tab-seperated text file (multiple_comp.txt) should exist in the main directory location which the user specified using the -o flag. The file contains information relating to each biological replicate summarized into a single file.
+
+A detailed description of column headers in the multiple_comp.txt file is shown below. Each putative candidate position and the accompanying information is merged with/if that same candidate position occurs in the other biological replicates. Information from column [1-9, 11-16] are taken from the replicate that has the highest G-test [8] and odd-ratio [11].
+```
+[1] transcript_id:
+[2] position:
+[3] genomic_position:
+[4] strand:                
+[5] eleven_bp_motif:
+[6] nearest_ac_motif:
+[7] nearest_ac:
+[8] max-G_test:                                           Maximum G-test value seen for this location across all replicates
+[9] max-G_padj:                                           padj value corresponding to the max G-test value
+[10] support:                                             The number of biological replicates this site occurs in
+[11] max_odds:                                            Maximum odds ratio seen for this location across all replicates
+[12] max_odds_padj:                                       padj value corresponding to the max odds value
+[13] accumulation:          
+[14] depletion:
+[15] frac_diff:
+[16] Comparison1-pos:Gtest:padj:OR:ORpadj:frac_diff:      Information relating to biological replicate 1, same a corresponding summary.txt file
+[17] Comparison2-pos:Gtest:padj:OR:ORpadj:frac_diff:      Information relating to biological replicate 2, same a corresponding summary.txt file
+[18] Comparison3-pos:Gtest:padj:OR:ORpadj:frac_diff:                                           ...
+[29] Comparison4-pos:Gtest:padj:OR:ORpadj:frac_diff:                                           ...            
+```
+
 ## Running DRUMMER with the test datasets
 
 Several test datasets are included in the DRUMMER repository and can be used to verify DRUMMER is working correctly in your environment. Note that expected outputs are reliant on default parameters and changing these may change the output.
@@ -116,19 +156,26 @@ Several test datasets are included in the DRUMMER repository and can be used to 
 ### m6A detection in a sample adenovirus dataset using 'exome' mode
 The following command parses genome-level alignments to identify putative m6A sites in the adenovirus exome. The command should run to completion in ~5 mins and identify 7 candidate sites
 ```
-./drummer.sh -r TESTDATA/Adenovirus-Ad5.fasta -n Ad5 -c TESTDATA/exome.Ad5.MOD.bam -t TESTDATA/exome.Ad5.UNMOD.bam -o ./DRUMTEST_ADENO_EXO -m exome
+python3 path/to/DRUMMER.py -r TESTDATA/Adenovirus-Ad5.fasta -n Ad5 -o exome-test -c TESTDATA/exome.Ad5.MOD.bam -t TESTDATA/exome.Ad5.UNMOD.bam -a exome
+
 ```
 
 ### m6A detection in a sample adenovirus dataset using 'isoform' mode
 The following command parses transcriptome-level alignments to identify putative m6A sites in a limited adenovirus transcriptome comprising seven transcript isoforms originating from the E3 locus. The command should run to completion in ~5 mins and identify 5 candidate sites across three distinct transcripts (E3.12K '1', E3.RIDa '1', E3.10K '3')
 ```
-./drummer.sh -r TESTDATA/Ad5_v9.1_complete.fasta -u TESTDATA/Ad5.sample.transcripts.txt -c TESTDATA/isoform.Ad5.MOD.bam -t TESTDATA/isoform.Ad5.UNMOD.bam -o ./DRUMTEST_ADENO_ISO -m isoform
+python3 path/to/DRUMMER.py -r TESTDATA/Ad5_v9.1_complete.fasta -l TESTDATA/Ad5.sample.transcripts.txt -o isoform-test -c TESTDATA/isoform.Ad5.MOD.bam -t TESTDATA/isoform.Ad5.UNMOD.bam -a isoform 
 ```
  
+### Multiple biological replicates 
+The following command shows how one would run multiple biological replicates in parallel (up to 3 in each group supported). DRUMMER automatically does all possible permutations and creates individual directory names based on the name of the inputed .sorted.bam files. Please note that files isoform2.Ad5.MOD.bam and isoform2.Ad5.UNMOD.bam are not contained in the TESTDATA. 
+```
+python3 path/to/DRUMMER.py -r TESTDATA/Ad5_v9.1_complete.fasta -l TESTDATA/Ad5.sample.transcripts.txt -o isoform-test -c TESTDATA/isoform.Ad5.MOD.bam TESTDATA/isoform2.Ad5.MOD.bam -t TESTDATA/isoform.Ad5.UNMOD.bam TESTDATA/isoform2.Ad5.UNMOD.bam -a isoform 
+```
+
 ### m6A detection in a sample H. sapiens dataset using 'isoform' mode
 The following command parses transcriptome-level alignments to identify putative m6A sites in a limited human transcriptome comprising five abundantly expressed transcript isoforms. The command should run to completion in ~10 mins and identify 108 candidate sites across three distinct transcripts as well as producing a summary visualization file.
 ```
-./drummer.sh -r TESTDATA/Hsapiens.sample.fasta -u TESTDATA/Hsapiens.sample.transcripts.txt -c TESTDATA/isoform.Hsapiens.MOD.sorted.bam -t TESTDATA/isoform.Hsapiens.UNMOD.sorted.bam -o ./DRUMTEST_HUMAN_ISO -m isoform
+python3 path/to/DRUMMER.py -r TESTDATA/Hsapiens.sample.fasta -l TESTDATA/Hsapiens.sample.transcripts.txt -o isoform-test -c TESTDATA/isoform.Hsapiens.MOD.sorted.bam -t TESTDATA/isoform.Hsapiens.UNMOD.sorted.bam -a isoform 
 ```
 
  
@@ -141,7 +188,7 @@ DRUMMER requires sorted.bam files containing transcriptome- or genome-level read
 - each read has a single (primary) alignment. All secondary/supplemental alignments have been filtered out
 - each read is aligned against the correct transcript sequence (transcriptome analysis only)
 
-The choice of alignment & filtering parameters for generated the input sorted.bam files will always be context dependent. For instance, our work on [mapping the locations of m6A modifications on the adenovirus Ad5 transcriptome](https://www.biorxiv.org/content/10.1101/865485v1) required careful filtering of sequence alignments due to the preence of numerous overlapping transcripts that shared the same 5' and/or 3' ends. Following a detailed [characterization of the Adenovirus AD5 transcriptome](https://www.biorxiv.org/content/10.1101/2019.12.13.876037v1), we subsequently used [minimap2](https://github.com/lh3/minimap2) to align our nanopore DRS datasets against the transcriptome as follows:
+The choice of alignment & filtering parameters for generated the input sorted.bam files will always be context dependent. For instance, our work on [mapping the locations of m6A modifications on the adenovirus Ad5 transcriptome](https://www.nature.com/articles/s41467-020-19787-6) required careful filtering of sequence alignments due to the preence of numerous overlapping transcripts that shared the same 5' and/or 3' ends. Following a detailed [characterization of the Adenovirus AD5 transcriptome](https://www.biorxiv.org/content/10.1101/2019.12.13.876037v1), we subsequently used [minimap2](https://github.com/lh3/minimap2) to align our nanopore DRS datasets against the transcriptome as follows:
 
 ```
 minimap2 -t 8 -ax map-ont -p 0.99 Ad5.transcriptome.fasta dataset1.reads.fq > dataset1.aligned.sam
