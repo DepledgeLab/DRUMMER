@@ -1,0 +1,16 @@
+---
+name: DRUMMER
+channels:
+  - anaconda
+  - conda-forge
+  - bioconda
+  - r
+  - defaults
+
+dependencies:
+  - seaborn
+  - scipy
+  - pandas
+  - numpy
+  - biopython
+  - matplotlib
