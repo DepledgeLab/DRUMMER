@@ -14,7 +14,7 @@ DRUMMER v1.0 has now been released with the following improvements
 - [Installation](#installation)
   * [Pre-requisites](#pre-requisites)
   * [Setup](#setup-1)
-  * [DRUMMER installation]
+  * [DRUMMER-installation]
 - [Running DRUMMER](#running-drummer)
 - [Output](#output)
 - [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
