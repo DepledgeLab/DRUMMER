@@ -55,16 +55,16 @@ Note that upon installation, we strongly recommend testing DRUMMER using one or 
 
 ### DRUMMER installation 
 ```
-Install enviroment 
-conda env create --file enviroment-setup.yml 
+Install environment 
+conda env create --file environment-setup.yml 
 
-Activate DRUMMER enviroment
+Activate DRUMMER environment
 conda activate DRUMMER
 
 Run DRUMMER
 python path/to/DRUMMER.py -h
 
-Deactivate DRUMMER enviroment
+Deactivate DRUMMER environment
 conda deactivate
 ```
 ## Running DRUMMER
