@@ -54,18 +54,18 @@ git clone https://github.com/DepledgeLab/DRUMMER
 Note that upon installation, we strongly recommend testing DRUMMER using one or more of the test datasets included - see [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
 
 
-## DRUMMER installation 
+### DRUMMER installation 
 ```
-Install environment 
+##Install environment 
 conda env create --file environment-setup.yml 
 
-Activate DRUMMER environment
+##Activate DRUMMER environment
 conda activate DRUMMER
 
-Run DRUMMER
+##Run DRUMMER
 python path/to/DRUMMER.py -h
 
-Deactivate DRUMMER environment
+##Deactivate DRUMMER environment
 conda deactivate
 ```
 ## Running DRUMMER
