@@ -63,7 +63,7 @@ conda env create --file environment-setup.yml
 conda activate DRUMMER
 
 ##Run DRUMMER
-python path/to/DRUMMER.py -h
+python /path/to/DRUMMER.py -h
 
 ##Deactivate DRUMMER environment
 conda deactivate
@@ -73,7 +73,7 @@ DRUMMER requires two co-ordinate sorted and indexed BAM files as input. These sh
 
 Usage:
 ```
-Usage: python drummer.py -r [FASTA] -l|-n [TARGETS] -c [CONTROL] -t [TREATMENT] -o [OUTPUT] -a [RUNMODE] (OPTIONS)
+Usage: python DRUMMER.py -r [FASTA] -l|-n [TARGETS] -c [CONTROL] -t [TREATMENT] -o [OUTPUT] -a [RUNMODE] (OPTIONS)
 ```
 Required flags
 ```
