@@ -99,7 +99,8 @@ def merged_dataframes(mod,unmod,file,filter_bool):
     return merged_df
 
 if __name__ == "__main__":
-    merged_dataframes('ExomeFwd-filter-march13/Ad5-M3P1.422.raw.AD5.fwd.gen-Ad5-M3KO1.422.raw.AD5.fwd.gen/bam_readcount/Ad5.MOD.bamreadcount.txt','ExomeFwd-filter-march13/Ad5-M3P1.422.raw.AD5.fwd.gen-Ad5-M3KO1.422.raw.AD5.fwd.gen/bam_readcount/Ad5.UNMOD.bamreadcount.txt','Ad5',False)
+    out_file = merged_dataframes('ExomeFwd-filter-march13/Ad5-M3P1.422.raw.AD5.fwd.gen-Ad5-M3KO1.422.raw.AD5.fwd.gen/bam_readcount/Ad5.MOD.bamreadcount.txt','ExomeFwd-filter-march13/Ad5-M3P1.422.raw.AD5.fwd.gen-Ad5-M3KO1.422.raw.AD5.fwd.gen/bam_readcount/Ad5.UNMOD.bamreadcount.txt','Ad5',False)
+    out_file.to_csv('file_name.txt',sep ='\t')
 
 
 
