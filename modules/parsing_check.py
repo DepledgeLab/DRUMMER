@@ -29,7 +29,7 @@ def merging_files(root,list_of_files,endswith,transcript):
         final_df = final_df.drop(['depth_bamreadcount_x','depth_bamreadcount_y'],axis = 1)
     elif endswith == 'genomecov.txt':
         full_df = []
-        print("LIST OF FILES",list_of_files)
+        #print("LIST OF FILES",list_of_files)
         for file in list_of_files:
             df = pd.read_csv(root+file,usecols = [0,1,2],header = None,names = ['transcript','position','depth'],sep = '\t')
             if len(transcript) > 0:
@@ -79,19 +79,19 @@ def ylimit(highest_val):
 
 def exome_mode_parsing(root_directory,name):
     current_result_lst = []
-    print(root_directory)
+    #print(root_directory)
     for i in directory_names:
         current_directory = root_directory + i
         onlyfiles = [f for f in listdir(current_directory) if isfile(join(current_directory, f))]
         endswith_value = find_files(i)
-        print(i)
-        print('ENDSWITH_VAL',endswith_value)
-        print('ONLYFILES',onlyfiles)
+        #print(i)
+        #print('ENDSWITH_VAL',endswith_value)
+        #print('ONLYFILES',onlyfiles)
         filter_ = [files for files in onlyfiles if files.endswith(endswith_value)]
         current_result = merging_files(current_directory,filter_,endswith_value,name)
         current_result_lst.append(current_result)
     df_final = reduce(lambda left,right: pd.merge(left,right,on='position'), current_result_lst)
-    print(df_final.head())
+    #print(df_final.head())
     output_dir = root_directory +'/parsing-test/'
     os.makedirs(output_dir,exist_ok = True)
     plotting(df_final,output_dir + name+'.pdf',name)

@@ -270,9 +270,9 @@ if __name__ == "__main__":
     directory = args['directory']
     comparison = args['comparison_names']
     output = args['output']
-    print('directory',directory)
-    print('comparison',comparison)
-    print('output',output)
+    #print('directory',directory)
+    #print('comparison',comparison)
+    #print('output',output)
     df = main(directory,comparison,True)
     df.to_csv(output+'.txt',sep = '\t')
 

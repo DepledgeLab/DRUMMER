@@ -4,7 +4,7 @@ import modules.support
 from modules.odds import run_odds
 from modules.motif import run_motif
 import modules.merge
-from modules.gtest import run_gtest
+from modules.Gtest import run_gtest
 from modules.candidates import run_find_candidates
 from modules.genomic import run_genomics
 from modules.visualization import run_visualization

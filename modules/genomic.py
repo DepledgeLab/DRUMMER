@@ -139,9 +139,9 @@ def run_genomics(path,transcripts):
 		updated_coordinates = [location for locations in updated_coordinates for location in locations]
 		include_candidate_df['genomic_position'] = ' '
 		candidate_and_updated = list(zip(candidate_positions,updated_coordinates))
-		for i,j in candidate_and_updated:
-			if i in [36,65,122,213,317,1071]:
-				print(i,j+1)
+# 		for i,j in candidate_and_updated:
+# 			if i in [36,65,122,213,317,1071]:
+# 				print(i,j+1)
 		for cand,updt in candidate_and_updated:
 			if strand == '+':
 				add_val = [k for k,val in finding_exons.items() if cand in val]
