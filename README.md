@@ -176,7 +176,7 @@ python /path/to/DRUMMER.py -r TESTDATA/Ad5_v9.1_complete.fasta -l TESTDATA/Ad5.s
 ### m6A detection in a sample H. sapiens dataset using 'isoform' mode
 The following command parses transcriptome-level alignments to identify putative m6A sites in a limited human transcriptome comprising five abundantly expressed transcript isoforms. The command should run to completion in ~10 mins and identify 108 candidate sites across three distinct transcripts as well as producing a summary visualization file.
 ```
-python3 /path/to/DRUMMER.py -r TESTDATA/Hsapiens.sample.fasta -l TESTDATA/Hsapiens.sample.transcripts.txt -o isoform-test -c TESTDATA/isoform.Hsapiens.MOD.sorted.bam -t TESTDATA/isoform.Hsapiens.UNMOD.sorted.bam -a isoform 
+python3 /path/to/DRUMMER.py -r TESTDATA/Hsapiens.sample.fasta -l TESTDATA/Hsapiens.sample.transcripts.txt -o isoform-test-human -c TESTDATA/isoform.Hsapiens.MOD.sorted.bam -t TESTDATA/isoform.Hsapiens.UNMOD.sorted.bam -a isoform 
 ```
 
  
