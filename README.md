@@ -226,7 +226,7 @@ bamToBed -bed12 -i t2g.sorted.bam > t2g.sorted.bed
 cut -f1,4,6,7,10,11,12 t2g.sorted.bed > transcripts.txt
 ```
 ### *Alternative* Setting up a transcript list file (Larger transcriptomes)
-Frequently, the transcripts contained in the aligned file(s) does not run the gamut of that organism's transcriptome. In these cases the directive from above will cause DRUMMER to spit out errors for the unmmapped transcripts. To avoid this issue, and drastically increase the speed of DRUMMER, the user can convert the mapped bam files to bam files, and find the overlap between conditions. This will give a set of transcripts that are found in both the KO and WT groups.
+Frequently, the transcripts contained in the aligned file(s) does not run the gamut of that organism's transcriptome. In these cases the directive from above will cause DRUMMER to spit out errors for the unmmapped transcripts. To avoid this issue, and drastically increase the speed of DRUMMER, the user can convert the mapped bam files to bed files, and find the overlap between conditions. This will give a set of transcripts that are found in both the KO and WT groups.
 
 ```
 ### Extract transcript names from aligned.KO.sorted.bam files
