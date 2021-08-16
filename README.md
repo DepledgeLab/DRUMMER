@@ -170,7 +170,7 @@ python /path/to/DRUMMER.py -r TESTDATA/Ad5_v9.1_complete.fasta -l TESTDATA/Ad5.s
 ### Multiple biological replicates 
 The following command shows how one would run multiple biological replicates in parallel (up to 3 in each group supported). DRUMMER automatically does all possible permutations and creates individual directory names based on the name of the inputed .sorted.bam files. Please note that files isoform2.Ad5.MOD.bam and isoform2.Ad5.UNMOD.bam are not contained in the TESTDATA. 
 ```
-python /path/to/DRUMMER.py -r TESTDATA/Ad5_v9.1_complete.fasta -l TESTDATA/Ad5.sample.transcripts.txt -o isoform-test -c TESTDATA/isoform.Ad5.MOD.bam TESTDATA/isoform2.Ad5.MOD.bam -t TESTDATA/isoform.Ad5.UNMOD.bam TESTDATA/isoform2.Ad5.UNMOD.bam -a isoform 
+python /path/to/DRUMMER.py -r TESTDATA/Ad5_v9.1_complete.fasta -l TESTDATA/Ad5.sample.transcripts.txt -o isoform-test-m -c TESTDATA/isoform.Ad5.MOD.bam TESTDATA/isoform2.Ad5.MOD.bam -t TESTDATA/isoform.Ad5.UNMOD.bam TESTDATA/isoform2.Ad5.UNMOD.bam -a isoform 
 ```
 
 ### m6A detection in a sample H. sapiens dataset using 'isoform' mode
