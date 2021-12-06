@@ -70,7 +70,7 @@ def run_samtools(comp,comp2,transcript_id,length,output_dir,rep):
 	subprocess.call(sort_ctrl_format)
 	subprocess.call(index_ctrl_format)
 # 	print(comp)
-	print(output_dir+'/'+rep +'/map/' + transcript_id + '.unmod.genomecov.txt')
+# 	print(output_dir+'/'+rep +'/map/' + transcript_id + '.unmod.genomecov.txt')
 	with open(output_dir+'/'+rep +'/map/' + transcript_id + '.unmod.genomecov.txt','w') as fout:
 	    subprocess.call(bedtools_unmod,stdout=fout)
 	with open(output_dir+'/'+rep +'/map/' + transcript_id + '.mod.genomecov.txt','w') as fout:
@@ -122,6 +122,7 @@ def do_work(all_permuations_w_replicates,i,transcript_directory,output_dir,m6A_s
 	rep = all_permuations_w_replicates[0]
 	comp = all_permuations_w_replicates[-1][1] # control
 	comp2 = all_permuations_w_replicates[-1][0] # treatment
+	print('Current Comparison: {} vs {}'.format(comp,comp2))
 # 	print('AALLL PERMUAT',all_permuations_w_replicates)
 # 	print('AALLL PERMUAT rep',all_permuations_w_replicates[0])
 # 	print('AALLL PERMUAT comp',all_permuations_w_replicates[-1][0])
@@ -130,7 +131,7 @@ def do_work(all_permuations_w_replicates,i,transcript_directory,output_dir,m6A_s
 
 	
 	current_file = transcript_directory + i + '.fa'
-	print('Current_file',current_file)
+# 	print('Current_file',current_file)
 	os.makedirs(output_dir+'/'+rep+'/map/',exist_ok = True)
 	os.makedirs(output_dir+'/'+rep+'/complete_analysis/',exist_ok = True)
 	os.makedirs(output_dir+'/'+rep+'/gTEST/',exist_ok = True)
@@ -146,13 +147,13 @@ def do_work(all_permuations_w_replicates,i,transcript_directory,output_dir,m6A_s
 	#os.makedirs(output_dir+'/'+rep+'/complete_analysis/',exist_ok = True)
 	merged_df = modules.merge.merged_dataframes(bam_readcount_dir+i+'.MOD.bamreadcount.txt',bam_readcount_dir+i+'.UNMOD.bamreadcount.txt',i,deletion_filter)
 	merged_df.to_csv(output_dir+'/'+rep+'/MERGED/' +i+'.txt',sep = '\t',index =False)
-	print('MERGED')
+# 	print('MERGED')
 	odds_df = run_odds(merged_df)
 	odds_df.to_csv(output_dir+'/'+rep+'/ODDS/' +i+'.txt',sep = '\t',index =False)
-	print('ODDS')
+# 	print('ODDS')
 	motif_df = run_motif(odds_df,m6A_status)
 	motif_df.to_csv(output_dir+'/'+rep+'/MOTIF/' +i+'.txt',sep = '\t',index =False)
-	print('MOTIF')
+# 	print('MOTIF')
 	#gtest_df = run_gtest(motif_df)
 	#gtest_df.to_csv(output_dir+'/'+rep+'/gTEST/' +i+'.txt',sep = '\t',index =False)
 	gtest_df = run_gtest(motif_df)
@@ -179,9 +180,9 @@ def main(transcriptome_file,test_file,name,control_file,odds,padj,m6A_status,fra
     #replicate_names = ['rep1','rep2','rep3','rep4']
     all_permutations_w_rep = list(zip(replicate_names,all_permutations))
     length = exome_mode(transcriptome_file,transcript_directory)[name]
-    print('all_permutations_w_rep',all_permutations_w_rep)
-    print('****LENGTH****',length)
-    print(all_permutations)
+#     print('all_permutations_w_rep',all_permutations_w_rep)
+#     print('****LENGTH****',length)
+    # print('Current Comparison: {} vs {}'.format(all_permutations[0][0],all_permutations[0][1]))
     with concurrent.futures.ProcessPoolExecutor() as executor:
         executor.map(do_work, all_permutations_w_rep,repeat(name),repeat(transcript_directory),repeat(output_dir),repeat(m6A_status),repeat(odds),repeat(padj),repeat(fraction_diff),repeat('exome'),repeat(deletion_filter))
     #l = process_map(do_work, all_permutations_w_rep,repeat(name),repeat(transcript_directory),repeat(output_dir),repeat(m6A_status),repeat(odds),repeat(padj),repeat(fraction_diff),repeat('exome'))

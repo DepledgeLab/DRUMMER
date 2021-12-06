@@ -163,7 +163,7 @@ def return_top3_transcripts(path):
         max_mean = max(current_df['mean'])
         transcript_max[i] = max_mean
     top_3_trans = sorted(transcript_max, key=transcript_max.get, reverse=True)[:3]
-    print(top_3_trans)
+#     print(top_3_trans)
     top_3_trans = list(map(lambda x:x.replace('.complete.txt',''),top_3_trans))
     return top_3_trans
 
@@ -179,11 +179,12 @@ def main(transcriptome_file,test_file,path_transcripts,control_file,odds,padj,m6
     #all_permutations_dict = {'rep_'+str(i+1):all_permutations[i] for i in range(len(all_permutations))}
     iterate,length_dictionary,shape_lst = isoform_mode(transcriptome_file,transcript_directory,path_transcripts)
     #print('iterate',iterate)
-    print(all_permutations_w_rep)
+#     print(all_permutations_w_rep)
     [os.makedirs(output_dir+'/'+output_loc+'/map/',exist_ok = True) for output_loc,compare in all_permutations_w_rep]
     [run_bedtools(compare[0],compare[1],output_dir,output_loc) for output_loc,compare in all_permutations_w_rep]
     for replicate,comparisons in all_permutations_w_rep:
         try:
+            print('Current Comparison: {} vs {}'.format(comparisons[0],comparisons[1]))
             with concurrent.futures.ProcessPoolExecutor() as executor:
                 executor.map(do_work, iterate.name,repeat(replicate),repeat(comparisons[0]),repeat(comparisons[1]),repeat(transcript_directory),repeat(output_dir),repeat(m6A_status),
                 repeat(odds),repeat(padj),repeat(fraction_diff),repeat(path_transcripts),repeat(visualization_input),repeat(mode),repeat(deletion_filter))

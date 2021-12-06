@@ -30,47 +30,49 @@ args = vars(ap.parse_args())
 
 
 
-modules.support.check_samtools()
-modules.support.check_bedtools()
+# modules.support.check_samtools()
+# modules.support.check_bedtools()
 #transcriptome_file,test_file,control_file,log2fc,odds,padj,m6A_status,fraction_diff,output_dir,additional_columns,mode
+# print(modules.support.check_bedtools())
+if modules.support.check_samtools() == True and modules.support.check_bedtools() == True:
+    if args['analysis_mode'].lower() == 'exome':
+#         print('IN EXOME')
+        transcriptome_file = args['reference_fasta']
+        treatment_bam = args['treatment_bam']
+        control_bam = args['control_bam']
+    #     log2fc = args['log2fc']
+        odds = args['odds']
+        padj = args['padj']
+        m6A = modules.support.handle_booleans(args['m6A'],False)
+        deletion = modules.support.handle_booleans(args['indel_filter'],False)
+        fraction_diff = args['fraction_diff']
+        output_dir = args['output_dir']
+    #     additional_columns = args['additional_information']
+        name = args['name']
+        if name is None:
+            raise modules.support.MyException('Need -n argument when running in exome mode')
+        modules.support.print_logo('exome\n')
+        test_exome.main(transcriptome_file,treatment_bam,name,control_bam,odds,padj,m6A,fraction_diff,output_dir,'exome',deletion)
+    elif args['analysis_mode'].lower() == 'isoform':
+#         print('isoform')
+        transcriptome_file = args['reference_fasta']
+        treatment_bam = args['treatment_bam']
+        path_transcripts = args['list']
+        control_bam = args['control_bam']
+        deletion = modules.support.handle_booleans(args['indel_filter'],False)
+    #     log2fc = args['log2fc']
+        odds = args['odds']
+        padj = args['padj']
+        m6A = modules.support.handle_booleans(args['m6A'],False)
+        fraction_diff = args['fraction_diff']
+        visualization_input = modules.support.handle_booleans(args['visualization'],False)
+        output_dir = args['output_dir']
+    #     additional_columns = args['additional_information']
+        if path_transcripts is None:
+            raise modules.support.MyException('Need -u argument when running in isoform mode')
+        modules.support.print_logo('isoform\n')
+        test_isoform.main(transcriptome_file,treatment_bam,path_transcripts,control_bam,odds,padj,m6A,fraction_diff,visualization_input,output_dir,'isoform',deletion)
 
-if args['analysis_mode'].lower() == 'exome':
-    print('IN EXOME')
-    transcriptome_file = args['reference_fasta']
-    treatment_bam = args['treatment_bam']
-    control_bam = args['control_bam']
-#     log2fc = args['log2fc']
-    odds = args['odds']
-    padj = args['padj']
-    m6A = modules.support.handle_booleans(args['m6A'],False)
-    deletion = modules.support.handle_booleans(args['indel_filter'],False)
-    fraction_diff = args['fraction_diff']
-    output_dir = args['output_dir']
-#     additional_columns = args['additional_information']
-    name = args['name']
-    if name is None:
-        raise modules.support.MyException('Need -n argument when running in exome mode')
-    modules.support.print_logo('exome\n')
-    test_exome.main(transcriptome_file,treatment_bam,name,control_bam,odds,padj,m6A,fraction_diff,output_dir,'exome',deletion)
-elif args['analysis_mode'].lower() == 'isoform':
-    print('isoform')
-    transcriptome_file = args['reference_fasta']
-    treatment_bam = args['treatment_bam']
-    path_transcripts = args['list']
-    control_bam = args['control_bam']
-    deletion = modules.support.handle_booleans(args['indel_filter'],False)
-#     log2fc = args['log2fc']
-    odds = args['odds']
-    padj = args['padj']
-    m6A = modules.support.handle_booleans(args['m6A'],False)
-    fraction_diff = args['fraction_diff']
-    visualization_input = modules.support.handle_booleans(args['visualization'],False)
-    output_dir = args['output_dir']
-#     additional_columns = args['additional_information']
-    if path_transcripts is None:
-        raise modules.support.MyException('Need -u argument when running in isoform mode')
-    modules.support.print_logo('isoform\n')
-    test_isoform.main(transcriptome_file,treatment_bam,path_transcripts,control_bam,odds,padj,m6A,fraction_diff,visualization_input,output_dir,'isoform',deletion)
     
     
     
