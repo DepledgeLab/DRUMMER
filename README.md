@@ -1,3 +1,6 @@
+# Bugs
+Currently DRUMMER works by running the DRUMMER.py script from the main directory. This bug will be resolved in the next iteration of DRUMMER.
+
 # DRUMMER
 DRUMMER is designed to identify RNA modifications at nucleotide-level resolution on distinct transcript isoforms through the comparative analysis of basecall errors in Nanopore direct RNA sequencing (DRS) datasets. 
 
