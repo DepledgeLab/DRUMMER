@@ -26,6 +26,7 @@ import modules.multiple_combine
 from modules.plot_multi import run_main
 from Bio import SeqIO
 from modules.parsing_check import exome_mode_parsing
+import shutil
 devnull = open(os.devnull, 'w')
 def exome_mode(transcriptome_file,transcript_directory):
     length_dictionary = {}
@@ -165,7 +166,7 @@ def do_work(all_permuations_w_replicates,i,transcript_directory,output_dir,m6A_s
 	os.makedirs(output_dir+'/'+rep+'/complete_analysis/',exist_ok = True)
 	candidates_df.to_csv(output_dir+'/'+rep+'/complete_analysis/' +i+'.complete.txt',sep = '\t',index =False)
 	
-	os.makedirs(output_dir+'/'+rep+'/visualization/', exist_ok = True)
+# 	os.makedirs(output_dir+'/'+rep+'/visualization/', exist_ok = True)
 # 	run_visualization(candidates_df,m6A_status,output_dir+'/'+rep + '/visualization/'+i+'.pdf',mode_of_analysis,i)
 
 
@@ -195,6 +196,10 @@ def main(transcriptome_file,test_file,name,control_file,odds,padj,m6A_status,fra
         exome_mode_parsing(output_dir+'/'+repl,name)
         if m6A_status == True:
             run_plotting(output_dir+'/'+repl + '/complete_analysis/',summary_df,output_dir+'/'+repl + '/m6A_plot.pdf')
+        shutil.rmtree(output_dir+'/'+repl+'/gTEST/')
+        shutil.rmtree(output_dir+'/'+repl+'/MOTIF/')
+        shutil.rmtree(output_dir+'/'+repl+'/MERGED/')
+        shutil.rmtree(output_dir+'/'+repl+'/ODDS/')
     if len(replicate_names) > 1:
         final_df = modules.multiple_combine.main(output_dir,replicate_names,m6A_status)
         final_df.to_csv(output_dir +'/'+'multiple_comp.txt',sep = '\t',na_rep='NaN',index= False)

@@ -12,7 +12,7 @@ from itertools import repeat
 from modules.summary import run_summary
 import modules.candidates
 from modules.m6a_summary import run_plotting
-#from tqdm.contrib.concurrent import process_map
+# from tqdm.contrib.concurrent import process_map
 #from p_tqdm import p_map
 import sys
 import math
@@ -29,6 +29,7 @@ from modules.plot_multi import run_main
 from Bio import SeqIO
 from modules.parsing_check import isoform_mode_parsing
 from functools import reduce
+import shutil
 
 def isoform_mode(transcriptome_file,transcript_directory,path_transcripts):
     f_open = open(transcriptome_file, "rU")
@@ -141,7 +142,11 @@ def do_work(i,rep,comp2,comp,transcript_directory,output_dir,m6A_status,odds,pad
 	#print(candidates_df)
 	os.makedirs(output_dir+'/'+rep+'/complete_analysis/',exist_ok = True)
 	candidates_df.to_csv(output_dir+'/'+rep+'/complete_analysis/' +i+'.complete.txt',sep = '\t',index =False)
-	#print('shape_lst',shape_lst)
+	print('completed..{}'.format(i))
+# 	shutil.rmtree(output_dir+'/'+rep+'/gTEST/') 
+# 	shutil.rmtree(output_dir+'/'+rep+'/MOTIF/') 
+# 	shutil.rmtree(output_dir+'/'+rep+'/MERGED/') 
+# 	shutil.rmtree(output_dir+'/'+rep+'/ODDS/')
 	if shape_lst != 1:
 		#print('IN GENOMICS')
 		genomics_df = genomic.run_genomics(output_dir+'/'+rep+'/complete_analysis/' +i+'.complete.txt',path_transcripts)
@@ -152,7 +157,7 @@ def do_work(i,rep,comp2,comp,transcript_directory,output_dir,m6A_status,odds,pad
 		#print('IN visualizaation')
 		os.makedirs(output_dir+'/'+rep+'/visualization/', exist_ok = True)
 		run_visualization(candidates_df,m6A_status,output_dir+'/'+rep + '/visualization/'+i+'.pdf',mode_of_analysis,i)
-	print('completed..{}'.format(i))
+	
 
 def return_top3_transcripts(path):
     transcript_max = {}
@@ -188,6 +193,8 @@ def main(transcriptome_file,test_file,path_transcripts,control_file,odds,padj,m6
             with concurrent.futures.ProcessPoolExecutor() as executor:
                 executor.map(do_work, iterate.name,repeat(replicate),repeat(comparisons[0]),repeat(comparisons[1]),repeat(transcript_directory),repeat(output_dir),repeat(m6A_status),
                 repeat(odds),repeat(padj),repeat(fraction_diff),repeat(path_transcripts),repeat(visualization_input),repeat(mode),repeat(deletion_filter))
+#             l = process_map(do_work, iterate.name,repeat(replicate),repeat(comparisons[0]),repeat(comparisons[1]),repeat(transcript_directory),repeat(output_dir),repeat(m6A_status),
+#                 repeat(odds),repeat(padj),repeat(fraction_diff),repeat(path_transcripts),repeat(visualization_input),repeat(mode),repeat(deletion_filter), max_workers=16,file=sys.stdout,miniters=1,desc = replicate)
         except UnboundLocalError:
             continue
 
@@ -198,6 +205,10 @@ def main(transcriptome_file,test_file,path_transcripts,control_file,odds,padj,m6
         isoform_mode_parsing(output_dir+'/'+repl,top_3)
         if m6A_status == True:
             run_plotting(output_dir+'/'+repl + '/complete_analysis/',summary_df,output_dir+'/'+repl + '/m6A_plot.pdf')
+        shutil.rmtree(output_dir+'/'+repl+'/gTEST/')
+        shutil.rmtree(output_dir+'/'+repl+'/MOTIF/')
+        shutil.rmtree(output_dir+'/'+repl+'/MERGED/')
+        shutil.rmtree(output_dir+'/'+repl+'/ODDS/')
     if len(replicate_names) > 1:
         final_df = modules.multiple_combine.main(output_dir,replicate_names,m6A_status)
         if shape_lst != 1:

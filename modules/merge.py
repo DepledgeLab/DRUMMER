@@ -94,8 +94,8 @@ def merged_dataframes(mod,unmod,file,filter_bool):
                 seperate_dfs.append(filtered_df)
         merged_df = seperate_dfs[0].merge(seperate_dfs[1],on = 'pos',suffixes = ('','.1'))
     except ValueError:
-        print("Problem merging:",file,'\n')
-        print(mod,unmod)
+        print("Transcript missing in one or more alignment files:",file,'\n')
+#         print(mod,unmod)
     return merged_df
 
 if __name__ == "__main__":
