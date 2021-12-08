@@ -20,7 +20,7 @@ DRUMMER v1.0 has now been released with the following improvements
 - [Data preparation](#data-preparation)
   * [Alignment and filtering](#alignment-and-filtering)
   * [Setting up a transcript list file](#Setting up a transcript list file (isoform mode only))
-  * [Setting up a transcript list file - *Alternative approach for large transcriptomes*](Setting up a transcript list file - *Alternative approach for large transcriptomes* (isoform mode only))
+  * [Setting up a transcript list file - *Alternative approach for large transcriptomes*](#Setting up a transcript list file - *Alternative approach for large transcriptomes* (isoform mode only))
 - [Troubleshooting](#troubleshooting)
 - [Citation](#citation)
 - [Wisdom](#wisdom)
