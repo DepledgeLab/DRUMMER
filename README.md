@@ -19,7 +19,6 @@ DRUMMER v1.0 has now been released with the following improvements
 - [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
 - [Data preparation](#data-preparation)
   * [Alignment and filtering](#alignment-and-filtering)
-  * [Setting up a transcript list file](#setting up a transcript list file)
 - [Troubleshooting](#troubleshooting)
 - [Citation](#citation)
 - [Wisdom](#wisdom)
@@ -206,7 +205,7 @@ samtools index dataset1.aligned.sorted.bam
 
 ```
 
-### Setting up a transcript list file
+### Setting up a transcript list for isoform mode
 When running DRUMMER in isoform mode, a list of transcript IDs should be supplied with the -u flag. Note these IDs must match exactly the headers present in the transcriptome database. Each ID should be supplied on seperate lines (single-column) e.g.
 ```
 E1A-s
@@ -229,7 +228,7 @@ bamToBed -bed12 -i t2g.sorted.bam > t2g.sorted.bed
 ### Extract relevant columns to transcripts.txt input file
 cut -f1,4,6,7,10,11,12 t2g.sorted.bed > transcripts.txt
 ```
-### Setting up a transcript list file - *Alternative approach for large transcriptomes* (isoform mode only)
+### Setting up a transcript list - *Alternative approach for large transcriptomes*
 Frequently, the transcripts contained in the aligned file(s) does not run the gamut of that organism's transcriptome. In these cases the directive from above will cause DRUMMER to spit out errors for the unmmapped transcripts. To avoid this issue, and drastically increase the speed of DRUMMER, the user can convert the mapped bam files to bed files, and find the overlap between conditions. This will give a set of transcripts that are found in both the KO and WT groups.
 
 ```
