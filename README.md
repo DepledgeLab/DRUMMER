@@ -248,6 +248,7 @@ This can easily be achieved with sed
 ```
 sed 's/|.*$//g' infile > outfile
 ```
+
 2: At present DRUMMER.py needs launching from within the DRUMMER directory in all cases. This will be fixed in a later version.
 
 
