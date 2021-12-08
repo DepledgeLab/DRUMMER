@@ -180,7 +180,7 @@ python DRUMMER.py -r TESTDATA/Ad5_v9.1_complete.fasta -l TESTDATA/Ad5.sample.tra
 ### m6A detection in a sample H. sapiens dataset using 'isoform' mode
 The following command parses transcriptome-level alignments to identify putative m6A sites in a limited human transcriptome comprising five abundantly expressed transcript isoforms. The command should run to completion in ~10 mins and identify 93 candidate sites across three distinct transcripts as well as producing a summary visualization file.
 ```
-python3 /path/to/DRUMMER.py -r TESTDATA/Hsapiens.sample.fasta -l TESTDATA/Hsapiens.sample.transcripts.txt -o isoform-test-human -c TESTDATA/isoform.Hsapiens.MOD.sorted.bam -t TESTDATA/isoform.Hsapiens.UNMOD.sorted.bam -a isoform 
+python3 DRUMMER.py -r TESTDATA/Hsapiens.sample.fasta -l TESTDATA/Hsapiens.sample.transcripts.txt -o isoform-test-human -c TESTDATA/isoform.Hsapiens.MOD.sorted.bam -t TESTDATA/isoform.Hsapiens.UNMOD.sorted.bam -a isoform 
 ```
 
  
@@ -229,7 +229,7 @@ bamToBed -bed12 -i t2g.sorted.bam > t2g.sorted.bed
 ### Extract relevant columns to transcripts.txt input file
 cut -f1,4,6,7,10,11,12 t2g.sorted.bed > transcripts.txt
 ```
-### *Alternative* Setting up a transcript list file (Larger transcriptomes)
+### *Alternative* Setting up a transcript list file - *Alternative approach for large transcriptomes* (isoform mode only)
 Frequently, the transcripts contained in the aligned file(s) does not run the gamut of that organism's transcriptome. In these cases the directive from above will cause DRUMMER to spit out errors for the unmmapped transcripts. To avoid this issue, and drastically increase the speed of DRUMMER, the user can convert the mapped bam files to bed files, and find the overlap between conditions. This will give a set of transcripts that are found in both the KO and WT groups.
 
 ```
