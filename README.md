@@ -19,7 +19,7 @@ DRUMMER v1.0 has now been released with the following improvements
 - [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
 - [Data preparation](#data-preparation)
   * [Alignment and filtering](#alignment-and-filtering)
-  * [Setting up a transcript list file](#Setting up a transcript list file)
+  * [Setting up a transcript list file](#setting up a transcript list file)
 - [Troubleshooting](#troubleshooting)
 - [Citation](#citation)
 - [Wisdom](#wisdom)
