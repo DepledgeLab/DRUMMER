@@ -253,7 +253,7 @@ MORE TIPS COMING SOON...
 ## Citation
 When using DRUMMER, please cite the following:
 
-[Price AM, Hayer KE, McIntyre ABR, Gokhale NS, Abebe JS, Della Fera AN, Mason CE, Horner, SM, Wilson AC, Depledge DP, and Weitzman MD. Direct RNA sequencing reveals m6A modifications on adenovirus RNA are necessary for efficient splicing. Nat Commun. 2020;11:6016.](https://www.nature.com/articles/s41467-020-19787-6)
+
 
 
 
