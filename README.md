@@ -243,8 +243,11 @@ sort KO.txt WT.txt | uniq -d > overlap.txt
 
 ## Troubleshooting
 1: Complex FASTA headers are problematic for DRUMMER. We thus recommend simplifying headers prior to generating alignment. For instance, a human transcriptome file might have headers such as >ENST00000641515.2|ENSG00000186092.6|OTTHUMG00000001094.4|OTTHUMT00000003223.4|OR4F5-202|OR4F5|2618|UTR5:1-60|CDS:61-1041|UTR3:1042-2618| that are best simplified to >ENST00000641515.2. 
-This can easily be achieved with sed i.e. "sed 's/|.*$//g' infile > outfile"
 
+This can easily be achieved with sed 
+```
+sed 's/|.*$//g' infile > outfile
+```
 2: At present DRUMMER.py needs launching from within the DRUMMER directory in all cases. This will be fixed in a later version.
 
 
