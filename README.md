@@ -47,9 +47,7 @@ numpy
 biopython
 matplotlib
 
-### Installing DRUMMER
-
-# Git
+### Installing DRUMMER with git
 ```
 git clone https://github.com/DepledgeLab/DRUMMER
 cd DRUMMER
@@ -57,7 +55,7 @@ python DRUMMER.py -h
 ```
 Note that upon installation, we strongly recommend testing DRUMMER using one or more of the test datasets included - see [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
 
-# Conda
+### Installing DRUMMER with Conda
 ```
 ##Install environment 
 conda env create --file environment-setup.yml 
