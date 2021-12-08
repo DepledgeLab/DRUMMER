@@ -159,21 +159,22 @@ Several test datasets are included in the DRUMMER repository and can be used to 
 ### m6A detection in a sample adenovirus dataset using 'exome' mode
 The following command parses genome-level alignments to identify putative m6A sites in the adenovirus exome. The command should run to completion in ~5 mins and identify 2 candidate sites
 ```
-python /path/to/DRUMMER.py -r TESTDATA/Adenovirus-Ad5.fasta -n Ad5 -o exome-test -c TESTDATA/exome.Ad5.MOD.bam -t TESTDATA/exome.Ad5.UNMOD.bam -a exome -m True
+python DRUMMER.py -r TESTDATA/Adenovirus-Ad5.fasta -n Ad5 -o exome-test -c TESTDATA/exome.Ad5.MOD.bam -t TESTDATA/exome.Ad5.UNMOD.bam -a exome -m True
 
+(note: run python DRUMMER.py from within DRUMMER directory)
 ```
 
 ### m6A detection in a sample adenovirus dataset using 'isoform' mode
 The following command parses transcriptome-level alignments to identify putative m6A sites in a limited adenovirus transcriptome comprising seven transcript isoforms originating from the E3 locus. The command should run to completion in ~5 mins and identify 9 candidate sites across three distinct transcripts (E3.12K '2', E3.RIDa '1', E3.10K '6')
 ```
-python /path/to/DRUMMER.py -r TESTDATA/Ad5_v9.1_complete.fasta -l TESTDATA/Ad5.sample.transcripts.txt -o isoform-test -c TESTDATA/isoform.Ad5.MOD.bam -t TESTDATA/isoform.Ad5.UNMOD.bam -a isoform -m True
+python DRUMMER.py -r TESTDATA/Ad5_v9.1_complete.fasta -l TESTDATA/Ad5.sample.transcripts.txt -o isoform-test -c TESTDATA/isoform.Ad5.MOD.bam -t TESTDATA/isoform.Ad5.UNMOD.bam -a isoform -m True
 ```
  
 ### Multiple biological replicates 
 The following command shows how one would run multiple biological replicates in parallel (up to 3 in each group supported). DRUMMER automatically does all possible permutations and creates individual directory names based on the name of the inputed .sorted.bam files. A file named multiple_comp.txt containing 10 distinct sites across all permutations should be found.
 
 ```
-python /path/to/DRUMMER.py -r TESTDATA/Ad5_v9.1_complete.fasta -l TESTDATA/Ad5.sample.transcripts.txt -o isoform-test-m -c TESTDATA/isoform.Ad5.MOD.bam TESTDATA/isoform2.Ad5.MOD.bam -t TESTDATA/isoform.Ad5.UNMOD.bam TESTDATA/isoform2.Ad5.UNMOD.bam -a isoform 
+python DRUMMER.py -r TESTDATA/Ad5_v9.1_complete.fasta -l TESTDATA/Ad5.sample.transcripts.txt -o isoform-test-m -c TESTDATA/isoform.Ad5.MOD.bam TESTDATA/isoform2.Ad5.MOD.bam -t TESTDATA/isoform.Ad5.UNMOD.bam TESTDATA/isoform2.Ad5.UNMOD.bam -a isoform 
 ```
 
 ### m6A detection in a sample H. sapiens dataset using 'isoform' mode
