@@ -19,7 +19,8 @@ DRUMMER v1.0 has now been released with the following improvements
 - [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
 - [Data preparation](#data-preparation)
   * [Alignment and filtering](#alignment-and-filtering)
-  * [Setting up a transcript list file](#Setting up a transcript list file (isoform mode only))
+  * [Setting up a transcript list file](#Setting up a transcript list file)
+  * 
   * [Setting up a transcript list file - *Alternative approach for large transcriptomes*](#Setting up a transcript list file - *Alternative approach for large transcriptomes* (isoform mode only))
 - [Troubleshooting](#troubleshooting)
 - [Citation](#citation)
@@ -207,7 +208,7 @@ samtools index dataset1.aligned.sorted.bam
 
 ```
 
-### Setting up a transcript list file (isoform mode only)
+### Setting up a transcript list file
 When running DRUMMER in isoform mode, a list of transcript IDs should be supplied with the -u flag. Note these IDs must match exactly the headers present in the transcriptome database. Each ID should be supplied on seperate lines (single-column) e.g.
 ```
 E1A-s
