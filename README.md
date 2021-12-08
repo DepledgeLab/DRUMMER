@@ -165,7 +165,7 @@ python DRUMMER.py -r TESTDATA/Adenovirus-Ad5.fasta -n Ad5 -o exome-test -c TESTD
 ```
 
 ### m6A detection in a sample adenovirus dataset using 'isoform' mode
-The following command parses transcriptome-level alignments to identify putative m6A sites in a limited adenovirus transcriptome comprising seven transcript isoforms originating from the E3 locus. The command should run to completion in ~5 mins and identify 9 candidate sites across three distinct transcripts (E3.12K '2', E3.RIDa '1', E3.10K '6')
+The following command parses transcriptome-level alignments to identify putative m6A sites in a limited adenovirus transcriptome comprising seven transcript isoforms originating from the E3 locus. The command should run to completion in ~5 mins and identify 9 candidate sites across three distinct transcripts (E3.12K = 2 sites, E3.RIDa = 1 site, E3.10K = 6 sites)
 ```
 python DRUMMER.py -r TESTDATA/Ad5_v9.1_complete.fasta -l TESTDATA/Ad5.sample.transcripts.txt -o isoform-test -c TESTDATA/isoform.Ad5.MOD.bam -t TESTDATA/isoform.Ad5.UNMOD.bam -a isoform -m True
 ```
