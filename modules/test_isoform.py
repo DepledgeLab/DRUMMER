@@ -201,6 +201,7 @@ def main(transcriptome_file,test_file,path_transcripts,control_file,odds,padj,m6
     for repl in replicate_names:
         summary_df = run_summary(output_dir+'/'+repl + '/complete_analysis/',m6A_status)
         summary_df.to_csv(output_dir+'/'+repl + '/summary.txt',sep = '\t',index = False)
+        print('{} - total sites - {}'.format(repl,summary_df.shape[0]))
         top_3 = return_top3_transcripts(output_dir+'/'+repl + '/complete_analysis/')
         isoform_mode_parsing(output_dir+'/'+repl,top_3)
         if m6A_status == True:
@@ -215,6 +216,7 @@ def main(transcriptome_file,test_file,path_transcripts,control_file,odds,padj,m6
             mapping = dict(zip(iterate['name'],iterate['strand']))
             final_df.insert(3, 'strand', final_df["transcript_id"].map(mapping))
         final_df.to_csv(output_dir +'/'+'multiple_comp.txt',sep = '\t',na_rep='NaN',index= False)
+        print('Total Sites across replicates - {}'.format(final_df.shape[0]))
         run_main(final_df,output_dir)
     
 if __name__ == "__main__":
