@@ -1,15 +1,12 @@
-# Bugs
-Currently DRUMMER works by running the DRUMMER.py script from the main directory. This bug will be resolved in the next iteration of DRUMMER.
-
 # DRUMMER
 DRUMMER is designed to identify RNA modifications at nucleotide-level resolution on distinct transcript isoforms through the comparative analysis of basecall errors in Nanopore direct RNA sequencing (DRS) datasets. 
 
-DRUMMER was designed and implemented by Jonathan S. Abebe and [Daniel P. Depledge](https://med.nyu.edu/faculty/daniel-p-depledge)
+DRUMMER was designed and implemented by Jonathan S. Abebe and [Daniel P. Depledge](https://www.mhh.de/virologie/forschung/depledge-lab)
 
 ## Updates
 DRUMMER v1.0 has now been released with the following improvements
 - a single output summary file containing all candidate site information across all biological replicates
-- parsing test figure to confirm that all reads have been included
+- a parsing test figure to confirm that all reads have been included
 - improved tutorials for both human and viral datasets
 
 ## Table of contents
@@ -50,14 +47,17 @@ numpy
 biopython
 matplotlib
 
+### Installing DRUMMER
 
-### Setup
+# Git
+```
 git clone https://github.com/DepledgeLab/DRUMMER
-
+cd DRUMMER
+python DRUMMER.py -h
+```
 Note that upon installation, we strongly recommend testing DRUMMER using one or more of the test datasets included - see [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
 
-
-### DRUMMER installation 
+# Conda
 ```
 ##Install environment 
 conda env create --file environment-setup.yml 
@@ -71,6 +71,7 @@ python /path/to/DRUMMER.py -h
 ##Deactivate DRUMMER environment
 conda deactivate
 ```
+
 ## Running DRUMMER
 DRUMMER requires two co-ordinate sorted and indexed BAM files as input. These should contain read alignments for the test (RNA modification absent) and control (RNA modification present) datasets (see Data Preparation section below). DRUMMER can be run in either exome or isoform mode. Exome mode (-a exome) uses DRS read alignments against the genome of a given organism to identify putatively modified bases while isoform mode (-a isoform) uses DRS read alignments against the transcriptome of a given organism to provide a high resolution mapping. While isoform mode is more sensitive, it is also (currently) slower. 
 
@@ -243,6 +244,9 @@ sort KO.txt WT.txt | uniq -d > overlap.txt
 ## Troubleshooting
 1: Complex FASTA headers are problematic for DRUMMER. We thus recommend simplifying headers prior to generating alignment. For instance, a human transcriptome file might have headers such as >ENST00000641515.2|ENSG00000186092.6|OTTHUMG00000001094.4|OTTHUMT00000003223.4|OR4F5-202|OR4F5|2618|UTR5:1-60|CDS:61-1041|UTR3:1042-2618| that are best simplified to >ENST00000641515.2. 
 This can easily be achieved with sed i.e. "sed 's/|.*$//g' infile > outfile"
+
+2: At present DRUMMER.py needs launching from within the DRUMMER directory in all cases. This will be fixed in a later version.
+
 
 MORE TIPS COMING SOON...
 
