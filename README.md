@@ -21,6 +21,7 @@ DRUMMER v1.0 has now been released with the following improvements
   * [Alignment and filtering](#alignment-and-filtering)
   * [Setting up a transcript list file (isoform mode only)](#setting-up-a-transcript-list-file--isoform-mode-only-)
 - [Troubleshooting](#troubleshooting)
+- [Citation](#citation)
 - [Wisdom](#wisdom)
 
 
@@ -149,7 +150,7 @@ A detailed description of column headers in the multiple_comp.txt file is shown 
 [16] Comparison1-pos:Gtest:padj:OR:ORpadj:frac_diff:      Information relating to biological replicate 1, same a corresponding summary.txt file
 [17] Comparison2-pos:Gtest:padj:OR:ORpadj:frac_diff:      Information relating to biological replicate 2, same a corresponding summary.txt file
 [18] Comparison3-pos:Gtest:padj:OR:ORpadj:frac_diff:                                           ...
-[29] Comparison4-pos:Gtest:padj:OR:ORpadj:frac_diff:                                           ...            
+[19] Comparison4-pos:Gtest:padj:OR:ORpadj:frac_diff:                                           ...            
 ```
 
 ## Running DRUMMER with the test datasets
@@ -180,10 +181,9 @@ python DRUMMER.py -r TESTDATA/Ad5_v9.1_complete.fasta -l TESTDATA/Ad5.sample.tra
 ### m6A detection in a sample H. sapiens dataset using 'isoform' mode
 The following command parses transcriptome-level alignments to identify putative m6A sites in a limited human transcriptome comprising five abundantly expressed transcript isoforms. The command should run to completion in ~10 mins and identify 93 candidate sites across three distinct transcripts as well as producing a summary visualization file.
 ```
-python3 DRUMMER.py -r TESTDATA/Hsapiens.sample.fasta -l TESTDATA/Hsapiens.sample.transcripts.txt -o isoform-test-human -c TESTDATA/isoform.Hsapiens.MOD.sorted.bam -t TESTDATA/isoform.Hsapiens.UNMOD.sorted.bam -a isoform 
+python DRUMMER.py -r TESTDATA/Hsapiens.sample.fasta -l TESTDATA/Hsapiens.sample.transcripts.txt -o isoform-test-human -c TESTDATA/isoform.Hsapiens.MOD.sorted.bam -t TESTDATA/isoform.Hsapiens.UNMOD.sorted.bam -a isoform 
 ```
 
- 
  
 ## Data preparation
 ### Alignment and filtering
@@ -229,17 +229,18 @@ bamToBed -bed12 -i t2g.sorted.bam > t2g.sorted.bed
 ### Extract relevant columns to transcripts.txt input file
 cut -f1,4,6,7,10,11,12 t2g.sorted.bed > transcripts.txt
 ```
-### *Alternative* Setting up a transcript list file - *Alternative approach for large transcriptomes* (isoform mode only)
+### Setting up a transcript list file - *Alternative approach for large transcriptomes* (isoform mode only)
 Frequently, the transcripts contained in the aligned file(s) does not run the gamut of that organism's transcriptome. In these cases the directive from above will cause DRUMMER to spit out errors for the unmmapped transcripts. To avoid this issue, and drastically increase the speed of DRUMMER, the user can convert the mapped bam files to bed files, and find the overlap between conditions. This will give a set of transcripts that are found in both the KO and WT groups.
 
 ```
 ### Extract transcript names from aligned.KO.sorted.bam files
-bedtools bamtobed -bed12 -i aligned.KO.sorted.bam | cut -f1 > KO.txt
-bedtools bamtobed -bed12 -i aligned.WT.sorted.bam | cut -f1 > WT.txt
+bedtools bamtobed -bed12 -i aligned.KO.sorted.bam | cut -f1 | sort > KO.txt
+bedtools bamtobed -bed12 -i aligned.WT.sorted.bam | cut -f1 | sort > WT.txt
 
 ### Find overlap between the two conditions
 sort KO.txt WT.txt | uniq -d > overlap.txt
 ```
+
 ## Troubleshooting
 1: Complex FASTA headers are problematic for DRUMMER. We thus recommend simplifying headers prior to generating alignment. For instance, a human transcriptome file might have headers such as >ENST00000641515.2|ENSG00000186092.6|OTTHUMG00000001094.4|OTTHUMT00000003223.4|OR4F5-202|OR4F5|2618|UTR5:1-60|CDS:61-1041|UTR3:1042-2618| that are best simplified to >ENST00000641515.2. 
 This can easily be achieved with sed i.e. "sed 's/|.*$//g' infile > outfile"
@@ -248,6 +249,11 @@ This can easily be achieved with sed i.e. "sed 's/|.*$//g' infile > outfile"
 
 
 MORE TIPS COMING SOON...
+
+## Citation
+When using DRUMMER, please cite the following:
+
+[Price AM, Hayer KE, McIntyre ABR, Gokhale NS, Abebe JS, Della Fera AN, Mason CE, Horner, SM, Wilson AC, Depledge DP, and Weitzman MD. Direct RNA sequencing reveals m6A modifications on adenovirus RNA are necessary for efficient splicing. Nat Commun. 2020;11:6016.](https://www.nature.com/articles/s41467-020-19787-6)
 
 
 
