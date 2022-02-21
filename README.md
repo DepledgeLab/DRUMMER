@@ -65,7 +65,7 @@ conda env create --file environment-setup.yml
 conda activate DRUMMER
 
 ##Run DRUMMER
-python /path/to/DRUMMER.py -h
+python DRUMMER.py -h
 
 ##Deactivate DRUMMER environment
 conda deactivate
