@@ -56,7 +56,7 @@ python DRUMMER.py -h
 ```
 Note that upon installation, we strongly recommend testing DRUMMER using one or more of the test datasets included - see [Running DRUMMER with the test datasets](#running-drummer-with-the-test-datasets)
 
-### Installing DRUMMER with Conda
+### Setting up Conda environment 
 ```
 ##Install environment 
 conda env create --file environment-setup.yml 
