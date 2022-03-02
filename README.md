@@ -251,6 +251,7 @@ sed 's/|.*$//g' infile > outfile
 
 2: At present DRUMMER.py needs launching from within the DRUMMER directory in all cases. This will be fixed in a later version.
 
+3: When running DRUMMER with multiple replicates, the final summary table (across all replicates) fail to be produced if there are either underscores and/or whitespaces in the fasta headers. However, a summary.txt file should still be produced within each replicate directory that will indicate modification statuses. 
 
 MORE TIPS COMING SOON...
 
