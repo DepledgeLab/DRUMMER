@@ -193,16 +193,28 @@ DRUMMER requires sorted.bam files containing transcriptome- or genome-level read
 - each read has a single (primary) alignment. All secondary/supplemental alignments have been filtered out
 - each read is aligned against the correct transcript sequence (transcriptome analysis only)
 
-The choice of alignment & filtering parameters for generated the input sorted.bam files will always be context dependent. For instance, our work on [mapping the locations of m6A modifications on the adenovirus Ad5 transcriptome](https://www.nature.com/articles/s41467-020-19787-6) required careful filtering of sequence alignments due to the preence of numerous overlapping transcripts that shared the same 5' and/or 3' ends. Following a detailed [characterization of the Adenovirus AD5 transcriptome](https://www.biorxiv.org/content/10.1101/2019.12.13.876037v1), we subsequently used [minimap2](https://github.com/lh3/minimap2) to align our nanopore DRS datasets against the transcriptome as follows:
+The choice of alignment & filtering parameters for generated the input sorted.bam files will always be context dependent. For instance, our work on [mapping the locations of m6A modifications on the adenovirus Ad5 transcriptome](https://www.nature.com/articles/s41467-020-19787-6) required careful filtering of sequence alignments due to the preence of numerous overlapping transcripts that shared the same 5' and/or 3' ends. Following a detailed [characterization of the Adenovirus AD5 transcriptome](https://www.biorxiv.org/content/10.1101/2019.12.13.876037v1), we subsequently used [minimap2](https://github.com/lh3/minimap2) to align our nanopore DRS datasets against the genome and transcriptome as follows:
 
+#### Genome-level alignment (for exome mode)
 ```
-minimap2 -t 8 -ax map-ont -p 0.99 Ad5.transcriptome.fasta dataset1.reads.fq > dataset1.aligned.sam
+minimap2 -t 8 -ax splice -k14 Ad5.genome.fasta dataset1.reads.fq > dataset1.aligned.genome.sam
 
-samtools view -h dataset1.aligned.sam | awk ' ( $5 > 0 || $1 ~ /SQ/ ) ' | awk ' ( $2 == 0 || $1 ~ /SQ/ ) ' | awk ' ( $6 !~ /H/ || $1 ~ /SQ/ ) ' | samtools view -b - > dataset1.aligned.bam
+samtools view -F2308 -bS -o dataset1.aligned.genome.bam dataset1.aligned.genome.sam
 
-samtools sort -o dataset1.aligned.sorted.bam dataset1.aligned.bam
+samtools sort -o dataset1.aligned.genome.sorted.bam dataset1.aligned.genome.bam
 
-samtools index dataset1.aligned.sorted.bam
+samtools index dataset1.aligned.genome.sorted.bam
+```
+
+#### Transcriptome-level alignment (for isoform mode)
+```
+minimap2 -t 8 -ax map-ont -p 0.99 Ad5.transcriptome.fasta dataset1.reads.fq > dataset1.aligned.transcriptome.sam
+
+samtools view -h dataset1.aligned.transcriptome.sam | awk ' ( $5 > 0 || $1 ~ /SQ/ ) ' | awk ' ( $2 == 0 || $1 ~ /SQ/ ) ' | awk ' ( $6 !~ /H/ || $1 ~ /SQ/ ) ' | samtools view -b - > dataset1.aligned.transcriptome.bam
+
+samtools sort -o dataset1.aligned.transcriptome.sorted.bam dataset1.aligned.transcriptome.bam
+
+samtools index dataset1.aligned.transcriptome.sorted.bam
 
 ```
 
