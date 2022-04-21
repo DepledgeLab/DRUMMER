@@ -270,7 +270,7 @@ MORE TIPS COMING SOON...
 ## Citation
 When using DRUMMER, please cite the following:
 
-
+[DRUMMER—Rapid detection of RNA modifications through comparative nanopore sequencing](https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/btac274/6569078)
 
 
 
