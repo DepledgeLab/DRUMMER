@@ -265,7 +265,9 @@ sed 's/|.*$//g' infile > outfile
 
 3: When running DRUMMER with multiple replicates, the final summary table (across all replicates) fail to be produced if there are either underscores and/or whitespaces in the fasta headers. However, a summary.txt file should still be produced within each replicate directory that will indicate modification statuses. 
 
-MORE TIPS COMING SOON...
+4: In some instances, final results files will contain a small number of missing positions. These are removed by DRUMMER due to failures of the G-test and/or Odds Ratio test. Should you wish to recover these then you will need to edit motif.py (modules folder) and comment out line 40 i.e. #df = df.dropna() 
+Note that this will slightly adjust the calculation of adjusted p values.
+
 
 ## Citation
 When using DRUMMER, please cite the following:
