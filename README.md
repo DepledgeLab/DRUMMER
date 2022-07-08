@@ -9,6 +9,8 @@ DRUMMER v1.0 has now been released with the following improvements
 - a parsing test figure to confirm that all reads have been included
 - improved tutorials for both human and viral datasets
 
+NOTE: Please not that the DRUMMER dependency [bam-readcount](https://github.com/genome/bam-readcount) is reportedly unstable on OSX systems and may cause DRUMMER to fail. 
+
 ## Table of contents
 - [Introduction](#introduction)
 - [Installation](#installation)
